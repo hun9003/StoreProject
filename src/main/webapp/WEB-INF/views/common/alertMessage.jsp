@@ -13,10 +13,15 @@
 	model.addAttribute("url", "링크"); 
  -->
 <script type="text/javascript"> 
-	var message = '${msg}'; 
-	var returnUrl = '${url}'; 
-	alert(message); 
-	document.location.href = '<c:url value="'+returnUrl+'"/>'; 
+	alert('${msg}');
+	<c:choose>
+        <c:when test="${url != null}">
+	        document.location.href = '<c:url value="${url}"/>';
+        </c:when>
+        <c:otherwise>
+            history.back();
+        </c:otherwise>
+    </c:choose>
 </script>
 </body>
 </html>

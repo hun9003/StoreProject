@@ -63,4 +63,22 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getMemberEmailCode(memberAuthEmailBean);
 
 	}
+
+	@Override
+	public MemberAuthEmailBean checkMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
+		System.out.println("MemberServiceImpl - checkMemberEmailCode()");
+		return memberDAO.checkMemberEmailCode(memberAuthEmailBean);
+	}
+
+	@Override
+	public int updateMemberEmailCert(MemberBean memberBean) {
+		System.out.println("MemberServiceImpl - updateMemberEmailCert()");
+		return memberDAO.updateMemberEmailCert(memberBean);
+	}
+
+	@Override
+	public int useMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
+		System.out.println("MemberServiceImpl - useMemberEmailCode()");
+		return memberDAO.useMemberEmailCode(memberAuthEmailBean);
+	}
 }

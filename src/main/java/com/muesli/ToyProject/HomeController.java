@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.muesli.util.StrResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,7 @@ public class HomeController {
 			MemberBean memberBean = (MemberBean)session.getAttribute("member");
 			MemberBean memberCheck = memberservice.getMember(memberBean);
 			if(memberCheck.getMem_email_cert() == 0) {
-				model.addAttribute("msg", "이메일 인증 미완료 회원입니다. 이메일 인증을 진행해주세요."); 
+				model.addAttribute("msg", StrResources.EMAIL_CERT);
 				model.addAttribute("url", "cert");
 				return "/common/alertMessage";
 			}

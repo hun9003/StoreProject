@@ -69,5 +69,23 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne(namespace+".getMemberEmailCode", memberAuthEmailBean);
 	}
 
+	@Override
+	public MemberAuthEmailBean checkMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
+		System.out.println("MemberDAOImpl - checkMemberEmailCode()");
+		return sqlSession.selectOne(namespace+".checkMemberEmailCode", memberAuthEmailBean);
+	}
+
+	@Override
+	public int updateMemberEmailCert(MemberBean memberBean) {
+		System.out.println("MemberDAOImpl - updateMemberEmailCert()");
+		return sqlSession.update(namespace+".updateMemberEmailCert", memberBean);
+	}
+
+	@Override
+	public int useMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
+		System.out.println("MemberDAOImpl - useMemberEmailCode()");
+		return sqlSession.update(namespace+".useMemberEmailCode", memberAuthEmailBean);
+	}
+
 
 }

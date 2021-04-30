@@ -29,12 +29,18 @@
 		SELECT * FROM member_auth_email WHERE mem_id = #{mem_id}
 	</select>
 
+<!--	이메일 코드 체크-->
+	<select id="checkMemberEmailCode" resultType="emailCode">
+		SELECT * FROM member_auth_email WHERE mem_id = #{mem_id} AND mae_key = #{mae_key}
+	</select>
+
+
 <!-- 	회원가입 -->
 	<insert id="insertMember">
-		INSERT INTO member 
+		INSERT INTO member
 		VALUES (null, #{mem_userid}, #{mem_email}, #{mem_password}, #{mem_nickname},
-		#{mem_level}, #{mem_point}, #{mem_phone}, #{mem_gender}, #{mem_receive_email}, 
-		#{mem_receive_sms}, #{mem_denied}, #{mem_email_cert}, #{mem_register_datetime}, #{mem_register_ip}, 
+		#{mem_level}, #{mem_point}, #{mem_phone}, #{mem_gender}, #{mem_receive_email},
+		#{mem_receive_sms}, #{mem_denied}, #{mem_email_cert}, #{mem_register_datetime}, #{mem_register_ip},
 		#{mem_lastlogin_datetime}, #{mem_lastlogin_ip}, #{mem_is_admin}, #{mem_profile_content}, #{mem_adminmemo}, #{mem_photo})
 	</insert>
 
@@ -53,5 +59,15 @@
 <!--	이메일 코드 재전송-->
 	<update id="updateMemberEmailCode">
 		UPDATE member_auth_email SET mae_key = #{mae_key}, mae_generate_datetime = #{mae_generate_datetime} WHERE mem_id = #{mem_id}
+	</update>
+
+<!--	이메일 인증 완료-->
+	<update id="updateMemberEmailCert">
+		UPDATE member SET mem_email_cert = 1 WHERE mem_id = #{mem_id}
+	</update>
+
+<!--	이메일 코드 폐기-->
+	<update id="useMemberEmailCode">
+		UPDATE member_auth_email SET mae_use_datetime = #{mae_use_datetime}, mae_expired = #{mae_expired} WHERE mem_id = #{mem_id}
 	</update>
 </mapper>

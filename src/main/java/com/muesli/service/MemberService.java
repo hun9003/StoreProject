@@ -20,4 +20,10 @@ public interface MemberService {
     int updateMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean);
 
 	MemberAuthEmailBean getMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean);
+
+    MemberAuthEmailBean checkMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean);
+
+	int updateMemberEmailCert(MemberBean memberBean);
+
+    int useMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean);
 }
