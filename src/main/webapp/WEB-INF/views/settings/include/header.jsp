@@ -3,14 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Header -->
 <header id="header">
-	<a href="<c:url value="/home"/>" class="logo"><strong>뮤즐리</strong> 커뮤니티</a>
+	<a href="<c:url value="/home"/>" class="logo"><strong>뮤즐리</strong> 커뮤니티</a> 관리자 페이지
 	<ul class="icons">
 		<c:choose>
 			<c:when test="${sessionScope.member != null}">
 				<li><span>${sessionScope.member.mem_nickname}님 환영합니다.</span></li>
-				<c:if test="${sessionScope.member.mem_is_admin == 1}">
-					<li><a href="<c:url value="/settings"/>" class="fas fa-cogs"> <span class="label">관리</span></a></li>
-				</c:if>
 				<li><a href="<c:url value="/logout"/>" class="fas fa-sign-out-alt"> <span class="label">로그아웃</span></a></li>
 			</c:when>
 			<c:otherwise>

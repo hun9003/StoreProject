@@ -1,0 +1,12 @@
+/*
+ul.alt 안의 li를 hover 했을 때
+*/
+ul.alt > li > span.hov:hover {
+    font-weight: bold;
+    color: #f56a6a;
+    cursor: pointer;
+}
+
+.menu-controller {
+    cursor: pointer;
+}

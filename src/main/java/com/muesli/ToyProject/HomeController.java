@@ -44,33 +44,33 @@ public class HomeController {
 			if(memberCheck.getMem_email_cert() == 0) {
 				model.addAttribute("msg", StrResources.EMAIL_CERT);
 				model.addAttribute("url", "cert");
-				return "/common/alertMessage";
+				return StrResources.ALERT_MESSAGE_PAGE;
 			}
 		}
-		return "/home";
+		return StrResources.MAIN_PAGE;
 	}
 	
 	@RequestMapping(value = "/top", method = RequestMethod.GET)
 	public String top() {
 		System.out.println("HomeController - top() :: GET /top");
-		return "/include/top";
+		return StrResources.INCLUDE_TOP;
 	}
 	
 	@RequestMapping(value = "/header", method = RequestMethod.GET)
 	public String header(Model model, HttpServletRequest request) {
 		System.out.println("HomeController - header() :: GET /header");
-		return "/include/header";
+		return StrResources.INCLUDE_SETTING_HEADER;
 	}
 	
 	@RequestMapping(value = "/side", method = RequestMethod.GET)
 	public String side(Model model, HttpServletRequest request) {
 		System.out.println("HomeController - side() :: GET /side");
-		return "/include/side";
+		return StrResources.INCLUDE_SETTING_SIDE;
 	}
 	
 	@RequestMapping(value = "/bottom", method = RequestMethod.GET)
 	public String bottom() {
 		System.out.println("HomeController - bottom() :: GET /header");
-		return "/include/bottom";
+		return StrResources.INCLUDE_SETTING_BOTTOM;
 	}
 }

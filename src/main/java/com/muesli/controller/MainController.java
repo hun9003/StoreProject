@@ -1,6 +1,7 @@
 package com.muesli.controller;
 
 
+import com.muesli.util.StrResources;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,6 @@ public class MainController {
 	public String main() {
 		System.out.println("MainController - main() :: GET");
 		
-		return "/main/main";
+		return StrResources.MAIN_PAGE;
 	}
 }

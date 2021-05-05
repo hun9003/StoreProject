@@ -1777,7 +1777,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="413" parent="257" name="men_moblie">
+    <column id="413" parent="257" name="men_mobile">
       <Position>7</Position>
       <Comment>모바일 버전에서 보일지 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>

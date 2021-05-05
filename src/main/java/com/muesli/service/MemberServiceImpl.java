@@ -8,6 +8,9 @@ import com.muesli.dao.MemberDAO;
 import com.muesli.domain.MemberAuthEmailBean;
 import com.muesli.domain.MemberBean;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -80,5 +83,17 @@ public class MemberServiceImpl implements MemberService {
 	public int useMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
 		System.out.println("MemberServiceImpl - useMemberEmailCode()");
 		return memberDAO.useMemberEmailCode(memberAuthEmailBean);
+	}
+
+	@Override
+	public int getListCount(Map<String, Object> searchMap) {
+		System.out.println("MemberServiceImpl - getListCount()");
+		return memberDAO.getListCount(searchMap);
+	}
+
+	@Override
+	public List<MemberBean> getMemberList(Map<String, Object> searchMap) {
+		System.out.println("MemberServiceImpl - getMemberList()");
+		return memberDAO.getMemberList(searchMap);
 	}
 }

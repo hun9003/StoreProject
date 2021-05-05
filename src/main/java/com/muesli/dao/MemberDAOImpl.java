@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.muesli.domain.MemberAuthEmailBean;
 import com.muesli.domain.MemberBean;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public class MemberDAOImpl implements MemberDAO {
 	
@@ -57,34 +60,53 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.insert(namespace+".createMemberEmailCode", memberAuthEmailBean);
 	}
 
+	// 메일 코드 재전송
 	@Override
 	public int updateMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
 		System.out.println("MemberDAOImpl - updateMemberEmailCode()");
 		return sqlSession.update(namespace+".updateMemberEmailCode", memberAuthEmailBean);
 	}
 
+	// 메일 코드 가져오기
 	@Override
 	public MemberAuthEmailBean getMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
 		System.out.println("MemberDAOImpl - getMemberEmailCode()");
 		return sqlSession.selectOne(namespace+".getMemberEmailCode", memberAuthEmailBean);
 	}
 
+	// 메일 코드 체크
 	@Override
 	public MemberAuthEmailBean checkMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
 		System.out.println("MemberDAOImpl - checkMemberEmailCode()");
 		return sqlSession.selectOne(namespace+".checkMemberEmailCode", memberAuthEmailBean);
 	}
 
+	// 회원 메일 인증 여부 변경
 	@Override
 	public int updateMemberEmailCert(MemberBean memberBean) {
 		System.out.println("MemberDAOImpl - updateMemberEmailCert()");
 		return sqlSession.update(namespace+".updateMemberEmailCert", memberBean);
 	}
 
+	// 메일 사용 여부 변경
 	@Override
 	public int useMemberEmailCode(MemberAuthEmailBean memberAuthEmailBean) {
 		System.out.println("MemberDAOImpl - useMemberEmailCode()");
 		return sqlSession.update(namespace+".useMemberEmailCode", memberAuthEmailBean);
+	}
+
+	// 회원 리스트 갯수 가져오기
+	@Override
+	public int getListCount(Map<String, Object> searchMap) {
+		System.out.println("MemberDAOImpl - getListCount()");
+		return sqlSession.selectOne(namespace+".getListCount", searchMap);
+	}
+
+	// 회원 리스트 가져오기
+	@Override
+	public List<MemberBean> getMemberList(Map<String, Object> searchMap) {
+		System.out.println("MemberDAOImpl - getMemberList()");
+		return sqlSession.selectList(namespace+".getMemberList", searchMap);
 	}
 
 

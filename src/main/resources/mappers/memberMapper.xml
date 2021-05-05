@@ -21,6 +21,9 @@
 		<if test="mem_password != null">
 		AND mem_password = #{mem_password}
 		</if>
+		<if test="mem_id != null and mem_password == null">
+		AND mem_id = #{mem_id}
+		</if>
 		</trim>
 	</select>
 
@@ -70,4 +73,49 @@
 	<update id="useMemberEmailCode">
 		UPDATE member_auth_email SET mae_use_datetime = #{mae_use_datetime}, mae_expired = #{mae_expired} WHERE mem_id = #{mem_id}
 	</update>
+
+<!--	멤버 리스트 갯수-->
+	<select id="getListCount" resultType="int">
+		SELECT COUNT(mem_id) FROM member
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="sch_type != null">
+				<choose>
+					<when test="sch_type == 1">
+						AND mem_userid LIKE CONCAT('%',#{sch_content},'%')
+					</when>
+					<when test="sch_type == 2">
+						AND mem_nickname LIKE CONCAT('%',#{sch_content},'%')
+					</when>
+					<when test="sch_type == 3">
+						AND mem_email LIKE CONCAT('%',#{sch_content},'%')
+					</when>
+				</choose>
+			</if>
+		</trim>
+	</select>
+
+<!--	멤버 리스트-->
+	<select id="getMemberList" resultType="member">
+		SELECT * FROM member
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="sch_type != null">
+				<choose>
+					<when test="sch_type == 1">
+						AND mem_userid LIKE CONCAT('%',#{sch_content},'%')
+					</when>
+					<when test="sch_type == 2">
+						AND mem_nickname = LIKE CONCAT('%',#{sch_content},'%')
+					</when>
+					<when test="sch_type == 3">
+						AND mem_email LIKE CONCAT('%',#{sch_content},'%')
+					</when>
+				</choose>
+			</if>
+			<if test="denied == 0">
+				AND mem_denied != 1
+			</if>
+		</trim>
+		ORDER BY mem_id DESC
+		LIMIT #{pageBean.startRow},#{pageBean.pageSize};
+	</select>
 </mapper>

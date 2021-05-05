@@ -9,5 +9,7 @@
  		<typeAlias alias="member" type="com.muesli.domain.MemberBean"/>
 		<!--  		회원 이메일 코드 -->
 		<typeAlias alias="emailCode" type="com.muesli.domain.MemberAuthEmailBean"/>
- 	</typeAliases>
+		<!--		메뉴-->
+		<typeAlias alias="menu" type="com.muesli.domain.MenuBean"/>
+	</typeAliases>
  </configuration> 

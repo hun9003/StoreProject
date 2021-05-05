@@ -43,9 +43,9 @@ public class MemberController {
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
             model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
-        return "member/join";
+        return StrResources.JOIN_PAGE;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -54,16 +54,16 @@ public class MemberController {
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
             model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
-        return "member/login";
+        return StrResources.LOGIN_PAGE;
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) {
         System.out.println("MemberController - logout :: GET /logout");
         session.invalidate();
-        return "redirect:/login";
+        return StrResources.REDIRECT+"/login";
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -72,7 +72,7 @@ public class MemberController {
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
             model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
         // 현재 시간과 IP를 확인
         Timestamp nowTime = new Timestamp(System.currentTimeMillis());
@@ -98,10 +98,9 @@ public class MemberController {
         // 예외 처리
         if (result == 0) {
             model.addAttribute("msg", StrResources.ERROR);
-            model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
-        return "redirect:/login";
+        return StrResources.REDIRECT+"/login";
     }
     // 비밀번호 해시화
     private String SALT(String password) {
@@ -128,8 +127,7 @@ public class MemberController {
         System.out.println("MemberController - loginPost");
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
-            model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
         String password = request.getParameter("mem_password"); // 유저 비밀번호
         memberBean.setMem_password(SALT(password));
@@ -148,15 +146,13 @@ public class MemberController {
                 session.setAttribute("member", memberCheck);
             } else {
                 model.addAttribute("msg", StrResources.ERROR);
-                model.addAttribute("url", "/home");
-                return "/common/alertMessage";
+                return StrResources.ALERT_MESSAGE_PAGE;
             }
         } else {
-            model.addAttribute("msg", StrResources.ERROR);
-            model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            model.addAttribute("msg", StrResources.LOGIN_FAIL);
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
-        return "redirect:/home";
+        return StrResources.REDIRECT+"/home";
     }
 
     @RequestMapping(value = "/ckUserid", method = RequestMethod.GET)
@@ -218,14 +214,14 @@ public class MemberController {
         }
         MemberBean memberBean = (MemberBean) session.getAttribute("member");
         model.addAttribute("mem_email", memberBean.getMem_email());
-        return "/member/cert";
+        return StrResources.CERT_PAGE;
     }
 
     // 이메일 인증 폼
     @RequestMapping(value = "/certForm", method = RequestMethod.GET)
     public String certForm() {
         System.out.println("MemberController - certForm :: GET /certForm");
-        return "/member/cert_form";
+        return StrResources.CERT_FORM_PAGE;
     }
 
     // 이메일 전송 ajax
@@ -305,8 +301,8 @@ public class MemberController {
 		System.out.println("MemberController - sandMail :: POST /sandMail");
         if(!StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.LOGIN);
-            model.addAttribute("url", "/home");
-            return "/common/alertMessage";
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
         MemberBean memberBean = (MemberBean)session.getAttribute("member");
 		// 코드가 일치하는지 확인을 위해 서비스 호출
@@ -328,7 +324,7 @@ public class MemberController {
         } else {
             model.addAttribute("msg", StrResources.FAIL);
         }
-        return "/common/alertMessage";
+        return StrResources.ALERT_MESSAGE_PAGE;
 
 	}
 }

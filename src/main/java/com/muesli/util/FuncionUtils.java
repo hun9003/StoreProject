@@ -6,7 +6,7 @@ public class FuncionUtils {
 
 	public String getRandStr() {
 		String code = "";
-		StringBuffer temp = new StringBuffer();
+		StringBuilder temp = new StringBuilder();
 		Random rnd = new Random();
 		for (int i = 0; i < 6; i++) {
 		    int rIndex = rnd.nextInt(3);

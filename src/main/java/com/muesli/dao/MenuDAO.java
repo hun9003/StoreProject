@@ -1,0 +1,24 @@
+package com.muesli.dao;
+
+
+import com.muesli.domain.MenuBean;
+
+import java.util.List;
+import java.util.Map;
+
+public interface MenuDAO {
+
+    List<MenuBean> getMenuList();
+
+    MenuBean getMenu(int men_id);
+
+    int updateMenu(MenuBean menuBean);
+
+    int getMenuGroupCount();
+
+    int getMenuCount(String men_parent);
+
+    int updateOrder(Map<String, Object> menuMap);
+
+    int updateOtherOrder(Map<String, Object> menuMap);
+}
