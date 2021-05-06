@@ -21,4 +21,10 @@ public interface MenuService {
     int updateOrder(Map<String, Object> menuMap);
 
     int updateOtherOrder(Map<String, Object> menuMap);
+
+    int insertMenu(MenuBean menuBean);
+
+    int deleteMenu(int men_id);
+
+    void pushMenuOrder(MenuBean menuBean);
 }

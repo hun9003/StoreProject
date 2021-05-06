@@ -59,18 +59,18 @@ public class HomeController {
 	@RequestMapping(value = "/header", method = RequestMethod.GET)
 	public String header(Model model, HttpServletRequest request) {
 		System.out.println("HomeController - header() :: GET /header");
-		return StrResources.INCLUDE_SETTING_HEADER;
+		return StrResources.INCLUDE_HEADER;
 	}
 	
 	@RequestMapping(value = "/side", method = RequestMethod.GET)
 	public String side(Model model, HttpServletRequest request) {
 		System.out.println("HomeController - side() :: GET /side");
-		return StrResources.INCLUDE_SETTING_SIDE;
+		return StrResources.INCLUDE_SIDE;
 	}
 	
 	@RequestMapping(value = "/bottom", method = RequestMethod.GET)
 	public String bottom() {
 		System.out.println("HomeController - bottom() :: GET /header");
-		return StrResources.INCLUDE_SETTING_BOTTOM;
+		return StrResources.INCLUDE_BOTTOM;
 	}
 }

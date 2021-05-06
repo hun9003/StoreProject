@@ -56,4 +56,22 @@ public class MenuServiceImpl implements MenuService {
 		System.out.println("MenuServiceImpl - updateOtherOrder()");
 		return menuDAO.updateOtherOrder(menuMap);
 	}
+
+	@Override
+	public int insertMenu(MenuBean menuBean) {
+		System.out.println("MenuServiceImpl - insertMenu()");
+		return menuDAO.insertMenu(menuBean);
+	}
+
+	@Override
+	public int deleteMenu(int men_id) {
+		System.out.println("MenuServiceImpl - deleteMenu()");
+		return menuDAO.deleteMenu(men_id);
+	}
+
+	@Override
+	public void pushMenuOrder(MenuBean menuBean) {
+		System.out.println("MenuServiceImpl - pushMenuOrder()");
+		menuDAO.pushMenuOrder(menuBean);
+	}
 }

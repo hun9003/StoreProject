@@ -21,7 +21,7 @@
 						<span class="opener">메뉴관리</span>
 						<ul>
 							<li><a href="<c:url value="/settings/menu-group"/>">메뉴그룹 관리</a></li>
-							<li><a href="#">메뉴 관리</a></li>
+							<li><a href="<c:url value="/settings/menu"/>">메뉴 관리</a></li>
 						</ul>
 					</li>
 					<li>

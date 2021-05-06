@@ -17,7 +17,7 @@ public class StrResources {
     public static final String ALREADY_LOGIN = "이미 로그인 하셨습니다."; // 비로그인이 이용하는 시스템일 때
     public static final String EMAIL_CERT = "이메일 인증 미완료 회원입니다. 이메일 인증을 진행해주세요."; // 이메일 인증이 필요할 때
 
-    // 메뉴수정 관련 ===============================================================================
+    // 메뉴 관련 ===============================================================================
     public static final String FAIL_UPDATE_ORDER = "더이상 메뉴의 순서를 변경할 수 없습니다"; // 메뉴의 순서가 이미 최상단이거나 최하단일 때
 
     // 리다이렉트 관련 ==========================================================================
@@ -33,11 +33,11 @@ public class StrResources {
     public static final String INCLUDE_SETTING_SIDE = "/settings/include/side"; // 리팩토링 side 관리자페이지
     public static final String INCLUDE_SETTING_BOTTOM = "/settings/include/bottom"; // 리팩토링 bottom 관리자페이지
 
-    public static final String SETTING_MEMBER_PAGE = "/settings/member/members";
-    public static final String SETTING_MEMBER_INFO = "/settings/member/info";
+    public static final String SETTING_MEMBER_PAGE = "/settings/member/members"; // 회원 관리 페이지
+    public static final String SETTING_MEMBER_INFO = "/settings/member/info"; // 회원 정보 조회 페이지
 
-    public static final String SETTING_MENU_PAGE = "/settings/navigation/menu";
-    public static final String SETTING_MENU_INFO = "/settings/navigation/info";
+    public static final String SETTING_MENU_PAGE = "/settings/navigation/menu"; // 메뉴 관리 페이지
+    public static final String SETTING_MENU_INFO = "/settings/navigation/info"; // 메뉴 정보 조회 페이지
 
     public static final String MAIN_PAGE = "/home"; // 메인 페이지
     public static final String SETTING_PAGE = "/settings/index"; // 관리자 페이지

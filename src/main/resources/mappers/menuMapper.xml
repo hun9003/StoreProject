@@ -17,7 +17,7 @@
 <!--    메뉴 수정-->
     <update id="updateMenu">
         UPDATE menu SET men_name = #{men_name}, men_link = #{men_link}, men_custom = #{men_custom}, men_desktop = #{men_desktop},
-                        men_mobile = #{men_mobile}, men_parent = #{men_parent}, men_target = #{men_target} WHERE men_id = #{men_id}
+                        men_mobile = #{men_mobile}, men_target = #{men_target} WHERE men_id = #{men_id}
     </update>
 
 <!--    메뉴그룹 개수-->
@@ -29,6 +29,12 @@
     <select id="getMenuCount" resultType="int">
         SELECT COUNT(men_id) FROM menu WHERE men_parent = #{men_parent}
     </select>
+
+<!--    메뉴 생성-->
+    <insert id="insertMenu">
+        INSERT INTO menu VALUES (null, #{men_parent}, #{men_name}, #{men_link}, #{men_target},
+                                 #{men_desktop}, #{men_mobile}, #{men_custom}, #{men_order});
+    </insert>
 
 <!--    대상 메뉴 순서 변경-->
     <update id="updateOtherOrder">
@@ -52,5 +58,19 @@
                                                 </choose>
         WHERE men_id = #{menuBean.men_id}
     </update>
+
+<!--    메뉴 삭제시 뒷 순서 한 칸씩 앞당기기-->
+    <update id="pushMenuOrder">
+        UPDATE menu SET men_order = men_order-1
+        WHERE men_order > #{men_order}
+        <if test="men_parent != null">
+            AND men_parent = #{men_parent}
+        </if>
+    </update>
+
+<!--    메뉴 삭제-->
+    <delete id="deleteMenu">
+        DELETE FROM menu WHERE men_id = #{men_id}
+    </delete>
 </mapper>
 

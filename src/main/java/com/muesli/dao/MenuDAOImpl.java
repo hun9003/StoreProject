@@ -56,4 +56,22 @@ public class MenuDAOImpl implements MenuDAO {
 		System.out.println("MenuDAOImpl - updateOtherOrder()");
 		return sqlSession.update(namespace+".updateOtherOrder", menuMap);
 	}
+
+	@Override
+	public int insertMenu(MenuBean menuBean) {
+		System.out.println("MenuDAOImpl - insertMenu()");
+		return sqlSession.insert(namespace+".insertMenu", menuBean);
+	}
+
+	@Override
+	public int deleteMenu(int men_id) {
+		System.out.println("MenuDAOImpl - deleteMenu()");
+		return sqlSession.delete(namespace+".deleteMenu", men_id);
+	}
+
+	@Override
+	public void pushMenuOrder(MenuBean menuBean) {
+		System.out.println("MenuDAOImpl - pushMenuOrder()");
+		sqlSession.update(namespace+".pushMenuOrder", menuBean);
+	}
 }
