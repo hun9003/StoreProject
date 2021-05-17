@@ -1,9 +1,11 @@
 package com.muesli.controller;
 
 
+import com.muesli.domain.BoardBean;
 import com.muesli.domain.MemberBean;
 import com.muesli.domain.MenuBean;
 import com.muesli.domain.PageBean;
+import com.muesli.service.BoardService;
 import com.muesli.service.MemberService;
 import com.muesli.service.MenuService;
 import com.muesli.util.StrResources;
@@ -23,10 +25,13 @@ import java.util.Map;
 public class SettingsController {
 
     @Inject
-    MemberService memberService;
+    private MemberService memberService;
 
     @Inject
-    MenuService menuService;
+    private MenuService menuService;
+
+    @Inject
+    private BoardService boardService;
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String main() {
@@ -59,7 +64,7 @@ public class SettingsController {
         return StrResources.INCLUDE_SETTING_BOTTOM;
     }
 
-    // 회원 관리 페이지
+    // 회원 관리 페이지 ================================================================================================
     @RequestMapping(value = "/settings/members", method = RequestMethod.GET)
     public String members() {
         System.out.println("SettingsController - bottom() :: GET /settings/members");
@@ -145,7 +150,7 @@ public class SettingsController {
         return StrResources.SETTING_MEMBER_INFO;
     }
 
-    // 메뉴 그룹 관리
+    // 메뉴 그룹 관리 ==================================================================================================
     @RequestMapping(value = "/settings/menu-group", method = RequestMethod.GET)
     public String menu_group(Model model) {
         System.out.println("SettingsController - menu_group() :: GET /settings/menu-group");
@@ -185,8 +190,8 @@ public class SettingsController {
 
     // 메뉴 정보 조회
     @RequestMapping(value = "/settings/menu-info/{men_id}", method = RequestMethod.GET)
-    public String menu_info(Model model, @PathVariable int men_id) {
-        System.out.println("SettingsController - menu_info() :: GET /settings/menu-info/" + men_id);
+    public String menu_info_page(Model model, @PathVariable int men_id) {
+        System.out.println("SettingsController - menu_info_page() :: GET /settings/menu-info/" + men_id);
 
         // 메뉴 PK로 정보 가져와서 저장
         MenuBean menuBean = menuService.getMenu(men_id);
@@ -197,7 +202,7 @@ public class SettingsController {
 
     // 메뉴 정보 수정
     @RequestMapping(value = "/settings/menu-info/{men_id}", method = RequestMethod.POST)
-    public String menu_info_post(Model model, @PathVariable int men_id, MenuBean menuBean, HttpServletRequest request) {
+    public String menu_update(Model model, @PathVariable int men_id, MenuBean menuBean, HttpServletRequest request) {
         System.out.println("SettingsController - menu_info_post() :: POST /settings/menu-info/" + men_id);
 
         // 새창으로 열기가 널일시 기본값으로 _self 넣기
@@ -324,8 +329,8 @@ public class SettingsController {
 
     // 메뉴 생성
     @RequestMapping(value = "/settings/menu-create", method = RequestMethod.GET)
-    public String menu_create(Model model, HttpServletRequest request) {
-        System.out.println("SettingsController - menu_create() :: GET /settings/menu-create");
+    public String menu_create_page(Model model, HttpServletRequest request) {
+        System.out.println("SettingsController - menu_create_page() :: GET /settings/menu-create");
 
         // 그룹인지 메뉴인지 저장후 메뉴라면 메뉴그룹 PK 정보 저장
         String menuType = request.getParameter("menuType");
@@ -351,8 +356,8 @@ public class SettingsController {
     }
 
     @RequestMapping(value = "/settings/menu-create", method = RequestMethod.POST)
-    public String menu_create_post(Model model, HttpServletRequest request, MenuBean menuBean) {
-        System.out.println("SettingsController - menu_create_post() :: POST /settings/menu-create");
+    public String menu_create(Model model, HttpServletRequest request, MenuBean menuBean) {
+        System.out.println("SettingsController - menu_create() :: POST /settings/menu-create");
 
         // 그룹인지 메뉴인지 판별해서 저장
         String menuType = "";
@@ -422,5 +427,106 @@ public class SettingsController {
         menuService.pushMenuOrder(menuBean);
 
         return StrResources.REDIRECT+"/settings/"+url+menuParent;
+    }
+
+    // 게시판 관리 페이지 ==============================================================================================
+    @RequestMapping(value = "/settings/board", method = RequestMethod.GET)
+    public String board(Model model) {
+        System.out.println("SettingsController - board() :: GET /settings/board");
+
+        // 게시판 목록 가져오기
+        List<BoardBean> boardBeans = boardService.getBoardList();
+
+        model.addAttribute("boards", boardBeans);
+        return StrResources.SETTING_BOARD_PAGE;
+    }
+
+    // 게시판 생성 페이지
+    @RequestMapping(value = "/settings/board-create", method = RequestMethod.GET)
+    public String board_create_page(Model model) {
+        System.out.println("SettingsController - board_create_page() :: GET /settings/board-info");
+
+        return StrResources.SETTING_BOARD_INFO;
+    }
+
+    // 게시판 생성
+    @RequestMapping(value = "/settings/board-create", method = RequestMethod.POST)
+    public String board_create(Model model, BoardBean boardBean) {
+        System.out.println("SettingsController - board_create() :: GET /settings/board-info");
+        
+        boardBean.setBgr_id(1); // 임시 설정
+        boardBean.setBrd_search(1); // 임시 설정
+        
+        // order 세팅을 위해 해당 게시판 그룹의 가장 높은 순서 들고오기
+        boardBean.setBrd_order(boardService.getMaxOrder(boardBean.getBgr_id())+1);
+
+        int result = boardService.insertBoard(boardBean);
+        if(result < 1) {
+            model.addAttribute("msg", StrResources.FAIL);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        return StrResources.REDIRECT+"/settings/board";
+    }
+
+
+    // 게시판 정보 조회 페이지
+    @RequestMapping(value = "/settings/board-info/{brd_id}", method = RequestMethod.GET)
+    public String board_info(Model model, @PathVariable int brd_id) {
+        System.out.println("SettingsController - board_info() :: GET /settings/board-info");
+
+        BoardBean boardBean = boardService.getBoard(brd_id);
+
+        model.addAttribute("board", boardBean);
+        return StrResources.SETTING_BOARD_INFO;
+    }
+
+    @RequestMapping(value = "/settings/board-info", method = RequestMethod.GET)
+    public String board_info(Model model) {
+        System.out.println("SettingsController - board_info() :: GET /settings/board-info");
+
+        model.addAttribute("msg", StrResources.BAD_REDIRECT);
+        return StrResources.ALERT_MESSAGE_PAGE;
+    }
+
+    // 메뉴 정보 수정
+    @RequestMapping(value = "/settings/board-info/{brd_id}", method = RequestMethod.POST)
+    public String board_update(Model model, @PathVariable int brd_id, BoardBean boardBean, HttpServletRequest request) {
+        System.out.println("SettingsController - board_update() :: POST /settings/board-info/" + brd_id);
+
+        // 게시판 수정하기
+        int isSuccess = boardService.updateBoard(boardBean);
+
+        // 성공, 실패 메세지 저장하기
+        if (isSuccess == 1) {
+            model.addAttribute("msg", StrResources.SUCCESS);
+            model.addAttribute("url", "/settings/board");
+        } else {
+            model.addAttribute("msg", StrResources.FAIL);
+        }
+        return StrResources.ALERT_MESSAGE_PAGE;
+    }
+    
+    @RequestMapping(value = "/settings/board-delete", method = RequestMethod.GET)
+    public String board_delete(Model model, HttpServletRequest request) {
+        System.out.println("SettingsController - board_delete() :: GET /settings/board-delete");
+        // 삭제할 PK 저장
+        int brd_id = 0;
+        if(request.getParameter("brd_id") != null){
+            brd_id = Integer.parseInt(request.getParameter("brd_id"));
+        }
+        // 삭제할 게시판 정보 호출
+        BoardBean boardBean = boardService.getBoard(brd_id);
+
+
+        int result = boardService.deleteBoard(brd_id);
+        if(result < 1) {
+            model.addAttribute("msg", StrResources.FAIL);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+        // 삭제에 성공 했을때 삭제 게시판 뒷번호들 한번호씩 땡기기
+//        boardService.pushBoardOrder(boardBean);
+
+        return StrResources.REDIRECT+"/settings/board";
     }
 }

@@ -10,3 +10,7 @@ ul.alt > li > span.hov:hover {
 .menu-controller {
     cursor: pointer;
 }
+
+.btn-container {
+    text-align: right;
+}

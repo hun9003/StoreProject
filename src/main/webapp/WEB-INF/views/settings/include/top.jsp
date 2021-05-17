@@ -10,6 +10,16 @@
 		<link rel="stylesheet" href="<c:url value="/resources/css/main.css"/>" />
 		<link rel="stylesheet" href="<c:url value="/resources/css/custom.css"/>" />
 		<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
-		
+		<c:if test="${sessionScope.member == null}">
+			<script>
+				location.href = "<c:url value="/no-login"/>";
+			</script>
+		</c:if>
+		<c:if test="${sessionScope.member.mem_is_admin != 1}">
+			<script>
+				location.href = "<c:url value="/no-permission"/>";
+			</script>
+		</c:if>
+
 	</head>
 	<body class="is-preload">

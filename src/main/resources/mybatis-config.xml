@@ -11,5 +11,9 @@
 		<typeAlias alias="emailCode" type="com.muesli.domain.MemberAuthEmailBean"/>
 		<!--		메뉴-->
 		<typeAlias alias="menu" type="com.muesli.domain.MenuBean"/>
+		<!--		게시판-->
+		<typeAlias alias="board" type="com.muesli.domain.BoardBean"/>
+		<!--		게시물-->
+		<typeAlias alias="post" type="com.muesli.domain.PostBean"/>
 	</typeAliases>
  </configuration> 

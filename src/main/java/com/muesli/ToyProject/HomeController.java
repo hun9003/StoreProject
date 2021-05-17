@@ -6,9 +6,13 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.muesli.domain.MenuBean;
+import com.muesli.service.MenuService;
 import com.muesli.util.StrResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.muesli.domain.MemberBean;
 import com.muesli.service.MemberService;
+
+import java.util.List;
+
 @Controller
 public class HomeController {
 	
@@ -26,6 +33,9 @@ public class HomeController {
 	
 	@Inject
 	MemberService memberservice;
+
+	@Inject
+	MenuService menuService;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -65,6 +75,10 @@ public class HomeController {
 	@RequestMapping(value = "/side", method = RequestMethod.GET)
 	public String side(Model model, HttpServletRequest request) {
 		System.out.println("HomeController - side() :: GET /side");
+		// 메뉴 가져오기
+		List<MenuBean> menuBeans = menuService.getMenuList();
+		// 모델에 저장
+		model.addAttribute("menus", menuBeans);
 		return StrResources.INCLUDE_SIDE;
 	}
 	
@@ -72,5 +86,20 @@ public class HomeController {
 	public String bottom() {
 		System.out.println("HomeController - bottom() :: GET /header");
 		return StrResources.INCLUDE_BOTTOM;
+	}
+
+	@RequestMapping(value = "/no-login", method = RequestMethod.GET)
+	public String no_login(Model model) {
+		System.out.println("HomeController - no_login() :: GET /no-login");
+		model.addAttribute("msg", StrResources.LOGIN);
+		model.addAttribute("url", "/login");
+		return StrResources.ALERT_MESSAGE_PAGE;
+	}
+
+	@RequestMapping(value = "/no-permission", method = RequestMethod.GET)
+	public String no_permission(Model model) {
+		System.out.println("HomeController - no_permission() :: GET /no-permission");
+		model.addAttribute("msg", StrResources.BAD_PERMISSION);
+		return StrResources.ALERT_MESSAGE_PAGE;
 	}
 }

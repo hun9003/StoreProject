@@ -170,4 +170,6 @@
 			location.href = '<c:url value="/settings/menu"/>';
 		}
 	}
+
+
 </script>

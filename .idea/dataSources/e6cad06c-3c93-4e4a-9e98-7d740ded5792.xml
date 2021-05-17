@@ -1776,12 +1776,14 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Comment>데스크탑 버전에서 보일지 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
     </column>
     <column id="413" parent="257" name="men_mobile">
       <Position>7</Position>
       <Comment>모바일 버전에서 보일지 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
     </column>
     <column id="414" parent="257" name="men_custom">
       <Position>8</Position>
@@ -1866,303 +1868,297 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="428" parent="259" name="post_num">
+    <column id="428" parent="259" name="brd_id">
       <Position>2</Position>
-      <Comment>게시글 정렬을 위한 키</Comment>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="429" parent="259" name="brd_id">
-      <Position>3</Position>
       <Comment>게시판 테이블의 PK</Comment>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="430" parent="259" name="post_title">
-      <Position>4</Position>
+    <column id="429" parent="259" name="post_title">
+      <Position>3</Position>
       <Comment>게시글 제목</Comment>
       <DataType>varchar(200)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="431" parent="259" name="post_content">
-      <Position>5</Position>
+    <column id="430" parent="259" name="post_content">
+      <Position>4</Position>
       <Comment>게시글 본문 내용</Comment>
       <DataType>text|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="432" parent="259" name="post_category">
-      <Position>6</Position>
+    <column id="431" parent="259" name="post_category">
+      <Position>5</Position>
       <Comment>카테고리 존재시 연관 키</Comment>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="433" parent="259" name="mem_id">
-      <Position>7</Position>
+    <column id="432" parent="259" name="mem_id">
+      <Position>6</Position>
       <Comment>작성자 회원의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="434" parent="259" name="post_userid">
-      <Position>8</Position>
+    <column id="433" parent="259" name="post_userid">
+      <Position>7</Position>
       <Comment>작성자 회원 아이디</Comment>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="435" parent="259" name="post_nickname">
-      <Position>9</Position>
+    <column id="434" parent="259" name="post_nickname">
+      <Position>8</Position>
       <Comment>작성자의 닉네임</Comment>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="436" parent="259" name="post_datetime">
-      <Position>10</Position>
+    <column id="435" parent="259" name="post_datetime">
+      <Position>9</Position>
       <Comment>게시물 작성 일자</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="437" parent="259" name="post_updated_datetime">
-      <Position>11</Position>
+    <column id="436" parent="259" name="post_updated_datetime">
+      <Position>10</Position>
       <Comment>최종 수정시간</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="438" parent="259" name="post_update_mem_id">
-      <Position>12</Position>
+    <column id="437" parent="259" name="post_update_mem_id">
+      <Position>11</Position>
       <Comment>최종 수정한 회원 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="439" parent="259" name="post_comment_count">
-      <Position>13</Position>
+    <column id="438" parent="259" name="post_comment_count">
+      <Position>12</Position>
       <Comment>달린 댓글 수</Comment>
       <DataType>mediumint(9)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="440" parent="259" name="post_comment_updated_datetime">
-      <Position>14</Position>
+    <column id="439" parent="259" name="post_comment_updated_datetime">
+      <Position>13</Position>
       <Comment>최근 댓글 업데이트 일자</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="441" parent="259" name="post_secret">
-      <Position>15</Position>
+    <column id="440" parent="259" name="post_secret">
+      <Position>14</Position>
       <Comment>비밀글 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="442" parent="259" name="post_notice">
-      <Position>16</Position>
+    <column id="441" parent="259" name="post_notice">
+      <Position>15</Position>
       <Comment>공지사항 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="443" parent="259" name="post_hit">
-      <Position>17</Position>
+    <column id="442" parent="259" name="post_hit">
+      <Position>16</Position>
       <Comment>조회 수</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="444" parent="259" name="post_like">
-      <Position>18</Position>
+    <column id="443" parent="259" name="post_like">
+      <Position>17</Position>
       <Comment>추천 회수</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="445" parent="259" name="post_dislike">
-      <Position>19</Position>
+    <column id="444" parent="259" name="post_dislike">
+      <Position>18</Position>
       <Comment>비추천 회수</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="446" parent="259" name="post_ip">
-      <Position>20</Position>
+    <column id="445" parent="259" name="post_ip">
+      <Position>19</Position>
       <Comment>게시물 등록 IP</Comment>
       <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="447" parent="259" name="post_blame">
-      <Position>21</Position>
+    <column id="446" parent="259" name="post_blame">
+      <Position>20</Position>
       <Comment>신고된 회수</Comment>
       <DataType>mediumint(9)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="448" parent="259" name="post_device">
-      <Position>22</Position>
+    <column id="447" parent="259" name="post_device">
+      <Position>21</Position>
       <Comment>1: 데스크탑, 2: 모바일</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="449" parent="259" name="post_file">
-      <Position>23</Position>
+    <column id="448" parent="259" name="post_file">
+      <Position>22</Position>
       <Comment>첨부된 파일 개수(이미지 제외)</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="450" parent="259" name="post_image">
-      <Position>24</Position>
+    <column id="449" parent="259" name="post_image">
+      <Position>23</Position>
       <Comment>첨부된 이미지 개수</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="451" parent="259" name="post_del">
-      <Position>25</Position>
+    <column id="450" parent="259" name="post_del">
+      <Position>24</Position>
       <Comment>게시물 삭제 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <key id="452" parent="259" name="PRIMARY">
+    <key id="451" parent="259" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>post_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="453" parent="260" name="pfi_id">
+    <column id="452" parent="260" name="pfi_id">
       <Position>1</Position>
       <Comment>PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="454" parent="260" name="post_id">
+    <column id="453" parent="260" name="post_id">
       <Position>2</Position>
       <Comment>게시물 테이블의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="455" parent="260" name="brd_id">
+    <column id="454" parent="260" name="brd_id">
       <Position>3</Position>
       <Comment>게시판 테이블의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="456" parent="260" name="mem_id">
+    <column id="455" parent="260" name="mem_id">
       <Position>4</Position>
       <Comment>파일 업로드한 회원 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="457" parent="260" name="pfi_originname">
+    <column id="456" parent="260" name="pfi_originname">
       <Position>5</Position>
       <Comment>파일 업로드시 원래 파일명</Comment>
       <DataType>varchar(500)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="458" parent="260" name="pfi_filename">
+    <column id="457" parent="260" name="pfi_filename">
       <Position>6</Position>
       <Comment>파일 업로드시 서버에 저장된 파일명</Comment>
       <DataType>varchar(500)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="459" parent="260" name="pfi_download">
+    <column id="458" parent="260" name="pfi_download">
       <Position>7</Position>
       <Comment>다운로드 회수</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="460" parent="260" name="pfi_filesize">
+    <column id="459" parent="260" name="pfi_filesize">
       <Position>8</Position>
       <Comment>파일 크기</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="461" parent="260" name="pfi_width">
+    <column id="460" parent="260" name="pfi_width">
       <Position>9</Position>
       <Comment>이미지일 경우 이미지 가로값</Comment>
       <DataType>mediumint(9)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="462" parent="260" name="pfi_height">
+    <column id="461" parent="260" name="pfi_height">
       <Position>10</Position>
       <Comment>이미지일 경우 이미지 세로값</Comment>
       <DataType>mediumint(9)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="463" parent="260" name="pfi_type">
+    <column id="462" parent="260" name="pfi_type">
       <Position>11</Position>
       <Comment>파일 확장자</Comment>
       <DataType>varchar(10)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="464" parent="260" name="pfi_is_image">
+    <column id="463" parent="260" name="pfi_is_image">
       <Position>12</Position>
       <Comment>이미지인지 여부</Comment>
       <DataType>tinyint(4)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="465" parent="260" name="pfi_datetime">
+    <column id="464" parent="260" name="pfi_datetime">
       <Position>13</Position>
       <Comment>등록일자</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="466" parent="260" name="pfi_ip">
+    <column id="465" parent="260" name="pfi_ip">
       <Position>14</Position>
       <Comment>등록 IP</Comment>
       <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="467" parent="260" name="PRIMARY">
+    <key id="466" parent="260" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>pfi_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="468" parent="261" name="pfd_id">
+    <column id="467" parent="261" name="pfd_id">
       <Position>1</Position>
       <Comment>PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="469" parent="261" name="pfi_id">
+    <column id="468" parent="261" name="pfi_id">
       <Position>2</Position>
       <Comment>첨부파일 테이블의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="470" parent="261" name="post_id">
+    <column id="469" parent="261" name="post_id">
       <Position>3</Position>
       <Comment>게시물 테이블의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="471" parent="261" name="brd_id">
+    <column id="470" parent="261" name="brd_id">
       <Position>4</Position>
       <Comment>게시판 테이블의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="472" parent="261" name="mem_id">
+    <column id="471" parent="261" name="mem_id">
       <Position>5</Position>
       <Comment>다운로드한 회원의 PK</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="473" parent="261" name="pfd_datetime">
+    <column id="472" parent="261" name="pfd_datetime">
       <Position>6</Position>
       <Comment>다운로드 일시</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="474" parent="261" name="pfd_ip">
+    <column id="473" parent="261" name="pfd_ip">
       <Position>7</Position>
       <Comment>다운로드 IP</Comment>
       <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="475" parent="261" name="pfd_useragent">
+    <column id="474" parent="261" name="pfd_useragent">
       <Position>8</Position>
       <Comment>다운로드 유저의 user agent</Comment>
       <DataType>varchar(1000)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="476" parent="261" name="PRIMARY">
+    <key id="475" parent="261" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>pfd_id</ColNames>
       <Primary>1</Primary>

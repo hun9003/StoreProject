@@ -20,14 +20,14 @@
 					<li>
 						<span class="opener">메뉴관리</span>
 						<ul>
-							<li><a href="<c:url value="/settings/menu-group"/>">메뉴그룹 관리</a></li>
-							<li><a href="<c:url value="/settings/menu"/>">메뉴 관리</a></li>
+							<li><a href="<c:url value="/settings/menu-group"/>">메뉴그룹 목록</a></li>
+							<li><a href="<c:url value="/settings/menu"/>">메뉴 목록</a></li>
 						</ul>
 					</li>
 					<li>
 						<span class="opener">게시판 관리</span>
 						<ul>
-							<li><a href="#">게시판 목록</a></li>
+							<li><a href="<c:url value="/settings/board"/>">게시판 목록</a></li>
 						</ul>
 					</li>
 				</ul>

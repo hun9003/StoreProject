@@ -10,6 +10,8 @@ public class StrResources {
     public static final String SUCCESS = "성공적으로 완료했습니다."; // 무언가를 완료 했을 때
     public static final String RESULT_EMPTY = "결과가 존재하지 않습니다"; // 리스트의 결과가 존재하지 않을 때
     public static final String BAD_REDIRECT = "잘못된 접근 방식 입니다."; // 올바른 방식으로 리다이렉트 하지 않은 경우
+    public static final String BAD_PERMISSION = "권한이 없습니다."; // 관리자 권한이 필요한 페이지에 접근할 경우
+    public static final String PAGE_404 = "존재하지 않는 페이지 입니다. 메인 화면으로 이동합니다."; // 404 에러
 
     // 로그인 관련 =================================================================================
     public static final String LOGIN = "로그인이 필요한 시스템 입니다."; // 로그인이 필요한 시스템일 때
@@ -22,6 +24,14 @@ public class StrResources {
 
     // 리다이렉트 관련 ==========================================================================
     public static final String REDIRECT = "redirect:"; // 리다이렉트
+
+    // 게시판 관련 ==============================================================================
+    public static final String SUCCESS_BOARD_WRITE = "게시물 작성을 완료했습니다."; // 게시물 작성 완료
+    public static final String FAIL_BOARD_WRITE = "게시물 작성을 실패했습니다."; // 게시물 작성 실패
+    public static final String SUCCESS_BOARD_UPDATE = "게시물 수정을 완료했습니다."; // 게시물 수정 완료
+    public static final String FAIL_BOARD_UPDATE = "게시물 수정을 실패했습니다."; // 게시물 수정 실패
+    public static final String SUCCESS_BOARD_DELETE = "게시물 삭제를 완료했습니다."; // 게시물 삭제 성공
+    public static final String FAIL_BOARD_DELETE = "게시물 삭제를 실패했습니다."; // 게시물 삭제 실패
 
     public static final String INCLUDE_TOP = "/include/top"; // 리팩토링 top 페이지
     public static final String INCLUDE_HEADER = "/include/header"; // 리팩토링 header 페이지
@@ -39,6 +49,9 @@ public class StrResources {
     public static final String SETTING_MENU_PAGE = "/settings/navigation/menu"; // 메뉴 관리 페이지
     public static final String SETTING_MENU_INFO = "/settings/navigation/info"; // 메뉴 정보 조회 페이지
 
+    public static final String SETTING_BOARD_PAGE = "/settings/board/board"; // 게시판 관리 페이지
+    public static final String SETTING_BOARD_INFO = "/settings/board/info"; // 게시판 정보 페이지
+    
     public static final String MAIN_PAGE = "/home"; // 메인 페이지
     public static final String SETTING_PAGE = "/settings/index"; // 관리자 페이지
     public static final String JOIN_PAGE = "/member/join"; // 회원가입 페이지
@@ -46,7 +59,9 @@ public class StrResources {
     public static final String CERT_PAGE = "/member/cert"; // 이메일 인증 페이지
     public static final String CERT_FORM_PAGE = "/member/cert_form"; // 이메일 인증 폼 페이지
 
-
+    public static final String BOARD_PAGE = "/page/board"; // 게시판 페이지
+    public static final String BOARD_FORM_PAGE = "/page/form"; // 게시판 폼 페이지
+    
     public static final String ALERT_MESSAGE_PAGE = "/common/alertMessage"; // 메세지 출력 페이지
 
     public static boolean CHECK_LOGIN(HttpSession session) {

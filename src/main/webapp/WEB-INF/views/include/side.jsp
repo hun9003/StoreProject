@@ -18,27 +18,20 @@
 				<ul>
 					<li><a href="<c:url value="home"/>">Home</a></li>
 					<li><a href="generic.html">공지사항</a></li>
-					<li>
-						<span class="opener">게시판</span>
-						<ul>
-							<li><a href="#">자유게시판</a></li>
-							<li><a href="#">건의게시판</a></li>
-						</ul>
-					</li>
-					<li>
-						<span class="opener">놀이터</span>
-						<ul>
-							<li><a href="#">이상형월드컵</a></li>
-						</ul>
-					</li>
-					<li>
-						<span class="opener">고객 서비스</span>
-						<ul>
-							<li><a href="#">질문과 답변</a></li>
-							<li><a href="#">자주 묻는 질문</a></li>
-							<li><a href="#">1:1 문의</a></li>
-						</ul>
-					</li>
+					<c:forEach items="${menus}" var="meg">
+							<c:if test="${meg.men_parent == null}">
+							<li>
+								<span class="opener">${meg.men_name}</span>
+								<ul>
+									<c:forEach items="${menus}" var="men">
+										<c:if test="${meg.men_id == men.men_parent}">
+											<li><a href="<c:url value="/board/${men.men_link}/1"/>" target="${men.men_target}">${men.men_name}</a></li>
+										</c:if>
+									</c:forEach>
+								</ul>
+							</li>
+							</c:if>
+					</c:forEach>
 				</ul>
 			</nav>
 		<!-- Section -->
