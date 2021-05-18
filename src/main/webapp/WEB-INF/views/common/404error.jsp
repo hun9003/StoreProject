@@ -1,6 +1,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:import url="/top"/>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -12,8 +13,8 @@
       <section id="banner">
         <div class="content">
           <header>
-            <h1>잘못된 URL 입니다. </h1>
-            <a class="primary" href="<c:url value="/"/>">메인으로</a>
+            <h1><spring:message code="msg.badRedirect"/> </h1>
+            <a class="primary" href="<c:url value="/"/>"><spring:message code="button.main"/></a>
           </header>
         </div>
       </section>

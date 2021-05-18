@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:import url="/top"/>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -22,10 +23,10 @@
                     <table>
                         <thead>
                         <tr>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                            <th>추천</th>
+                            <th><spring:message code="table.title"/></th>
+                            <th><spring:message code="table.writer"/></th>
+                            <th><spring:message code="table.dateWrite"/></th>
+                            <th><spring:message code="table.likes"/></th>
                         </tr>
                         </thead>
                         <tbody>

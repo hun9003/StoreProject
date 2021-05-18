@@ -2,6 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:import url="/top"/>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -12,15 +13,15 @@
             <!-- Section -->
             <section>
                 <header class="major">
-                    <h2>${boardBean.brd_name} 글쓰기</h2>
+                    <h2>${boardBean.brd_name} <spring:message code="button.write"/></h2>
                 </header>
                 <hr>
                 <div class="box">
                     <form method="post">
                         <div class="row gtr-uniform">
                             <div class="col-12 col-12-xsmall">
-                                <label for="post_title">제목</label>
-                                <input type="text" name="post_title" id="post_title" value="" placeholder="제목" required="required">
+                                <label for="post_title"><spring:message code="label.title"/></label>
+                                <input type="text" name="post_title" id="post_title" value="" placeholder="<spring:message code="label.title"/>" required="required">
                                 <hr>
                                 <script type="text/javascript" src="<c:url value="/resources/plugin/ckeditor/ckeditor.js"/>"></script>
                                 <textarea class="form-control" id="p_content" name="post_content"></textarea>
@@ -32,7 +33,7 @@
                                 </script>
                                 <hr>
                                 <div class="btn-container">
-                                    <input class="primary" type="submit" value="작성하기">
+                                    <input class="primary" type="submit" value="<spring:message code="button.submitWrite"/>">
                                 </div>
                                 </div>
                         </div>

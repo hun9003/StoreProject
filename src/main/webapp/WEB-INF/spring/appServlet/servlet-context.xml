@@ -51,5 +51,15 @@
 		</beans:property>
 
 	</beans:bean>
-	
+
+<!--	전역변수-->
+	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basenames">
+			<beans:list>
+				<beans:value>messages.message</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="defaultEncoding" value="utf-8"/>
+	</beans:bean>
+
 </beans:beans>

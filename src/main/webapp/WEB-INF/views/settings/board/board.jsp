@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:import url="/settings/top"/>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -13,13 +14,13 @@
 					<section id="banner">
 						<div class="content">
 							<header>
-								<h2>게시판관리</h2>
+								<h2><spring:message code="title.settingBoard"/></h2>
 							</header>
 							<div class="content">
 								<section>
 									<div class="box">
-										<p>게시판을 생성하거나 수정&삭제 하실 수 있습니다</p>
-										<a href="javascript:void(0)" class="text-primary" onclick="boardCreate()">생성하기</a>
+										<p><spring:message code="msg.settingBoard"/></p>
+										<a href="javascript:void(0)" class="text-primary" onclick="boardCreate()"><spring:message code="button.create"/></a>
 										<hr>
 
 										<div class="row">
@@ -32,7 +33,7 @@
 											</div>
 											<div class="col-6 col-6-xlarge">
 												<section id="board_container">
-													<p class="text-info">게시판 정보를 확인 하실 수 있습니다 게시판을 클릭하세요.</p>
+													<p class="text-info"><spring:message code="msg.settingInfoBoard"/></p>
 												</section>
 											</div>
 										</div>
