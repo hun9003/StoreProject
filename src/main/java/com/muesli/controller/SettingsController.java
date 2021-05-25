@@ -78,7 +78,7 @@ public class SettingsController {
         System.out.println("SettingsController - members() :: GET /settings/members/" + page);
 
         // 페이지 제목
-        String subTitle = "회원목록";
+        String subTitle = "settingMemberList";
         // 차단한 멤버 확인 여부 체크
         int deniedType;
         if (request.getParameter("mem_denied") != null) {
@@ -137,7 +137,7 @@ public class SettingsController {
         System.out.println("SettingsController - member_info() :: GET /settings/members/info/" + mem_id);
 
         // 페이지 제목
-        String subTitle = "회원정보";
+        String subTitle = "settingMemberInfo";
 
         // 멤버 PK로 정보 호출
         MemberBean memberBean = new MemberBean();
@@ -155,7 +155,7 @@ public class SettingsController {
     public String menu_group(Model model) {
         System.out.println("SettingsController - menu_group() :: GET /settings/menu-group");
         // 서브타이틀과 메뉴리스트 담기
-        String subTitle = "메뉴 그룹";
+        String subTitle = "settingMenuGroup";
         List<MenuBean> menuBeans = menuService.getMenuList();
 
         // 모델에 저장
@@ -170,7 +170,7 @@ public class SettingsController {
     public String menu(Model model, HttpServletRequest request) {
         System.out.println("SettingsController - menu() :: GET /settings/menu");
         // 서브타이틀과 메뉴가 속한 그룹의 PK 받아오기
-        String subTitle = "메뉴";
+        String subTitle = "settingMenu";
         String menuParent = request.getParameter("menuParent");
 
         // 만약 메뉴가 속한 그룹이 널스트링으로 저장되었을 시 널로 처리
@@ -342,8 +342,8 @@ public class SettingsController {
         String menuTitle = "";
         if(menuType != null){
             switch (menuType){
-                case "men": menuTitle = "메뉴 생성";break;
-                case "meg": menuTitle = "메뉴 그룹 생성";break;
+                case "men": menuTitle = "settingMenuCreate";break;
+                case "meg": menuTitle = "settingMenuGroupCreate";break;
             }
         } else {
             model.addAttribute("msg", StrResources.BAD_REDIRECT);

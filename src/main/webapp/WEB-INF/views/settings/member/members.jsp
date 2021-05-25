@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:import url="/settings/top"/>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -12,23 +13,23 @@
 				<!-- Banner -->
 					<section>
 						<header class="main">
-							<h2>회원관리 > ${subTitle}</h2>
+							<h2><spring:message code="label.memberSetting"/> > <spring:message code="title.${subTitle}"/></h2>
 						</header>
 						<div class="content">
 							<form action="<c:url value="/settings/members/1"/>" method="get">
 								<div class="row">
 									<div class="col-3 col-3-xsmall">
 										<select name="sch_type">
-											<option value="1">아이디</option>
-											<option value="2">닉네임</option>
-											<option value="3">이메일</option>
+											<option value="1"><spring:message code="label.id"/></option>
+											<option value="2"><spring:message code="label.nickname"/></option>
+											<option value="3"><spring:message code="label.email"/></option>
 										</select>
 									</div>
 									<div class="col-3 col-3-xsmall">
-										<input type="text" name="sch_content" placeholder="검색내용">
+										<input type="text" name="sch_content" placeholder="<spring:message code="label.searchContent"/>">
 									</div>
 									<div class="col-3 col-3-xsmall">
-										<input type="submit" value="검색">
+										<input type="submit" value="<spring:message code="button.search"/>">
 									</div>
 								</div>
 							</form>
@@ -36,14 +37,14 @@
 								<table class="alt">
 									<thead>
 									<tr>
-										<th>No</th>
-										<th>레벨</th>
-										<th>아이디</th>
-										<th>등급</th>
-										<th>닉네임</th>
-										<th>이메일</th>
-										<th>가입날짜</th>
-										<th>마지막접속날짜</th>
+										<th><spring:message code="table.index"/></th>
+										<th><spring:message code="table.level"/></th>
+										<th><spring:message code="table.id"/></th>
+										<th><spring:message code="table.permissoin"/></th>
+										<th><spring:message code="table.nickname"/></th>
+										<th><spring:message code="table.email"/></th>
+										<th><spring:message code="table.joinDatetime"/></th>
+										<th><spring:message code="table.lastDatetime"/></th>
 										<th></th>
 									</tr>
 									</thead>
@@ -54,8 +55,8 @@
 											<td>${member.mem_level}</td>
 											<td>${member.mem_userid}</td>
 											<td><c:choose>
-												<c:when test="${member.mem_is_admin == 1}">관리자</c:when>
-												<c:otherwise>일반회원</c:otherwise>
+												<c:when test="${member.mem_is_admin == 1}"><spring:message code="permission.admin"/></c:when>
+												<c:otherwise><spring:message code="permission.public"/></c:otherwise>
 											</c:choose></td>
 											<td>${member.mem_nickname}</td>
 											<td>${member.mem_email}</td>
@@ -70,7 +71,7 @@
 						</div>
 						<div id="paging">
 							<ul class="pagination">
-								<li><span class="button disabled">Prev</span></li>
+								<li><span class="button disabled"><spring:message code="button.prev"/></span></li>
 								<li><a href="#" class="page active">1</a></li>
 								<li><a href="#" class="page">2</a></li>
 								<li><a href="#" class="page">3</a></li>
@@ -82,7 +83,7 @@
 								<li><a href="#" class="page">8</a></li>
 								<li><a href="#" class="page">9</a></li>
 								<li><a href="#" class="page">10</a></li>
-								<li><a href="#" class="button">Next</a></li>
+								<li><a href="#" class="button"><spring:message code="button.next"/></a></li>
 							</ul>
 						</div>
 					</section>

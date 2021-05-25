@@ -14,3 +14,22 @@ ul.alt > li > span.hov:hover {
 .btn-container {
     text-align: right;
 }
+.hover-btn {
+    transition: 0.5s ease;
+    color : #808080;
+    cursor: pointer;
+}
+
+.hover-btn:hover {
+    color : #f67878;
+}
+
+.active-btn {
+    color : #f67878;
+    transition: 0.5s ease;
+    cursor: pointer;
+}
+
+.active-btn:hover {
+    color : #808080;
+}

@@ -14,7 +14,7 @@
 					<section id="banner">
 						<div class="content">
 							<header>
-								<h2><spring:message code="title.settingBoard"/></h2>
+								<h2><spring:message code="title.board"/></h2>
 							</header>
 							<div class="content">
 								<section>

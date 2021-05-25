@@ -1,6 +1,7 @@
 package com.muesli.dao;
 
 import com.muesli.domain.BoardBean;
+import com.muesli.domain.LikedBean;
 import com.muesli.domain.PostBean;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -74,5 +75,71 @@ public class BoardDAOImpl implements BoardDAO {
 	public List<PostBean> getPostList(Map<String, Object> listMap) {
 		System.out.println("BoardDAOImpl - getPostList()");
 		return sqlSession.selectList(namespace+".getPostList", listMap);
+	}
+
+	@Override
+	public int createPost(PostBean postBean) {
+		System.out.println("BoardDAOImpl - createPost()");
+		return sqlSession.insert(namespace+".createPost", postBean);
+	}
+
+	@Override
+	public PostBean getPost(int post_id) {
+		System.out.println("BoardDAOImpl - getPost()");
+		return sqlSession.selectOne(namespace+".getPost", post_id);
+	}
+
+	@Override
+	public int updatePost(PostBean postBean) {
+		System.out.println("BoardDAOImpl - updatePost()");
+		return sqlSession.update(namespace+".updatePost", postBean);
+	}
+
+	@Override
+	public void hitPost(int post_id) {
+		System.out.println("BoardDAOImpl - hitPost()");
+		sqlSession.update(namespace+".hitPost", post_id);
+	}
+
+	@Override
+	public LikedBean getLiked(Map<String, Object> likeMap) {
+		System.out.println("BoardDAOImpl - getLiked()");
+		return sqlSession.selectOne(namespace+".getLiked", likeMap);
+	}
+
+	@Override
+	public void deleteLike(Map<String, Object> likeMap) {
+		System.out.println("BoardDAOImpl - deleteLike()");
+		sqlSession.delete(namespace+".deleteLike", likeMap);
+	}
+
+	@Override
+	public void insertLike(Map<String, Object> likeMap) {
+		System.out.println("BoardDAOImpl - insertLike()");
+		sqlSession.insert(namespace+".insertLike", likeMap);
+	}
+
+	@Override
+	public int getLikeCount(int post_id) {
+		System.out.println("BoardDAOImpl - getLikeCount()");
+		return sqlSession.selectOne(namespace+".getLikeCount", post_id);
+	}
+
+	@Override
+	public int getHateCount(int post_id) {
+		System.out.println("BoardDAOImpl - getHateCount()");
+		return sqlSession.selectOne(namespace+".getHateCount", post_id);
+	}
+
+	@Override
+	public void setLikeCount(PostBean postBean) {
+		System.out.println("BoardDAOImpl - setLikeCount()");
+		sqlSession.update(namespace+".setLikeCount", postBean);
+	}
+
+	@Override
+	public void setHateCount(PostBean postBean) {
+		System.out.println("BoardDAOImpl - setHateCount()");
+		sqlSession.update(namespace+".setHateCount", postBean);
 	}
 }

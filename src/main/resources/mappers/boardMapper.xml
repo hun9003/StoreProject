@@ -138,4 +138,76 @@
     <delete id="deleteBoard">
         DELETE FROM board WHERE brd_id = #{brd_id}
     </delete>
+
+
+<!--    ========================= 게시물 =======================-->
+    <select id="getPost" resultType="post">
+        SELECT * FROM post WHERE post_id = #{post_id}
+    </select>
+
+    <insert id="createPost">
+        INSERT INTO post VALUES (null, #{brd_id}, #{post_title}, #{post_content}, #{post_category}, #{mem_id}
+                                , #{post_userid}, #{post_nickname}, #{post_datetime}, #{post_updated_datetime}, #{post_update_mem_id}, #{post_comment_count}
+                                , #{post_comment_updated_datetime}, #{post_secret}, #{post_notice}, #{post_hit}, #{post_like}, #{post_dislike}
+                                , #{post_ip}, #{post_blame}, #{post_device}, #{post_file}, #{post_image}, #{post_del})
+    </insert>
+
+    <update id="hitPost">
+        UPDATE post SET post_hit = post_hit+1 WHERE post_id = #{post_id}
+    </update>
+
+    <update id="updatePost">
+        UPDATE post SET post_title = #{post_title}, post_content = #{post_content}, post_updated_datetime = #{post_updated_datetime} WHERE post_id = #{post_id}
+    </update>
+
+    <update id="deletePost">
+        UPDATE post SET post_del = 1 WHERE post_id = #{post_id}
+    </update>
+
+    <update id="setLikeCount">
+        UPDATE post set post_like = #{post_like} WHERE post_id = #{post_id}
+    </update>
+
+    <update id="setHateCount">
+        UPDATE post set post_dislike = #{post_dislike} WHERE post_id = #{post_id}
+    </update>
+
+<!--    좋아요 기능-->
+
+    <select id="getLiked" resultType="like">
+        SELECT * FROM liked WHERE mem_id = #{member.mem_id}
+                              AND target_type = 1
+                              AND target_id = #{post.post_id}
+    </select>
+
+    <select id="getLikeCount" resultType="int">
+        SELECT count(lik_id) FROM liked WHERE target_type = 1
+                                    AND target_id = #{post_id}
+                                    AND lik_type = 1
+    </select>
+
+    <select id="getHateCount" resultType="int">
+        SELECT count(lik_id) FROM liked WHERE target_type = 1
+                                          AND target_id = #{post_id}
+                                          AND lik_type = 2
+    </select>
+
+    <insert id="insertLike">
+        INSERT INTO liked VALUES (null, #{post.post_id}, 1, #{post.brd_id}, #{member.mem_id}, #{post.mem_id},
+                                  <choose>
+                                      <when test="type eq 'like'">
+                                          1
+                                      </when>
+                                      <otherwise>
+                                          2
+                                      </otherwise>
+                                  </choose>
+                                  , #{ip})
+    </insert>
+
+    <delete id="deleteLike">
+        DELETE FROM liked WHERE lik_id = #{like.lik_id}
+    </delete>
+
+
 </mapper>

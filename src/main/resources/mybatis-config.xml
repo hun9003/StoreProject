@@ -15,5 +15,7 @@
 		<typeAlias alias="board" type="com.muesli.domain.BoardBean"/>
 		<!--		게시물-->
 		<typeAlias alias="post" type="com.muesli.domain.PostBean"/>
+		<!--		좋아요-->
+		<typeAlias alias="like" type="com.muesli.domain.LikedBean"/>
 	</typeAliases>
  </configuration> 

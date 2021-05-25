@@ -2,6 +2,7 @@ package com.muesli.service;
 
 import com.muesli.dao.BoardDAO;
 import com.muesli.domain.BoardBean;
+import com.muesli.domain.LikedBean;
 import com.muesli.domain.PostBean;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,71 @@ public class BoardServiceImpl implements BoardService {
 	public List<PostBean> getPostList(Map<String, Object> listMap) {
 		System.out.println("BoardServiceImpl - getPostList()");
 		return boardDAO.getPostList(listMap);
+	}
+
+	@Override
+	public int createPost(PostBean postBean) {
+		System.out.println("BoardServiceImpl - createPost()");
+		return boardDAO.createPost(postBean);
+	}
+
+	@Override
+	public PostBean getPost(int post_id) {
+		System.out.println("BoardServiceImpl - getPost()");
+		return boardDAO.getPost(post_id);
+	}
+
+	@Override
+	public int updatePost(PostBean postBean) {
+		System.out.println("BoardServiceImpl - updatePost()");
+		return boardDAO.updatePost(postBean);
+	}
+
+	@Override
+	public void hitPost(int post_id) {
+		System.out.println("BoardServiceImpl - hitPost()");
+		boardDAO.hitPost(post_id);
+	}
+
+	@Override
+	public LikedBean getLiked(Map<String, Object> likeMap) {
+		System.out.println("BoardServiceImpl - getLiked()");
+		return boardDAO.getLiked(likeMap);
+	}
+
+	@Override
+	public void deleteLike(Map<String, Object> likeMap) {
+		System.out.println("BoardServiceImpl - deleteLike()");
+		boardDAO.deleteLike(likeMap);
+	}
+
+	@Override
+	public void insertLike(Map<String, Object> likeMap) {
+		System.out.println("BoardServiceImpl - insertLike()");
+		boardDAO.insertLike(likeMap);
+	}
+
+	@Override
+	public int getLikeCount(int post_id) {
+		System.out.println("BoardServiceImpl - getLikeCount()");
+		return boardDAO.getLikeCount(post_id);
+	}
+
+	@Override
+	public int getHateCount(int post_id) {
+		System.out.println("BoardServiceImpl - getHateCount()");
+		return boardDAO.getHateCount(post_id);
+	}
+
+	@Override
+	public void setLikeCount(PostBean postBean) {
+		System.out.println("BoardServiceImpl - setLikeCount()");
+		boardDAO.setLikeCount(postBean);
+	}
+
+	@Override
+	public void setHateCount(PostBean postBean) {
+		System.out.println("BoardServiceImpl - setHateCount()");
+		boardDAO.setHateCount(postBean);
 	}
 }

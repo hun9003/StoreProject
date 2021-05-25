@@ -1,15 +1,14 @@
 package com.muesli.controller;
 
-import com.muesli.domain.BoardBean;
-import com.muesli.domain.MemberBean;
-import com.muesli.domain.PageBean;
-import com.muesli.domain.PostBean;
+import com.muesli.domain.*;
 import com.muesli.service.BoardService;
 import com.muesli.service.MemberService;
 import com.muesli.util.ScriptUtils;
 import com.muesli.util.StrResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Member;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -117,6 +117,95 @@ public class BoardController {
         return StrResources.BOARD_FORM_PAGE;
     }
 
+    // 게시물 수정
+    @RequestMapping(value = "/board/{brd_key}/update", method = RequestMethod.GET)
+    public String update(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+        System.out.println("BoardController - update() :: GET /board/" + brd_key + "/update");
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if(!StrResources.CHECK_LOGIN(session)){
+            model.addAttribute("msg", StrResources.LOGIN);
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        if(request.getParameter("post_id") == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+        int post_id = Integer.parseInt(request.getParameter("post_id"));
+
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
+
+        if(boardBean == null){
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        if(boardBean.getBrd_key().equals("notice")){
+            if(memberBean.getMem_is_admin() != 1) {
+                model.addAttribute("msg", StrResources.BAD_PERMISSION);
+                return StrResources.ALERT_MESSAGE_PAGE;
+            }
+        }
+
+        PostBean postBean = boardService.getPost(post_id);
+        if(postBean.getMem_id() != memberBean.getMem_id()) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        model.addAttribute("boardBean", boardBean);
+        model.addAttribute("postBean", postBean);
+        return StrResources.BOARD_FORM_PAGE;
+    }
+
+    // 게시물 삭제
+    @RequestMapping(value = "/board/{brd_key}/delete", method = RequestMethod.GET)
+    public String delete(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+        System.out.println("BoardController - delete() :: GET /board/" + brd_key + "/delete");
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if(!StrResources.CHECK_LOGIN(session)){
+            model.addAttribute("msg", StrResources.LOGIN);
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        if(request.getParameter("post_id") == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+        int post_id = Integer.parseInt(request.getParameter("post_id"));
+
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
+
+        if(boardBean == null){
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        if(boardBean.getBrd_key().equals("notice")){
+            if(memberBean.getMem_is_admin() != 1) {
+                model.addAttribute("msg", StrResources.BAD_PERMISSION);
+                return StrResources.ALERT_MESSAGE_PAGE;
+            }
+        }
+
+        PostBean postBean = boardService.getPost(post_id);
+        if(postBean.getMem_id() != memberBean.getMem_id()) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        int result = boardService.deleteBoard(post_id);
+        if(result == 0) {
+            model.addAttribute("msg", StrResources.FAIL_BOARD_DELETE);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+        model.addAttribute("msg", StrResources.SUCCESS_BOARD_DELETE);
+        model.addAttribute("url", "/board/"+brd_key+"/1");
+        return StrResources.ALERT_MESSAGE_PAGE;
+    }
+
     // 컨트롤러클래스의 로그를 출력
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
@@ -161,7 +250,7 @@ public class BoardController {
         PrintWriter printWriter = response.getWriter();
         String fileUrl = request.getContextPath() + "/resources/upload/" + fileName;
         printWriter.println("<script>window.parent.CKEDITOR.tools.callFunction(" + callback + ",'" + fileUrl
-                + "','이미지가 업로드되었습니다.')" + "</script>");
+                + "','Image Upload Complete!')" + "</script>");
         printWriter.flush();
     }
 
@@ -212,7 +301,6 @@ public class BoardController {
         postBean.setPost_dislike(0);
         postBean.setPost_ip(nowIp);
         postBean.setPost_blame(0);
-        postBean.setPost_device(1);
         postBean.setPost_file(0);
         postBean.setPost_image(0);
         postBean.setPost_del(0);
@@ -228,4 +316,201 @@ public class BoardController {
         return StrResources.BOARD_FORM_PAGE;
     }
 
+    // 게시물 수정
+    @RequestMapping(value = "/board/{brd_key}/update", method = RequestMethod.POST)
+    public String update_post(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, PostBean postBean) {
+        System.out.println("BoardController - update() :: GET /board/" + brd_key + "/write");
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if(!StrResources.CHECK_LOGIN(session)){
+            model.addAttribute("msg", StrResources.LOGIN);
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        if(request.getParameter("post_id") == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+        int post_id = Integer.parseInt(request.getParameter("post_id"));
+
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
+
+        if(boardBean == null){
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        if(boardBean.getBrd_key().equals("notice")){
+            if(memberBean.getMem_is_admin() != 1) {
+                model.addAttribute("msg", StrResources.BAD_PERMISSION);
+                return StrResources.ALERT_MESSAGE_PAGE;
+            }
+        }
+
+        PostBean postBean2 = boardService.getPost(post_id);
+        if(postBean2.getMem_id() != memberBean.getMem_id()) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+        postBean.setPost_update_mem_id(memberBean.getMem_id());
+        postBean.setPost_updated_datetime(nowTime);
+
+        int result = boardService.updatePost(postBean);
+        if(result == 0) {
+            model.addAttribute("msg", StrResources.FAIL_BOARD_UPDATE);
+
+        }
+        model.addAttribute("msg", StrResources.SUCCESS_BOARD_UPDATE);
+        model.addAttribute("url", "/board/"+brd_key+"/1");
+        return StrResources.ALERT_MESSAGE_PAGE;
+    }
+
+    // 게시판 조회
+    @RequestMapping(value = "/board/{brd_key}/info/{post_id}", method = RequestMethod.GET)
+    public String boardInfo(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, @PathVariable int post_id, PageBean pageBean) {
+        System.out.println("BoardController - boardInfo() :: GET /board/" + brd_key + "/info");
+
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        PostBean postBean = boardService.getPost(post_id);
+        int page = 1;
+        if(request.getParameter("page") != null){
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        pageBean.setCurrentPage(page);
+        if(postBean == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        boardService.hitPost(post_id);
+
+        int like = boardService.getLikeCount(post_id);
+        int hate = boardService.getHateCount(post_id);
+        postBean.setPost_like(like);
+        postBean.setPost_dislike(hate);
+        boardService.setLikeCount(postBean);
+        boardService.setHateCount(postBean);
+
+
+        Map<String, Object> likeMap = new HashMap<String, Object>();
+        likeMap.put("member", (MemberBean)session.getAttribute("member"));
+        likeMap.put("post", postBean);
+        likeMap.put("ip", ScriptUtils.getIp(request));
+
+        LikedBean likedBean = boardService.getLiked(likeMap);
+
+        model.addAttribute("likedBean", likedBean);
+        model.addAttribute("boardBean", boardBean);
+        model.addAttribute("postBean", postBean);
+        model.addAttribute("pageBean", pageBean);
+        return StrResources.BOARD_INFO_PAGE;
+    }
+
+    @RequestMapping(value = "/like", method = RequestMethod.GET)
+    public ResponseEntity<String> like(HttpServletRequest request, HttpSession session) {
+        System.out.println("BoardController - like() :: GET /like");
+        MemberBean memberBean = (MemberBean)session.getAttribute("member");
+        String result;
+        ResponseEntity<String> entity;
+
+        if(memberBean == null) {
+            result = "nologin";
+            try {
+                entity = new ResponseEntity<String>(result, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        int post_id = Integer.parseInt(request.getParameter("post_id"));
+        PostBean postBean = boardService.getPost(post_id);
+
+        Map<String, Object> likeMap = new HashMap<String, Object>();
+        likeMap.put("member", memberBean);
+        likeMap.put("post", postBean);
+        likeMap.put("ip", ScriptUtils.getIp(request));
+        try {
+            LikedBean likedBean = boardService.getLiked(likeMap);
+            likeMap.put("like", likedBean);
+            if(likedBean != null) {
+                if(likedBean.getLik_type() == 1) {
+                    // 추천을 이미 했음 ( 추천 삭제 )
+                    likeMap.put("type", "like");
+                    boardService.deleteLike(likeMap);
+                    result = "likeOff";
+                } else {
+                    // 비추천을 해놨음 ( 비추천 삭제후 추천 ).
+                    likeMap.put("type", "hate");
+                    boardService.deleteLike(likeMap);
+                    likeMap.put("type", "like");
+                    boardService.insertLike(likeMap);
+                    result = "likeToggle";
+                }
+            } else {
+                likeMap.put("type", "like");
+                boardService.insertLike(likeMap);
+                result = "likeOn";
+            }
+            entity = new ResponseEntity<String>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+        return entity;
+    }
+
+    @RequestMapping(value = "/hate", method = RequestMethod.GET)
+    public ResponseEntity<String> hate(HttpServletRequest request, HttpSession session) {
+        System.out.println("BoardController - hate() :: GET /hate");
+        MemberBean memberBean = (MemberBean)session.getAttribute("member");
+        String result;
+        ResponseEntity<String> entity;
+
+        if(memberBean == null) {
+            result = "nologin";
+            try {
+                entity = new ResponseEntity<String>(result, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        int post_id = Integer.parseInt(request.getParameter("post_id"));
+        PostBean postBean = boardService.getPost(post_id);
+
+        Map<String, Object> likeMap = new HashMap<String, Object>();
+        likeMap.put("member", memberBean);
+        likeMap.put("post", postBean);
+        likeMap.put("ip", ScriptUtils.getIp(request));
+        try {
+            LikedBean likedBean = boardService.getLiked(likeMap);
+            likeMap.put("like", likedBean);
+            if(likedBean != null) {
+                if(likedBean.getLik_type() == 2) {
+                    // 비추천을 이미 했음 ( 비추천 삭제 )
+                    likeMap.put("type", "hate");
+                    boardService.deleteLike(likeMap);
+                    result = "hateOff";
+                } else {
+                    // 비추천을 해놨음 ( 추천 삭제후 비추천 ).
+                    likeMap.put("type", "like");
+                    boardService.deleteLike(likeMap);
+                    likeMap.put("type", "hate");
+                    boardService.insertLike(likeMap);
+                    result = "hateToggle";
+                }
+            } else {
+                likeMap.put("type", "hate");
+                boardService.insertLike(likeMap);
+                result = "hateOn";
+            }
+            entity = new ResponseEntity<String>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+        return entity;
+    }
 }

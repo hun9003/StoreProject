@@ -24,7 +24,7 @@ import com.muesli.domain.MailBean;
 import com.muesli.domain.MemberAuthEmailBean;
 import com.muesli.domain.MemberBean;
 import com.muesli.service.MemberService;
-import com.muesli.util.FuncionUtils;
+import com.muesli.util.FuntcionUtils;
 import com.muesli.util.LoginAPI;
 import com.muesli.util.ScriptUtils;
 
@@ -236,7 +236,7 @@ public class MemberController {
         String result = "";
 
         // 랜덤 문자열로 코드 생성
-        FuncionUtils fn = new FuncionUtils();
+        FuntcionUtils fn = new FuntcionUtils();
         String code = fn.getRandStr();
 
         Timestamp nowTime = new Timestamp(System.currentTimeMillis());

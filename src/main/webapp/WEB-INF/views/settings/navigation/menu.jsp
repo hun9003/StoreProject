@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:import url="/settings/top"/>
 <!-- Wrapper -->
@@ -22,14 +23,14 @@
 								</c:otherwise>
 							</c:choose>
 							<header>
-								<h2>메뉴관리 - ${subTitle}</h2>
+								<h2><spring:message code="title.settingMenu"/> - <spring:message code="title.${subTitle}"/></h2>
 							</header>
 							<div class="content">
 								<section>
 									<div class="box">
 
-										<h3>${subTitle}</h3>
-										<p>${subTitle}을 생성하거나 수정&amp;삭제 하실 수 있습니다.</p>
+										<h3><spring:message code="title.${subTitle}"/></h3>
+										<p><spring:message code="msg.${subTitle}"/></p>
 
 										<c:choose>
 											<c:when test="${isMenuGroup == true}">
@@ -49,7 +50,7 @@
 														<c:when test="${isMenuGroup == true || menuParent != null}">
 															<c:if test="${menuParent != null}">
 																<select name="menuParent" id="menuParent" onchange="meg_change(this.value)">
-																	<option value="">메뉴그룹선택</option>
+																	<option value=""><spring:message code="label.seleteMenuGroup"/></option>
 																	<c:forEach var="meg" items="${menus}">
 																		<c:if test="${meg.men_parent == null}">
 																			<option value="${meg.men_id}" <c:if test="${menuParent == meg.men_id}">selected</c:if>>${meg.men_name}</option>
@@ -82,9 +83,9 @@
 															</c:forEach>
 														</c:when>
 														<c:otherwise>
-															<label for="menuParent" class="text-info">조회할 메뉴의 메뉴 그룹을 선택해주세요</label>
+															<label for="menuParent" class="text-info"><spring:message code="msg.settingSelectMenuGroup"/></label>
 															<select name="menuParent" id="menuParent" onchange="meg_change(this.value)">
-																<option value="">메뉴그룹선택</option>
+																<option value=""><spring:message code="label.seleteMenuGroup"/></option>
 																<c:forEach var="meg" items="${menus}">
 																	<c:if test="${meg.men_parent == null}">
 																		<option value="${meg.men_id}">${meg.men_name}</option>
@@ -98,7 +99,7 @@
 											</div>
 											<div class="col-6 col-6-xlarge">
 												<section id="menu_container">
-												<p class="text-info">메뉴 정보를 확인 하실 수 있습니다 메뉴를 클릭하세요.</p>
+												<p class="text-info"><spring:message code="msg.settingMenuInfo"/></p>
 												</section>
 											</div>
 										</div>

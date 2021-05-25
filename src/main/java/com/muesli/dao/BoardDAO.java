@@ -1,6 +1,7 @@
 package com.muesli.dao;
 
 import com.muesli.domain.BoardBean;
+import com.muesli.domain.LikedBean;
 import com.muesli.domain.PostBean;
 
 import java.util.List;
@@ -27,4 +28,26 @@ public interface BoardDAO {
 	int getPostCount(Map<String, Object> listMap);
 
 	List<PostBean> getPostList(Map<String, Object> listMap);
+
+    int createPost(PostBean postBean);
+
+	PostBean getPost(int post_id);
+
+	int updatePost(PostBean postBean);
+
+	void hitPost(int post_id);
+
+	LikedBean getLiked(Map<String, Object> likeMap);
+
+	void deleteLike(Map<String, Object> likeMap);
+
+	void insertLike(Map<String, Object> likeMap);
+
+	int getLikeCount(int post_id);
+
+	int getHateCount(int post_id);
+
+	void setLikeCount(PostBean postBean);
+
+	void setHateCount(PostBean postBean);
 }
