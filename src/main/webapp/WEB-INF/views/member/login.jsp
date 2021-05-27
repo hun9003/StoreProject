@@ -30,6 +30,7 @@
 							</ul>
 						</div>
 					</div>
+					<input type="hidden" name="referrer" value="${referrer}">
 				</form>
 				</section>
 				

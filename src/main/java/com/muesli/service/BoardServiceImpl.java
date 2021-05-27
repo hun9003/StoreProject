@@ -141,4 +141,10 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println("BoardServiceImpl - setHateCount()");
 		boardDAO.setHateCount(postBean);
 	}
+
+	@Override
+	public void updateCommentCount(PostBean postBean) {
+		System.out.println("BoardServiceImpl - updateCommentCount()");
+		boardDAO.updateCommentCount(postBean);
+	}
 }

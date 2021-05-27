@@ -50,4 +50,6 @@ public interface BoardDAO {
 	void setLikeCount(PostBean postBean);
 
 	void setHateCount(PostBean postBean);
+
+    void updateCommentCount(PostBean postBean);
 }

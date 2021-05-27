@@ -6,7 +6,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.muesli.domain.MenuBean;
+import com.muesli.domain.*;
+import com.muesli.service.BoardService;
 import com.muesli.service.MenuService;
 import com.muesli.util.StrResources;
 import org.slf4j.Logger;
@@ -21,10 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Handles requests for the application home page.
  */
 
-import com.muesli.domain.MemberBean;
 import com.muesli.service.MemberService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HomeController {
@@ -36,6 +38,9 @@ public class HomeController {
 
 	@Inject
 	MenuService menuService;
+
+	@Inject
+	BoardService boardService;
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -57,6 +62,33 @@ public class HomeController {
 				return StrResources.ALERT_MESSAGE_PAGE;
 			}
 		}
+		int page = 1;
+		String order_type = "new";
+		String search_type = null;
+		String search_content = null;
+		int isOnlyDel = 0;
+
+		PageBean pageBean = new PageBean();
+		pageBean.setCurrentPage(page); // 서블릿에 붙은 페이지를 저장
+		pageBean.setPageNum(page + "");
+		pageBean.setPageSize(5);
+		BoardBean boardBean = boardService.getBoardName("notice");
+		Map<String, Object> ListMap = new HashMap<String, Object>();
+		ListMap.put("search_type", search_type);
+		ListMap.put("search_content", search_content);
+		ListMap.put("isOnlyDel", isOnlyDel);
+		ListMap.put("brd_id", boardBean.getBrd_id());;
+		pageBean.setStartRow((pageBean.getCurrentPage() - 1) * pageBean.getPageSize() + 1 - 1);
+		ListMap.put("pageBean", pageBean);
+		ListMap.put("order_type", order_type);
+		List<PostBean> notices = boardService.getPostList(ListMap);
+
+		boardBean = boardService.getBoardName("freeboard");
+		ListMap.put("brd_id", boardBean.getBrd_id());
+		List<PostBean> freeboards = boardService.getPostList(ListMap);
+
+		model.addAttribute("notices", notices);
+		model.addAttribute("freeboards", freeboards);
 		return StrResources.MAIN_PAGE;
 	}
 	

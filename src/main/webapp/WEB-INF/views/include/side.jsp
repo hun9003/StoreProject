@@ -6,19 +6,19 @@
 <div id="sidebar">
 	<div class="inner">
 		<!-- Search -->
-			<section id="search" class="alt">
-				<form method="post" action="#">
-					<input type="text" name="query" id="query" placeholder="Search" />
-				</form>
-			</section>
+<%--			<section id="search" class="alt">--%>
+<%--				<form method="post" action="#">--%>
+<%--					<input type="text" name="query" id="query" placeholder="Search" />--%>
+<%--				</form>--%>
+<%--			</section>--%>
 		<!-- Menu -->
 			<nav id="menu">
 				<header class="major">
 					<h2>Menu</h2>
 				</header>
 				<ul>
-					<li><a href="<c:url value="home"/>"><spring:message code="menu.home"/></a></li>
-					<li><a href="generic.html"><spring:message code="menu.notice"/></a></li>
+					<li><a href="<c:url value="/home"/>"><spring:message code="menu.home"/></a></li>
+					<li><a href="<c:url value="/board/notice"/>"><spring:message code="menu.notice"/></a></li>
 					<c:forEach items="${menus}" var="meg">
 							<c:if test="${meg.men_parent == null}">
 							<li>
@@ -26,7 +26,7 @@
 								<ul>
 									<c:forEach items="${menus}" var="men">
 										<c:if test="${meg.men_id == men.men_parent}">
-											<li><a href="<c:url value="/board/${men.men_link}/1"/>" target="${men.men_target}">${men.men_name}</a></li>
+											<li><a href="<c:url value="/board/${men.men_link}"/>" target="${men.men_target}">${men.men_name}</a></li>
 										</c:if>
 									</c:forEach>
 								</ul>

@@ -33,6 +33,13 @@ public class StrResources {
     public static final String SUCCESS_BOARD_DELETE = "successBoardDelete"; // 게시물 삭제를 완료했습니다.
     public static final String FAIL_BOARD_DELETE = "failBoardDelete"; // 게시물 삭제를 실패했습니다.
 
+    public static final String SUCCESS_COMMENT_WRITE = "successCommentWrite"; // 댓글 작성을 완료했습니다.
+    public static final String FAIL_COMMENT_WRITE = "failCommentWrite"; // 댓글 작성을 실패했습니다.
+    public static final String SUCCESS_COMMENT_UPDATE = "successCommentUpdate"; // 댓글 수정을 완료했습니다.
+    public static final String FAIL_COMMENT_UPDATE = "failCommentUpdate"; // 댓글 수정을 실패했습니다.
+    public static final String SUCCESS_COMMENT_DELETE = "successCommentDelete"; // 댓글 삭제를 완료했습니다.
+    public static final String FAIL_COMMENT_DELETE = "failCommentDelete"; // 댓글 삭제를 실패했습니다.
+
     public static final String INCLUDE_TOP = "/include/top"; // 리팩토링 top 페이지
     public static final String INCLUDE_HEADER = "/include/header"; // 리팩토링 header 페이지
     public static final String INCLUDE_SIDE = "/include/side"; // 리팩토링 side 페이지
@@ -62,6 +69,8 @@ public class StrResources {
     public static final String BOARD_PAGE = "/page/board"; // 게시판 페이지
     public static final String BOARD_FORM_PAGE = "/page/form"; // 게시물 폼 페이지
     public static final String BOARD_INFO_PAGE = "/page/info"; // 게시물 조회 페이지
+    public static final String COMMENT_PAGE = "/page/comment"; // 댓글 페이지
+
     public static final String ALERT_MESSAGE_PAGE = "/common/alertMessage"; // 메세지 출력 페이지
 
     public static boolean CHECK_LOGIN(HttpSession session) {

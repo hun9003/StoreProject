@@ -56,7 +56,6 @@
                                     document.getElementById('post_device').value = 1;
                                     }
                                 }
-
                         </script>
                     </form>
                 </div>

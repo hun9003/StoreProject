@@ -6,5 +6,6 @@
 		<script src="<c:url value="/resources/js/breakpoints.min.js"/>"></script>
 		<script src="<c:url value="/resources/js/util.js"/>"></script>
 		<script src="<c:url value="/resources/js/main.js"/>"></script>
+		<script src="<c:url value="/resources/js/common.js"/>"></script>
 	</body>
 </html>

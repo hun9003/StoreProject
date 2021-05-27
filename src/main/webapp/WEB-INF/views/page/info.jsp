@@ -33,27 +33,28 @@
                         <p class="text-mute"><script>document.write(timeForToday('${postBean.post_datetime}'));</script></p>
                     </div>
                 </div>
-                <div class="box" style="min-height: 500px;">
+                <div class="box" style="min-height: 500px; position: relative;">
                     ${postBean.post_content}
 
-                    <div class="align-center">
+                    <div class="align-center" style="bottom: 10px; position: absolute; left: 50%; margin-left: -100px;">
                         <i id="like" class="icon fa-thumbs-up fa-3x solid <c:choose>
                             <c:when test="${likedBean.lik_type == 1}">active-btn</c:when>
                             <c:otherwise>hover-btn</c:otherwise>
-                        </c:choose>" style="margin: 10px;"></i>
+                        </c:choose>" style="margin: 30px;"></i>
                         <i id="hate" class="icon fa-thumbs-down fa-3x solid <c:choose>
                             <c:when test="${likedBean.lik_type == 2}">active-btn</c:when>
                             <c:otherwise>hover-btn</c:otherwise>
-                        </c:choose>" style="margin: 10px"></i>
+                        </c:choose>" style="margin: 30px"></i>
                     </div>
 
                 </div>
+                <div id="comment-box"></div>
                 <div class="btn-container">
                     <c:if test="${member.mem_id == postBean.mem_id}">
-                    <button onclick="location.href = '<c:url value="/board/${boardBean.brd_key}/update?post_id=${postBean.post_id}"/>'"><spring:message code="button.update"/></button>
-                    <button onclick="location.href = '<c:url value="/board/${boardBean.brd_key}/delete?post_id=${postBean.post_id}"/>'"><spring:message code="button.delete"/></button>
+                        <button onclick="location.href = '<c:url value="/board/${boardBean.brd_key}/update?post_id=${postBean.post_id}"/>'"><spring:message code="button.update"/></button>
+                        <button onclick="location.href = '<c:url value="/board/${boardBean.brd_key}/delete?post_id=${postBean.post_id}"/>'"><spring:message code="button.delete"/></button>
                     </c:if>
-                    <button class="primary" onclick="location.href = '<c:url value="/board/${boardBean.brd_key}/${pageBean.currentPage}"/>'"><spring:message code="button.list"/></button>
+                    <button class="primary" onclick="location.href = '<c:url value="/board/${boardBean.brd_key}?page=${pageBean.currentPage}"/>'"><spring:message code="button.list"/></button>
                 </div>
             </section>
         </div>
@@ -62,6 +63,8 @@
 </div>
 <script>
     $(document).ready(function (){
+        $("#comment-box").load('<c:url value="/comment/${post_id}?page=1&brd_key=${brd_key}"/>');
+
         $("#like").click(function(){
             let post_id = '${postBean.post_id}';
             let like = $("#like");
@@ -85,7 +88,7 @@
                             like.removeClass('hover-btn');
                             like.addClass('active-btn');
                             break;
-                        case 'noLogin':
+                        case 'nologin':
                             let isLogin = confirm("로그인이 필요한 시스템입니다. 로그인 하시겠습니까?");
                             if(isLogin) {
                                 location.href = '<c:url value="/login"/>';
@@ -117,12 +120,20 @@
                             hate.removeClass('hover-btn');
                             hate.addClass('active-btn');
                             break;
-                        case 'noLogin':
+                        case 'nologin':
+                            let isLogin = confirm("로그인이 필요한 시스템입니다. 로그인 하시겠습니까?");
+                            if(isLogin) {
+                                location.href = '<c:url value="/login"/>';
+                            }
                             break;
                     }
                 }
             })
         })
     })
+
+    function commentPaging(url) {
+        $("#comment-box").load(url);
+    }
 </script>
 <c:import url="/bottom"/>

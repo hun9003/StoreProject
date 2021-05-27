@@ -10,7 +10,7 @@
 					<h2>Menu</h2>
 				</header>
 				<ul>
-					<li><a href="<c:url value="home"/>">메인</a></li>
+					<li><a href="<c:url value="/home"/>">메인</a></li>
 					<li>
 						<span class="opener">회원관리</span>
 						<ul>

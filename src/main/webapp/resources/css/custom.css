@@ -33,3 +33,12 @@ ul.alt > li > span.hov:hover {
 .active-btn:hover {
     color : #808080;
 }
+
+textarea.ta-noresize {
+    resize: none;
+}
+
+.box > p > img {
+    max-width: 100% !important;
+    height: auto !important;
+}

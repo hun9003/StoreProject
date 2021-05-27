@@ -17,5 +17,7 @@
 		<typeAlias alias="post" type="com.muesli.domain.PostBean"/>
 		<!--		좋아요-->
 		<typeAlias alias="like" type="com.muesli.domain.LikedBean"/>
+		<!--		댓글-->
+		<typeAlias alias="comment" type="com.muesli.domain.CommentBean"/>
 	</typeAliases>
  </configuration> 

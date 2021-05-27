@@ -49,8 +49,15 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(HttpSession session, Model model) {
+    public String login(HttpSession session, Model model, HttpServletRequest request) {
         System.out.println("MemberController - login :: GET /login");
+
+        // 로그인 시 이전페이지 기억
+        String referrer = request.getHeader("Referer");
+        request.getSession().setAttribute("prevPage", referrer);
+
+        model.addAttribute("referrer", referrer);
+
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
             model.addAttribute("url", "/home");
@@ -69,6 +76,7 @@ public class MemberController {
     @RequestMapping(value = "/join", method = RequestMethod.POST)
     public String joinpost(HttpServletRequest request, Model model, MemberBean memberBean, HttpSession session) {
         System.out.println("MemberController - joinpost() :: POST /join");
+        
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
             model.addAttribute("url", "/home");
@@ -152,7 +160,13 @@ public class MemberController {
             model.addAttribute("msg", StrResources.LOGIN_FAIL);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
-        return StrResources.REDIRECT+"/home";
+
+        String url = request.getParameter("referrer");
+        if(url == null){
+            url = "/home";
+        }
+
+        return StrResources.REDIRECT+url;
     }
 
     @RequestMapping(value = "/ckUserid", method = RequestMethod.GET)

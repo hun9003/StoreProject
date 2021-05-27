@@ -65,17 +65,16 @@ public class SettingsController {
     }
 
     // 회원 관리 페이지 ================================================================================================
-    @RequestMapping(value = "/settings/members", method = RequestMethod.GET)
-    public String members() {
-        System.out.println("SettingsController - bottom() :: GET /settings/members");
-        // 페이징 하지 않은 서블릿은 강제로 1을 붙여서 다시 리다이렉트
-        return StrResources.REDIRECT+"/settings/members/1";
-    }
 
-    // 회원 관리 페이지 (페이징)
-    @RequestMapping(value = "/settings/members/{page}", method = RequestMethod.GET)
-    public String members(@PathVariable int page, HttpServletRequest request, Model model) {
-        System.out.println("SettingsController - members() :: GET /settings/members/" + page);
+    // 회원 관리 페이지
+    @RequestMapping(value = "/settings/members", method = RequestMethod.GET)
+    public String members(HttpServletRequest request, Model model) {
+        System.out.println("SettingsController - members() :: GET /settings/members");
+
+        int page = 1;
+        if(request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
 
         // 페이지 제목
         String subTitle = "settingMemberList";

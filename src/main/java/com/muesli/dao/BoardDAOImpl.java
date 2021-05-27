@@ -142,4 +142,10 @@ public class BoardDAOImpl implements BoardDAO {
 		System.out.println("BoardDAOImpl - setHateCount()");
 		sqlSession.update(namespace+".setHateCount", postBean);
 	}
+
+	@Override
+	public void updateCommentCount(PostBean postBean) {
+		System.out.println("BoardDAOImpl - updateCommentCount()");
+		sqlSession.update(namespace+".updateCommentCount", postBean);
+	}
 }

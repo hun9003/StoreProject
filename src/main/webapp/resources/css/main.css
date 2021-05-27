@@ -2140,10 +2140,12 @@ button,
     width: 20%;
     min-height: 300px;
     min-width: 200px;
-    background-image: url("https://management.moe.work/theme/icecream/img/background_login.png?v6");
-    background-size: 240%;
+    /*background-image: url("https://management.moe.work/theme/icecream/img/background_login.png?v6");*/
+    background-image: url("../images/banner.png");
+    background-size: 150%;
     background-repeat: no-repeat;
-    background-position: 90%; }
+    /*background-position: 90%;*/
+  }
     #banner .image img {
       height: 100%;
       -moz-object-fit: cover;

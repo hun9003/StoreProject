@@ -2,9 +2,11 @@ package com.muesli.controller;
 
 import com.muesli.domain.*;
 import com.muesli.service.BoardService;
+import com.muesli.service.CommentService;
 import com.muesli.service.MemberService;
 import com.muesli.util.ScriptUtils;
 import com.muesli.util.StrResources;
+import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Member;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -38,14 +39,22 @@ public class BoardController {
     private BoardService boardService;
 
     @Inject
-    private MemberService memberService;
+    private CommentService commentService;
 
     // 게시판 조회
-    @RequestMapping(value = "/board/{brd_key}/{page}", method = RequestMethod.GET)
-    public String board(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, @PathVariable int page) {
-        System.out.println("BoardController - board() :: GET /board/" + brd_key + "/" + page);
+    @RequestMapping(value = "/board/{brd_key}", method = RequestMethod.GET)
+    public String board(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+        System.out.println("BoardController - board() :: GET /board/" + brd_key);
 
-        String order_type = request.getParameter("order_type") != null ? request.getParameter("order_type") : "new";
+        int page = 1;
+        if(request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        String order_type = request.getParameter("order_type");
+        if(order_type == null || order_type.equals("")) {
+            order_type = "new";
+        }
         String search_type = request.getParameter("search_type");
         String search_content = request.getParameter("search_content");
         int isOnlyDel = 0;
@@ -62,6 +71,11 @@ public class BoardController {
             pageBean.setPageSize(15);
         }
         BoardBean boardBean = boardService.getBoardName(brd_key);
+
+        if(boardBean == null) {
+            model.addAttribute("msg", StrResources.PAGE_404);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
 
         Map<String, Object> ListMap = new HashMap<String, Object>();
         ListMap.put("search_type", search_type);
@@ -202,7 +216,7 @@ public class BoardController {
             return StrResources.ALERT_MESSAGE_PAGE;
         }
         model.addAttribute("msg", StrResources.SUCCESS_BOARD_DELETE);
-        model.addAttribute("url", "/board/"+brd_key+"/1");
+        model.addAttribute("url", "/board/"+brd_key+"");
         return StrResources.ALERT_MESSAGE_PAGE;
     }
 
@@ -256,7 +270,7 @@ public class BoardController {
 
     // 게시물 생성
     @RequestMapping(value = "/board/{brd_key}/write", method = RequestMethod.POST)
-    public String write_post(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, PostBean postBean) {
+    public String write_post(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
         System.out.println("BoardController - write_post() :: POST /board/" + brd_key + "/write");
         BoardBean boardBean = boardService.getBoardName(brd_key);
         if(!StrResources.CHECK_LOGIN(session)){
@@ -275,6 +289,14 @@ public class BoardController {
                 model.addAttribute("msg", StrResources.BAD_PERMISSION);
                 return StrResources.ALERT_MESSAGE_PAGE;
             }
+        }
+
+        PostBean postBean = new PostBean();
+        postBean.setPost_title(request.getParameter("post_title"));
+        postBean.setPost_content(request.getParameter("post_content"));
+        postBean.setPost_device(request.getParameter("post_device") != null ? Integer.parseInt(request.getParameter("post_device")) : 1);
+        if(request.getParameter("post_id") != null && !request.getParameter("post_id").equals("")) {
+            postBean.setPost_id(Integer.parseInt(request.getParameter("post_id")));
         }
         if(postBean.getPost_title().trim().equals("")){
             model.addAttribute("msg", StrResources.FAIL);
@@ -308,7 +330,7 @@ public class BoardController {
         int result = boardService.createPost(postBean);
         if(result == 1) {
             model.addAttribute("msg", StrResources.SUCCESS_BOARD_WRITE);
-            model.addAttribute("url", "/board/"+brd_key+"/1");
+            model.addAttribute("url", "/board/"+brd_key+"");
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
@@ -367,7 +389,7 @@ public class BoardController {
         return StrResources.ALERT_MESSAGE_PAGE;
     }
 
-    // 게시판 조회
+    // 게시물 조회
     @RequestMapping(value = "/board/{brd_key}/info/{post_id}", method = RequestMethod.GET)
     public String boardInfo(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, @PathVariable int post_id, PageBean pageBean) {
         System.out.println("BoardController - boardInfo() :: GET /board/" + brd_key + "/info");
@@ -401,6 +423,7 @@ public class BoardController {
 
         LikedBean likedBean = boardService.getLiked(likeMap);
 
+
         model.addAttribute("likedBean", likedBean);
         model.addAttribute("boardBean", boardBean);
         model.addAttribute("postBean", postBean);
@@ -408,6 +431,7 @@ public class BoardController {
         return StrResources.BOARD_INFO_PAGE;
     }
 
+    // 추천 기능
     @RequestMapping(value = "/like", method = RequestMethod.GET)
     public ResponseEntity<String> like(HttpServletRequest request, HttpSession session) {
         System.out.println("BoardController - like() :: GET /like");
@@ -423,6 +447,7 @@ public class BoardController {
                 e.printStackTrace();
                 entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
             }
+            return entity;
         }
         int post_id = Integer.parseInt(request.getParameter("post_id"));
         PostBean postBean = boardService.getPost(post_id);
@@ -461,6 +486,7 @@ public class BoardController {
         return entity;
     }
 
+    // 비추천 기능
     @RequestMapping(value = "/hate", method = RequestMethod.GET)
     public ResponseEntity<String> hate(HttpServletRequest request, HttpSession session) {
         System.out.println("BoardController - hate() :: GET /hate");
@@ -513,4 +539,6 @@ public class BoardController {
         }
         return entity;
     }
+
+
 }

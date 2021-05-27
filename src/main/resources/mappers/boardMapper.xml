@@ -31,13 +31,16 @@
             <if test="search_type != null">
                 <choose>
                     <when test="search_type eq 'title'">
-                        AND post_title = #{search_type}
+                        AND post_title LIKE CONCAT('%', #{search_content} ,'%')
                     </when>
                     <when test="search_type eq 'content'">
-                        AND post_content = #{search_type}
+                        AND post_content LIKE CONCAT('%', #{search_content} ,'%')
+                    </when>
+                    <when test="search_type eq 'title_content'">
+                        AND post_title LIKE CONCAT('%', #{search_content} ,'%') OR post_content LIKE CONCAT('%', #{search_content} ,'%')
                     </when>
                     <when test="search_type eq 'nickname'">
-                        AND post_nickname = #{search_type}
+                        AND post_nickname LIKE CONCAT('%', #{search_content} ,'%')
                     </when>
                 </choose>
             </if>
@@ -56,13 +59,16 @@
             <if test="search_type != null">
                 <choose>
                     <when test="search_type eq 'title'">
-                        AND post_title = #{search_type}
+                        AND post_title LIKE CONCAT('%', #{search_content} ,'%')
                     </when>
                     <when test="search_type eq 'content'">
-                        AND post_content = #{search_type}
+                        AND post_content LIKE CONCAT('%', #{search_content} ,'%')
+                    </when>
+                    <when test="search_type eq 'title_content'">
+                        AND post_title LIKE CONCAT('%', #{search_content} ,'%') OR post_content LIKE CONCAT('%', #{search_content} ,'%')
                     </when>
                     <when test="search_type eq 'nickname'">
-                        AND post_nickname = #{search_type}
+                        AND post_nickname LIKE CONCAT('%', #{search_content} ,'%')
                     </when>
                 </choose>
             </if>
@@ -209,5 +215,8 @@
         DELETE FROM liked WHERE lik_id = #{like.lik_id}
     </delete>
 
-
+<!--    댓글관련-->
+    <update id="updateCommentCount">
+        UPDATE post SET post_comment_count = #{post_comment_count}, post_updated_datetime = #{post_updated_datetime} WHERE post_id = #{post_id}
+    </update>
 </mapper>

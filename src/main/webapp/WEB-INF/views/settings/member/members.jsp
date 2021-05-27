@@ -69,21 +69,30 @@
 								</table>
 							</div>
 						</div>
-						<div id="paging">
+						<div id="paging" class="align-center">
 							<ul class="pagination">
-								<li><span class="button disabled"><spring:message code="button.prev"/></span></li>
-								<li><a href="#" class="page active">1</a></li>
-								<li><a href="#" class="page">2</a></li>
-								<li><a href="#" class="page">3</a></li>
-								<li><a href="#" class="page">4</a></li>
-								<li><a href="#" class="page">5</a></li>
-								<li><a href="#" class="page">6</a></li>
-								<li><a href="#" class="page">7</a></li>
-<%--								<li><span>…</span></li>--%>
-								<li><a href="#" class="page">8</a></li>
-								<li><a href="#" class="page">9</a></li>
-								<li><a href="#" class="page">10</a></li>
-								<li><a href="#" class="button"><spring:message code="button.next"/></a></li>
+								<c:set value="/settings/members" var="url"/>
+								<c:set value="" var="params"/>
+								<c:if test="${param.sch_type != null }">
+									<c:set var="params" value="&sch_type=${param.sch_type }&sch_content=${param.sch_content }"/>
+								</c:if>
+								<c:choose>
+									<c:when test="${pageBean.startPage > pageBean.pageBlock}">
+										<li><a href="javascript:void(0)" class="button" onclick="paging('<c:url value="${url}?page=${pageBean.startPage - pageBean.pageBlock}${params}"/>')"><spring:message code="button.prev"/></a></li>
+									</c:when>
+									<c:otherwise><li><span class="button disabled"><spring:message code="button.prev"/></span></li></c:otherwise>
+								</c:choose>
+
+								<c:forEach var="count" begin="${pageBean.startPage}" end="${pageBean.endPage}" step="1">
+									<li><a href="javascript:void(0)" class="page <c:if test="${pageBean.currentPage == count}">active</c:if>" onclick="paging('<c:url value="${url}?page=${count}${params}"/>')">${count}</a></li>
+								</c:forEach>
+
+								<c:choose>
+									<c:when test="${pageBean.endPage < pageBean.pageCount}">
+										<li><a href="javascript:void(0)" class="button" onclick="paging('<c:url value="${url}?page=${pageBean.startPage - pageBean.pageBlock}${params}"/>')"><spring:message code="button.next"/></a></li>
+									</c:when>
+									<c:otherwise><li><span class="button disabled"><spring:message code="button.next"/></span></li></c:otherwise>
+								</c:choose>
 							</ul>
 						</div>
 					</section>

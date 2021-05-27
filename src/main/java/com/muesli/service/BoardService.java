@@ -50,4 +50,6 @@ public interface BoardService {
 	void setLikeCount(PostBean postBean);
 
 	void setHateCount(PostBean postBean);
+
+    void updateCommentCount(PostBean postBean);
 }

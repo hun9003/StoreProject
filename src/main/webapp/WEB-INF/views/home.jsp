@@ -13,11 +13,11 @@
 					<section id="banner">
 						<div class="content">
 							<header>
-								<h1>뮤즐리 커뮤니티에 오신 것을 환영합니다.</h1>
+								<h1>권해적단 커뮤니티에 오신 것을 환영합니다.</h1>
 							</header>
-							<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
+							<p>뭐라 설명해야 할지도 모르겠는 그냥 그런 사이트</p>
 							<ul class="actions">
-								<li><a href="#" class="button big">Learn More</a></li>
+								<li><a href="#" class="button big disabled">Learn More</a></li>
 							</ul>
 						</div>
 						<span class="image object">
@@ -28,43 +28,30 @@
 				<!-- Section -->
 					<section>
 						<header class="major">
-							<h2>공지사항</h2>
+							<h2><a href="<c:url value="/board/notice"/>">공지사항</a></h2>
 						</header>
 						<div class="table-wrapper">
 							<table>
 								<thead>
 									<tr>
-										<th>작성일</th>
 										<th>제목</th>
 										<th>작성자</th>
+										<th>조회</th>
+										<th>작성일</th>
 									</tr>
 								</thead>
 								<tbody>
+								<c:forEach items="${notices}" var="post">
 									<tr>
-										<td>21-04-05</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>Rateye</td>
+										<td><a href="<c:url value="/board/notice/info/${post.post_id}?page=${pageBean.currentPage}"/>">${post.post_title}</a>
+											<c:if test="${post.post_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
+											<a class="text-primary" href="<c:url value="/board/notice/info/${post.post_id}?page=${pageBean.currentPage}#comment-box"/>">[${post.post_comment_count}]</a>
+										</td>
+										<td>${post.post_nickname}</td>
+										<td>${post.post_hit}</td>
+										<td><script>document.write(timeForToday('${post.post_datetime}'));</script></td>
 									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td>Vis ac commodo adipiscing arcu aliquet.</td>
-										<td>Rateye</td>
-									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td> Morbi faucibus arcu accumsan lorem.</td>
-										<td>Rateye</td>
-									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td>Vitae integer tempus condimentum.</td>
-										<td>Rateye</td>
-									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>Rateye</td>
-									</tr>
+								</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -73,43 +60,30 @@
 					<!-- Section -->
 					<section>
 						<header class="major">
-							<h2>자유게시판</h2>
+							<h2><a href="<c:url value="/board/freeboard"/>">자유게시판</a></h2>
 						</header>
 						<div class="table-wrapper">
 							<table>
 								<thead>
 									<tr>
-										<th>작성일</th>
 										<th>제목</th>
 										<th>작성자</th>
+										<th>추천</th>
+										<th>작성일</th>
 									</tr>
 								</thead>
 								<tbody>
+								<c:forEach items="${freeboards}" var="post">
 									<tr>
-										<td>21-04-05</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>Rateye</td>
+										<td><a href="<c:url value="/board/freeboard/info/${post.post_id}?page=${pageBean.currentPage}"/>">${post.post_title}</a>
+											<c:if test="${post.post_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
+											<a class="text-primary" href="<c:url value="/board/freeboard/info/${post.post_id}?page=${pageBean.currentPage}#comment-box"/>">[${post.post_comment_count}]</a>
+										</td>
+										<td>${post.post_nickname}</td>
+										<td>${post.post_like}</td>
+										<td><script>document.write(timeForToday('${post.post_datetime}'));</script></td>
 									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td>Vis ac commodo adipiscing arcu aliquet.</td>
-										<td>Rateye</td>
-									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td> Morbi faucibus arcu accumsan lorem.</td>
-										<td>Rateye</td>
-									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td>Vitae integer tempus condimentum.</td>
-										<td>Rateye</td>
-									</tr>
-									<tr>
-										<td>21-04-05</td>
-										<td>Ante turpis integer aliquet porttitor.</td>
-										<td>Rateye</td>
-									</tr>
+								</c:forEach>
 								</tbody>
 							</table>
 						</div>
