@@ -1,5 +1,6 @@
 package com.muesli.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 
@@ -240,9 +241,9 @@ public class MemberController {
 
     // 이메일 전송 ajax
     @RequestMapping(value = "/sendMail", method = RequestMethod.GET)
-    public ResponseEntity<String> sandMail(HttpServletRequest request, final MailBean mailBean, HttpSession session) {
+    public ResponseEntity<String> sandMail(HttpServletRequest request, final MailBean mailBean, HttpSession session) throws UnsupportedEncodingException {
         System.out.println("MemberController - sendMail() :: GET /sandMail");
-
+        request.setCharacterEncoding("utf-8");
         // 이메일 전송을 위해 회원 정보 저장
         MemberBean member = (MemberBean) session.getAttribute("member");
         // ajax 결과를 저장할 변수
@@ -282,9 +283,9 @@ public class MemberController {
                 if (mem_email != null) {
                     mailBean.setTo(mem_email);
                     mailBean.setFrom("jinhun3892@gmail.com");
-                    mailBean.setContents("뮤즐리 커뮤니티 회원 인증 이메일 코드입니다.  <br>"
+                    mailBean.setContents("커뮤니티 회원 인증 이메일 코드입니다.  <br>"
                                                         + "인증 코드 : " + code);
-                    mailBean.setSubject("뮤즐리 커뮤니티 회원 인증 이메일 코드입니다.");
+                    mailBean.setSubject("커뮤니티 회원 인증 이메일 코드입니다.");
 
                     final MimeMessagePreparator preparator = new MimeMessagePreparator() {
                         @Override

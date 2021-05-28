@@ -8,9 +8,9 @@
 </header>
 <form action="<c:url value="/sandMail"/>" method="POST">
 	<div class="row gtr-uniform">
-		<p class="text-info text-center text-bold"><spring:message code="msg.giveMeCode" arguments="${mem_email }"/></p>
+		<p class="text-info text-center text-bold"><spring:message code="msg.giveMeCode" arguments="${sessionScope.member.mem_email }"/></p>
 		<div class="col-12 col-12-xsmall text-center">
-			<input type="hidden" name="mem_email" value="${mem_email }">
+			<input type="hidden" name="mem_email" value="${sessionScope.member.mem_email }">
 			<input type="text" name="mae_key" required="required" placeholder="<spring:message code="label.mailKey"/>">
 		</div>
 		<div class="col-12 col-12-xsmall text-center">

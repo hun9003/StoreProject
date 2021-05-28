@@ -34,19 +34,23 @@
                     </div>
                 </div>
                 <div class="box" style="min-height: 500px; position: relative;">
-                    ${postBean.post_content}
-
-                    <div class="align-center" style="bottom: 10px; position: absolute; left: 50%; margin-left: -100px;">
-                        <i id="like" class="icon fa-thumbs-up fa-3x solid <c:choose>
-                            <c:when test="${likedBean.lik_type == 1}">active-btn</c:when>
-                            <c:otherwise>hover-btn</c:otherwise>
-                        </c:choose>" style="margin: 30px;"></i>
-                        <i id="hate" class="icon fa-thumbs-down fa-3x solid <c:choose>
-                            <c:when test="${likedBean.lik_type == 2}">active-btn</c:when>
-                            <c:otherwise>hover-btn</c:otherwise>
-                        </c:choose>" style="margin: 30px"></i>
+                    <div id="content-box">
+                        ${postBean.post_content}
                     </div>
-
+                </div>
+                <div class="box">
+                    <div id="like-box">
+                        <div class="align-center">
+                            <i id="like" class="icon fa-thumbs-up fa-3x solid <c:choose>
+                                <c:when test="${likedBean.lik_type == 1}">active-btn</c:when>
+                                <c:otherwise>hover-btn</c:otherwise>
+                            </c:choose>" style="margin: 30px;"></i>
+                            <i id="hate" class="icon fa-thumbs-down fa-3x solid <c:choose>
+                                <c:when test="${likedBean.lik_type == 2}">active-btn</c:when>
+                                <c:otherwise>hover-btn</c:otherwise>
+                            </c:choose>" style="margin: 30px"></i>
+                        </div>
+                    </div>
                 </div>
                 <div id="comment-box"></div>
                 <div class="btn-container">

@@ -14,7 +14,7 @@
 				<header class="major">
 					<h2><spring:message code="title.cert"/></h2>
 				</header>
-				<p class="text-info text-center text-bold"><spring:message code="msg.cert" arguments="${mem_email }"/></p>
+				<p class="text-info text-center text-bold"><spring:message code="msg.cert" arguments="${mem_email}"/></p>
 				<div class="col-12 col-12-xsmall text-center">
 				<a href="javascript:void(0);" class="button primary icon solid fa-search sandBtn" onclick="send_mail('send')"><spring:message code="button.send"/></a>
 				</div>

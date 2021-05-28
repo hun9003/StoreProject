@@ -43,35 +43,44 @@ $(document).ready(function () {
 function checkDupId() {
     const isSuccess = $('#dupid');
     const userid = $('#mem_userid').val();
-    $.ajax('ckUserid', {
-        data: {mem_userid: userid},
-        success: function (data) {
-            if (data == 'true') {
-                alert('사용 가능한 아이디 입니다.');
-                isSuccess.val('1');
-            } else {
-                alert('이미 사용중인 아이디 입니다.');
-                isSuccess.val('0');
+    if(userid != "") {
+        $.ajax('ckUserid', {
+            data: {mem_userid: userid},
+            success: function (data) {
+                if (data == 'true') {
+                    alert('사용 가능한 아이디 입니다.');
+                    isSuccess.val('1');
+                } else {
+                    alert('이미 사용중인 아이디 입니다.');
+                    isSuccess.val('0');
+                }
             }
-        }
-    })
+        })
+    } else {
+        alert('아이디를 입력해 주세요.');
+    }
 }
 
 function checkDupName() {
     const isSuccess = $('#dupname');
     const nickname = $('#mem_userid').val();
-    $.ajax('ckUserid', {
-        data: {mem_nickname: nickname},
-        success: function (data) {
-            if (data == 'true') {
-                alert('사용 가능한 닉네임 입니다.');
-                isSuccess.val('1');
-            } else {
-                alert('이미 사용중인 닉네임 입니다.');
-                isSuccess.val('0');
+    if(nickname != "") {
+        $.ajax('ckUserid', {
+            data: {mem_nickname: nickname},
+            success: function (data) {
+                if (data == 'true') {
+                    alert('사용 가능한 닉네임 입니다.');
+                    isSuccess.val('1');
+                } else {
+                    alert('이미 사용중인 닉네임 입니다.');
+                    isSuccess.val('0');
+                }
             }
-        }
-    })
+        })
+    } else {
+        alert('닉네임을 작성해 주세요.');
+    }
+
 }
 
 function join() { // 회원가입

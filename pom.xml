@@ -181,11 +181,11 @@
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>5.1.36</version>
-		</dependency>
+<!--		<dependency>-->
+<!--		    <groupId>mysql</groupId>-->
+<!--		    <artifactId>mysql-connector-java</artifactId>-->
+<!--		    <version>5.1.36</version>-->
+<!--		</dependency>-->
 		
 		
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
@@ -235,6 +235,13 @@
             <artifactId>spring-security-web</artifactId>
             <version>5.4.5</version>
         </dependency>
+
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>2.7.2</version>
+		</dependency>
+
 
     </dependencies>
 	

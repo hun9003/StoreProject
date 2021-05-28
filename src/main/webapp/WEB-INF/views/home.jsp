@@ -43,9 +43,9 @@
 								<tbody>
 								<c:forEach items="${notices}" var="post">
 									<tr>
-										<td><a href="<c:url value="/board/notice/info/${post.post_id}?page=${pageBean.currentPage}"/>">${post.post_title}</a>
+										<td><a href="<c:url value="/board/notice/info/${post.post_id}?page=1"/>">${post.post_title}</a>
 											<c:if test="${post.post_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
-											<a class="text-primary" href="<c:url value="/board/notice/info/${post.post_id}?page=${pageBean.currentPage}#comment-box"/>">[${post.post_comment_count}]</a>
+											<a class="text-primary" href="<c:url value="/board/notice/info/${post.post_id}?page=1#comment-box"/>">[${post.post_comment_count}]</a>
 										</td>
 										<td>${post.post_nickname}</td>
 										<td>${post.post_hit}</td>
@@ -75,9 +75,9 @@
 								<tbody>
 								<c:forEach items="${freeboards}" var="post">
 									<tr>
-										<td><a href="<c:url value="/board/freeboard/info/${post.post_id}?page=${pageBean.currentPage}"/>">${post.post_title}</a>
+										<td><a href="<c:url value="/board/freeboard/info/${post.post_id}?page=1"/>">${post.post_title}</a>
 											<c:if test="${post.post_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
-											<a class="text-primary" href="<c:url value="/board/freeboard/info/${post.post_id}?page=${pageBean.currentPage}#comment-box"/>">[${post.post_comment_count}]</a>
+											<a class="text-primary" href="<c:url value="/board/freeboard/info/${post.post_id}?page=1#comment-box"/>">[${post.post_comment_count}]</a>
 										</td>
 										<td>${post.post_nickname}</td>
 										<td>${post.post_like}</td>
