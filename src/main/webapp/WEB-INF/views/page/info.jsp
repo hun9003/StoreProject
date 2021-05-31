@@ -14,7 +14,7 @@
             <section>
                 <c:set var="member" value="${sessionScope.member}"/>
                 <header class="major">
-                    <h2><a href="<c:url value="/board/${boardBean.brd_key}/1"/>">${boardBean.brd_name}</a></h2>
+                    <h2><a href="<c:url value="/board/${boardBean.brd_key}?page=${param.page != null ? param.page : 1}"/>">${boardBean.brd_name}</a></h2>
                 </header>
                 <hr>
                 <script src="<c:url value="/resources/js/calculateTime.js"/>"></script>
@@ -24,10 +24,10 @@
                         <p class="text-info">${postBean.post_nickname}</p>
                     </div>
                     <div class="col-3 col-3-medium">
-                        <p class="text-mute">추천 ${postBean.post_like - postBean.post_dislike}</p>
+                        <p class="text-mute"><spring:message code="table.likes"/> ${postBean.post_like - postBean.post_dislike}</p>
                     </div>
                     <div class="col-3 col-3-medium">
-                        <p class="text-mute">조회 ${postBean.post_hit}</p>
+                        <p class="text-mute"><spring:message code="table.hit"/> ${postBean.post_hit}</p>
                     </div>
                     <div class="col-3 col-3-medium">
                         <p class="text-mute"><script>document.write(timeForToday('${postBean.post_datetime}'));</script></p>

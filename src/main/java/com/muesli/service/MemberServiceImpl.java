@@ -2,6 +2,8 @@ package com.muesli.service;
 
 import javax.inject.Inject;
 
+import com.muesli.domain.CurrentvisitorBean;
+import com.muesli.domain.MemberLoginLogBean;
 import org.springframework.stereotype.Service;
 
 import com.muesli.dao.MemberDAO;
@@ -95,5 +97,50 @@ public class MemberServiceImpl implements MemberService {
 	public List<MemberBean> getMemberList(Map<String, Object> searchMap) {
 		System.out.println("MemberServiceImpl - getMemberList()");
 		return memberDAO.getMemberList(searchMap);
+	}
+
+	@Override
+	public void insertLog(MemberLoginLogBean memberLoginLogBean) {
+		System.out.println("MemberServiceImpl - insertLog()");
+		memberDAO.insertLog(memberLoginLogBean);
+	}
+
+	@Override
+	public void insertCurrentVisitor(CurrentvisitorBean currentvisitorBean) {
+		System.out.println("MemberServiceImpl - insertCurrentVisitor()");
+		memberDAO.insertCurrentVisitor(currentvisitorBean);
+	}
+
+	@Override
+	public void deleteCurrentVisitor(CurrentvisitorBean currentvisitorBean) {
+		System.out.println("MemberServiceImpl - insertLog()");
+		memberDAO.deleteCurrentVisitor(currentvisitorBean);
+	}
+
+	@Override
+	public void setMemberPoint(int mem_id, int point) {
+		System.out.println("MemberServiceImpl - setMemberPoint()");
+		MemberBean memberBean = new MemberBean();
+		memberBean.setMem_id(mem_id);
+		memberBean.setMem_point(point);
+		memberDAO.setMemberPoint(memberBean);
+
+		boolean isLevelUp = true;
+		while (isLevelUp) {
+			memberBean = getMember(memberBean);
+			if (memberBean.getMem_point() > memberBean.getMem_level()*100) {
+				memberBean.setMem_point(memberBean.getMem_point() - memberBean.getMem_level()*100);
+				memberBean.setMem_level(memberBean.getMem_level() + 1);
+				setMemberLevel(memberBean);
+			} else {
+				isLevelUp = false;
+			}
+		}
+	}
+
+	@Override
+	public void setMemberLevel(MemberBean memberBean) {
+		System.out.println("MemberServiceImpl - setMemberLevel()");
+		memberDAO.setMemberLevel(memberBean);
 	}
 }

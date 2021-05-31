@@ -115,7 +115,7 @@ public class CommentController {
         String nowIp = ScriptUtils.getIp(request);
 
         if(commentBean.getCmt_num() != 0) {
-            commentBean.setCmt_reply(commentService.getMaxOrder(commentBean.getCmt_num()));
+            commentBean.setCmt_reply(commentService.getMaxOrder(commentBean.getCmt_num())+1);
         }
         commentBean.setBrd_id(postBean.getBrd_id());
         commentBean.setCmt_num(commentBean.getCmt_num() == 0 ? commentService.getMaxNum()+1 : commentBean.getCmt_num());

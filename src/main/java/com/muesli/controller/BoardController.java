@@ -2,11 +2,9 @@ package com.muesli.controller;
 
 import com.muesli.domain.*;
 import com.muesli.service.BoardService;
-import com.muesli.service.CommentService;
 import com.muesli.service.MemberService;
 import com.muesli.util.ScriptUtils;
 import com.muesli.util.StrResources;
-import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,7 +37,7 @@ public class BoardController {
     private BoardService boardService;
 
     @Inject
-    private CommentService commentService;
+    private MemberService memberService;
 
     // 게시판 조회
     @RequestMapping(value = "/board/{brd_key}", method = RequestMethod.GET)
@@ -210,7 +208,7 @@ public class BoardController {
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        int result = boardService.deleteBoard(post_id);
+        int result = boardService.deletePost(post_id);
         if(result == 0) {
             model.addAttribute("msg", StrResources.FAIL_BOARD_DELETE);
             return StrResources.ALERT_MESSAGE_PAGE;
@@ -423,6 +421,7 @@ public class BoardController {
 
         LikedBean likedBean = boardService.getLiked(likeMap);
 
+        memberService.setMemberPoint(postBean.getMem_id(), 1);
 
         model.addAttribute("likedBean", likedBean);
         model.addAttribute("boardBean", boardBean);
@@ -540,5 +539,39 @@ public class BoardController {
         return entity;
     }
 
+    // 게시물 조회
+    @RequestMapping(value = "/board/table", method = RequestMethod.GET)
+    public String boardTable(HttpSession session, HttpServletRequest request, Model model) {
+        System.out.println("BoardController - boardTable() :: GET /board/table");
+
+        String brd_key = request.getParameter("brd_key");
+
+        int page = 1;
+        String order_type = "new";
+        String search_type = null;
+        String search_content = null;
+        int isOnlyDel = 0;
+
+        PageBean pageBean = new PageBean();
+        pageBean.setCurrentPage(page); // 서블릿에 붙은 페이지를 저장
+        pageBean.setPageNum(page + "");
+        pageBean.setPageSize(5);
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        Map<String, Object> ListMap = new HashMap<String, Object>();
+        ListMap.put("search_type", search_type);
+        ListMap.put("search_content", search_content);
+        ListMap.put("isOnlyDel", isOnlyDel);
+        ListMap.put("brd_id", boardBean.getBrd_id());;
+        pageBean.setStartRow((pageBean.getCurrentPage() - 1) * pageBean.getPageSize() + 1 - 1);
+        ListMap.put("pageBean", pageBean);
+        ListMap.put("order_type", order_type);
+        List<PostBean> posts = boardService.getPostList(ListMap);
+
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("brd_name", boardBean.getBrd_name());
+        model.addAttribute("brd_key", brd_key);
+        return StrResources.PANEL_PAGE;
+    }
 
 }

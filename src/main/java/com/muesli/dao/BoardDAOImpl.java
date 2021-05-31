@@ -148,4 +148,10 @@ public class BoardDAOImpl implements BoardDAO {
 		System.out.println("BoardDAOImpl - updateCommentCount()");
 		sqlSession.update(namespace+".updateCommentCount", postBean);
 	}
+
+	@Override
+	public int deletePost(int post_id) {
+		System.out.println("BoardDAOImpl - deletePost()");
+		return sqlSession.update(namespace+".deletePost", post_id);
+	}
 }

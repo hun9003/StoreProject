@@ -13,7 +13,7 @@
 					<section id="banner">
 						<div class="content">
 							<header>
-								<h1>권해적단 커뮤니티에 오신 것을 환영합니다.</h1>
+								<h1>찌끄래기 커뮤니티에 오신 것을 환영합니다.</h1>
 							</header>
 							<p>뭐라 설명해야 할지도 모르겠는 그냥 그런 사이트</p>
 							<ul class="actions">
@@ -25,71 +25,10 @@
 						</span>
 					</section>
 
-				<!-- Section -->
-					<section>
-						<header class="major">
-							<h2><a href="<c:url value="/board/notice"/>">공지사항</a></h2>
-						</header>
-						<div class="table-wrapper">
-							<table>
-								<thead>
-									<tr>
-										<th>제목</th>
-										<th>작성자</th>
-										<th>조회</th>
-										<th>작성일</th>
-									</tr>
-								</thead>
-								<tbody>
-								<c:forEach items="${notices}" var="post">
-									<tr>
-										<td><a href="<c:url value="/board/notice/info/${post.post_id}?page=1"/>">${post.post_title}</a>
-											<c:if test="${post.post_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
-											<a class="text-primary" href="<c:url value="/board/notice/info/${post.post_id}?page=1#comment-box"/>">[${post.post_comment_count}]</a>
-										</td>
-										<td>${post.post_nickname}</td>
-										<td>${post.post_hit}</td>
-										<td><script>document.write(timeForToday('${post.post_datetime}'));</script></td>
-									</tr>
-								</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</section>
-					
-					<!-- Section -->
-					<section>
-						<header class="major">
-							<h2><a href="<c:url value="/board/freeboard"/>">자유게시판</a></h2>
-						</header>
-						<div class="table-wrapper">
-							<table>
-								<thead>
-									<tr>
-										<th>제목</th>
-										<th>작성자</th>
-										<th>추천</th>
-										<th>작성일</th>
-									</tr>
-								</thead>
-								<tbody>
-								<c:forEach items="${freeboards}" var="post">
-									<tr>
-										<td><a href="<c:url value="/board/freeboard/info/${post.post_id}?page=1"/>">${post.post_title}</a>
-											<c:if test="${post.post_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
-											<a class="text-primary" href="<c:url value="/board/freeboard/info/${post.post_id}?page=1#comment-box"/>">[${post.post_comment_count}]</a>
-										</td>
-										<td>${post.post_nickname}</td>
-										<td>${post.post_like}</td>
-										<td><script>document.write(timeForToday('${post.post_datetime}'));</script></td>
-									</tr>
-								</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</section>
+				<div id="mainContent"></div>
 
-				<!-- Section -->
+
+				<%--<!-- Section -->
 					<section>
 						<header class="major">
 							<h2>이상형 월드컵</h2>
@@ -128,10 +67,26 @@
 								</ul>
 							</article>
 						</div>
-					</section>
+					</section>--%>
 
 			</div>
 		</div>
 	<c:import url="/side"/>
 </div>
+<script>
+	$(document).ready(function (){
+		<c:forEach items="${boards}" var="brd">
+			var response;
+			$.ajax({ type: "GET",
+				url: "<c:url value="/board/table"/>?brd_key=${brd.brd_key}",
+				async: false,
+				success : function(text)
+				{
+					response= text;
+				}
+			});
+			$("#mainContent").append(response);
+		</c:forEach>
+	})
+</script>
 <c:import url="/bottom"/>

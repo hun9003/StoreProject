@@ -6,10 +6,12 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- Root Context는 모든 웹 컴포넌트에서 공유될 수 있는 자원을 정의하는 공간이다 -->   
     <!-- jdbc 자원을 bean으로 선언하고 접속 환경을 구성 -->
-	<!--	<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />-->
-	<!--		<property name="url" value="jdbc:log4jdbc:mysql://localhost:3306/toyproject1" />-->
-	<!--		<property name="username" value="root" />-->
-	<!--		<property name="password" value="rateyes9003" />-->
+	<!--<property name="url" value="jdbc:log4jdbc:mariadb://hun9003.cafe24.com:3306/hun9003" />
+	<property name="username" value="hun9003" />
+	<property name="password" value="jinhun12" />-->
+	<!--<property name="url" value="jdbc:log4jdbc:mariadb://158.247.209.159:3306/toy_project" />
+	<property name="username" value="pjhoon" />
+	<property name="password" value="pjhoon" />-->
 	<bean id="driverManagerDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
 		<property name="url" value="jdbc:log4jdbc:mariadb://158.247.209.159:3306/toy_project" />

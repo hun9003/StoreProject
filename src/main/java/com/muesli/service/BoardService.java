@@ -52,4 +52,6 @@ public interface BoardService {
 	void setHateCount(PostBean postBean);
 
     void updateCommentCount(PostBean postBean);
+
+    int deletePost(int post_id);
 }

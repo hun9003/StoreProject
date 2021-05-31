@@ -3,17 +3,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<c:import url="/settings/top"/>
+<c:import url="/top"/>
 <!-- Wrapper -->
 <div id="wrapper">
 	<!-- Main -->
 		<div id="main">
 			<div class="inner">
-				<c:import url="/settings/header"/>
+				<c:import url="/header"/>
 				<!-- Banner -->
 					<section>
 						<header class="main">
-							<h2><spring:message code="label.memberSetting"/> &gt; <spring:message code="title.${subTitle}"/> - ${memberInfo.mem_userid}</h2>
+							<h2><spring:message code="label.memberSetting"/> &gt; <spring:message code="title.${subTitle}"/> - ${member.mem_userid}</h2>
 						</header>
 						<hr>
 						<div class="content">
@@ -30,19 +30,19 @@
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.id"/></div>
-										<div class="col-9 col-9-large text-bold">${memberInfo.mem_userid}</div>
+										<div class="col-9 col-9-large text-bold">${member.mem_userid}</div>
 									</div>
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.nickname"/></div>
-										<div class="col-9 col-9-large text-bold">${memberInfo.mem_nickname}</div>
+										<div class="col-9 col-9-large text-bold">${member.mem_nickname}</div>
 									</div>
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.gender"/></div>
 										<div class="col-9 col-9-large text-bold"><c:choose>
-											<c:when test="${memberInfo.mem_gender == 1}"><spring:message code="label.genderMen"/></c:when>
-											<c:when test="${memberInfo.mem_gender == 2}"><spring:message code="label.genderWomen"/></c:when>
+											<c:when test="${member.mem_gender == 1}"><spring:message code="label.genderMen"/></c:when>
+											<c:when test="${member.mem_gender == 2}"><spring:message code="label.genderWomen"/></c:when>
 											<c:otherwise><spring:message code="label.unknown"/></c:otherwise>
 										</c:choose></div>
 									</div>
@@ -60,12 +60,12 @@
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.email"/></div>
-										<div class="col-9 col-9-large text-bold">${memberInfo.mem_email}</div>
+										<div class="col-9 col-9-large text-bold">${member.mem_email}</div>
 									</div>
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.phone"/></div>
-										<div class="col-9 col-9-large text-bold">${memberInfo.mem_phone}</div>
+										<div class="col-9 col-9-large text-bold">${member.mem_phone}</div>
 									</div>
 								</div>
 							</section>
@@ -77,14 +77,23 @@
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.memberPermission"/></div>
 										<div class="col-9 col-9-large text-bold"><c:choose>
-											<c:when test="${memberInfo.mem_is_admin == 1}"><spring:message code="permission.admin"/></c:when>
+											<c:when test="${member.mem_is_admin == 1}"><spring:message code="permission.admin"/></c:when>
 											<c:otherwise><spring:message code="permission.public"/></c:otherwise>
 										</c:choose></div>
 									</div>
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.level"/></div>
-										<div class="col-9 col-9-large text-bold">${memberInfo.mem_level}</div>
+										<div class="col-9 col-9-large text-bold">
+											<div class="row">
+												<div class="col-6">
+													${member.mem_level}
+												</div>
+												<div class="col-6">
+													<spring:message code="label.exp" arguments="${member.mem_point}"/>
+													<div class="graph-box"><div class="graph" style="width: ${member.mem_point}%;"></div></div></div>
+												</div>
+											</div>
 									</div>
 									<hr>
 									<div class="row">
@@ -105,6 +114,6 @@
 					</section>
 			</div>
 		</div>
-	<c:import url="/settings/side"/>
+	<c:import url="/side"/>
 </div>
-<c:import url="/settings/bottom"/>
+<c:import url="/bottom"/>

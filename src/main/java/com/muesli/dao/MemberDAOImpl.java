@@ -2,6 +2,8 @@ package com.muesli.dao;
 
 import javax.inject.Inject;
 
+import com.muesli.domain.CurrentvisitorBean;
+import com.muesli.domain.MemberLoginLogBean;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -107,6 +109,36 @@ public class MemberDAOImpl implements MemberDAO {
 	public List<MemberBean> getMemberList(Map<String, Object> searchMap) {
 		System.out.println("MemberDAOImpl - getMemberList()");
 		return sqlSession.selectList(namespace+".getMemberList", searchMap);
+	}
+
+	@Override
+	public void insertLog(MemberLoginLogBean memberLoginLogBean) {
+		System.out.println("MemberDAOImpl - insertLog()");
+		sqlSession.insert(namespace+".insertLog", memberLoginLogBean);
+	}
+
+	@Override
+	public void insertCurrentVisitor(CurrentvisitorBean currentvisitorBean) {
+		System.out.println("MemberDAOImpl - insertCurrentVisitor()");
+		sqlSession.insert(namespace+".insertCurrentVisitor", currentvisitorBean);
+	}
+
+	@Override
+	public void deleteCurrentVisitor(CurrentvisitorBean currentvisitorBean) {
+		System.out.println("MemberDAOImpl - deleteCurrentVisitor()");
+		sqlSession.delete(namespace+".deleteCurrentVisitor", currentvisitorBean);
+	}
+
+	@Override
+	public void setMemberPoint(MemberBean memberBean) {
+		System.out.println("MemberDAOImpl - setMemberPoint()");
+		sqlSession.update(namespace+".setMemberPoint", memberBean);
+	}
+
+	@Override
+	public void setMemberLevel(MemberBean memberBean) {
+		System.out.println("MemberDAOImpl - setMemberLevel()");
+		sqlSession.update(namespace+".setMemberLevel", memberBean);
 	}
 
 

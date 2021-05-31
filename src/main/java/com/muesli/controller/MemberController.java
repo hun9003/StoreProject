@@ -3,12 +3,14 @@ package com.muesli.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.muesli.domain.MemberLoginLogBean;
 import com.muesli.util.StrResources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,7 +28,7 @@ import com.muesli.domain.MailBean;
 import com.muesli.domain.MemberAuthEmailBean;
 import com.muesli.domain.MemberBean;
 import com.muesli.service.MemberService;
-import com.muesli.util.FuntcionUtils;
+import com.muesli.util.FunctionUtils;
 import com.muesli.util.LoginAPI;
 import com.muesli.util.ScriptUtils;
 
@@ -60,9 +63,7 @@ public class MemberController {
         model.addAttribute("referrer", referrer);
 
         if(StrResources.CHECK_LOGIN(session)){
-            model.addAttribute("msg", StrResources.ALREADY_LOGIN);
-            model.addAttribute("url", "/home");
-            return StrResources.ALERT_MESSAGE_PAGE;
+            return StrResources.REDIRECT+"/home";
         }
         return StrResources.LOGIN_PAGE;
     }
@@ -132,7 +133,7 @@ public class MemberController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginPost(MemberBean memberBean, Model model, HttpSession session, HttpServletRequest request) {
+    public String loginPost(@RequestHeader(value = "User-Agent") String userAgent, MemberBean memberBean, Model model, HttpSession session, HttpServletRequest request) {
         System.out.println("MemberController - loginPost");
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
@@ -142,17 +143,51 @@ public class MemberController {
         memberBean.setMem_password(SALT(password));
         // 로그인을 위해 담아온 정보로 로그인 유효성 검사
         MemberBean memberCheck = memberService.getMember(memberBean);
+
+        String url = request.getParameter("referrer");
+        if(url == null){
+            url = "/home";
+        }
+
         if (memberCheck != null) {
             // 로그인에 성공했다면 마지막 로그인, 아이피 기록 업데이트
             Timestamp nowTime = new Timestamp(System.currentTimeMillis());
             String nowIp = ScriptUtils.getIp(request);
+
+            // 레벨업
+            System.out.println(nowTime.getTime() - memberCheck.getMem_lastlogin_datetime().getTime());
+            if (memberCheck.getMem_lastlogin_datetime() == null || nowTime.getTime() - memberCheck.getMem_lastlogin_datetime().getTime() > 86400000) {
+                System.out.println("Login Exp 10 up");
+                memberService.setMemberPoint(memberCheck.getMem_id(), 10);
+            }
+
             memberCheck.setMem_lastlogin_datetime(nowTime);
             memberCheck.setMem_lastlogin_ip(nowIp);
 
+            MemberLoginLogBean memberLoginLogBean = new MemberLoginLogBean();
+            memberLoginLogBean.setMll_success(1);
+            memberLoginLogBean.setMem_id(memberCheck.getMem_id());
+            memberLoginLogBean.setMll_userid(memberCheck.getMem_userid());
+            memberLoginLogBean.setMll_datetime(nowTime);
+            memberLoginLogBean.setMll_ip(nowIp);
+            memberLoginLogBean.setMll_reason("success");
+            memberLoginLogBean.setMll_useragent(userAgent);
+            memberLoginLogBean.setMll_url("/login");
+            memberLoginLogBean.setMll_referer(url);
+
+            memberService.insertLog(memberLoginLogBean);
+
             int result = memberService.updateLoginMember(memberCheck);
+
+
+
+
+
             // 업데이트 완료시 세션 저장
             if (result == 1) {
                 session.setAttribute("member", memberCheck);
+
+
             } else {
                 model.addAttribute("msg", StrResources.ERROR);
                 return StrResources.ALERT_MESSAGE_PAGE;
@@ -162,10 +197,8 @@ public class MemberController {
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        String url = request.getParameter("referrer");
-        if(url == null){
-            url = "/home";
-        }
+
+
 
         return StrResources.REDIRECT+url;
     }
@@ -251,7 +284,7 @@ public class MemberController {
         String result = "";
 
         // 랜덤 문자열로 코드 생성
-        FuntcionUtils fn = new FuntcionUtils();
+        FunctionUtils fn = new FunctionUtils();
         String code = fn.getRandStr();
 
         Timestamp nowTime = new Timestamp(System.currentTimeMillis());
@@ -342,4 +375,31 @@ public class MemberController {
         return StrResources.ALERT_MESSAGE_PAGE;
 
 	}
+
+    // 회원 정보 조회
+    @RequestMapping(value = "/member/info", method = RequestMethod.GET)
+    public String member_info(HttpSession session, Model model) {
+        System.out.println("MemberController - member_info() :: GET /member/info");
+
+        // 페이지 제목
+        String subTitle = "memberInfo";
+
+        // 세션으로 멤버 정보 호출
+        MemberBean memberBean = (MemberBean)session.getAttribute("member");
+        if(memberBean == null) {
+            model.addAttribute("msg", StrResources.LOGIN);
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        MemberBean memberInfo = memberService.getMember(memberBean);
+
+
+        // 모델에 저장
+        model.addAttribute("subTitle", subTitle);
+        model.addAttribute("member", memberInfo);
+        return StrResources.MEMBER_INFO_PAGE;
+    }
+
+
 }

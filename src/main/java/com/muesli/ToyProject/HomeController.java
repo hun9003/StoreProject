@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.muesli.service.MemberService;
 
+import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,56 +52,44 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String main(HttpSession session, Model model) {
+	public String main(Model model, HttpSession session) {
 		System.out.println("HomeController - main() :: GET /home");
 		if(session.getAttribute("member") != null) {
 			MemberBean memberBean = (MemberBean)session.getAttribute("member");
 			MemberBean memberCheck = memberservice.getMember(memberBean);
 			if(memberCheck.getMem_email_cert() == 0) {
 				model.addAttribute("msg", StrResources.EMAIL_CERT);
-				model.addAttribute("url", "cert");
+				model.addAttribute("url", "/cert");
 				return StrResources.ALERT_MESSAGE_PAGE;
 			}
 		}
-		int page = 1;
-		String order_type = "new";
-		String search_type = null;
-		String search_content = null;
-		int isOnlyDel = 0;
+		List<BoardBean> boardBeans = boardService.getBoardList();
 
-		PageBean pageBean = new PageBean();
-		pageBean.setCurrentPage(page); // 서블릿에 붙은 페이지를 저장
-		pageBean.setPageNum(page + "");
-		pageBean.setPageSize(5);
-		BoardBean boardBean = boardService.getBoardName("notice");
-		Map<String, Object> ListMap = new HashMap<String, Object>();
-		ListMap.put("search_type", search_type);
-		ListMap.put("search_content", search_content);
-		ListMap.put("isOnlyDel", isOnlyDel);
-		ListMap.put("brd_id", boardBean.getBrd_id());;
-		pageBean.setStartRow((pageBean.getCurrentPage() - 1) * pageBean.getPageSize() + 1 - 1);
-		ListMap.put("pageBean", pageBean);
-		ListMap.put("order_type", order_type);
-		List<PostBean> notices = boardService.getPostList(ListMap);
-
-		boardBean = boardService.getBoardName("freeboard");
-		ListMap.put("brd_id", boardBean.getBrd_id());
-		List<PostBean> freeboards = boardService.getPostList(ListMap);
-
-		model.addAttribute("notices", notices);
-		model.addAttribute("freeboards", freeboards);
+		model.addAttribute("boards", boardBeans);
 		return StrResources.MAIN_PAGE;
 	}
 	
 	@RequestMapping(value = "/top", method = RequestMethod.GET)
-	public String top() {
+	public String top(HttpSession session, Model model) {
 		System.out.println("HomeController - top() :: GET /top");
+
 		return StrResources.INCLUDE_TOP;
 	}
 	
 	@RequestMapping(value = "/header", method = RequestMethod.GET)
 	public String header(Model model, HttpServletRequest request) {
 		System.out.println("HomeController - header() :: GET /header");
+		MemberBean admin = new MemberBean();
+		admin.setMem_id(1);
+		admin = memberservice.getMember(admin);
+		if(admin.getMem_adminmemo().equals(StrResources.PAUSE)) {
+			model.addAttribute("msg", StrResources.PAUSE);
+			model.addAttribute("url", "/pause");
+			return StrResources.ALERT_MESSAGE_PAGE;
+		}
+
+
+
 		return StrResources.INCLUDE_HEADER;
 	}
 	
@@ -116,7 +105,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/bottom", method = RequestMethod.GET)
 	public String bottom() {
-		System.out.println("HomeController - bottom() :: GET /header");
+		System.out.println("HomeController - bottom() :: GET /bottom");
 		return StrResources.INCLUDE_BOTTOM;
 	}
 
@@ -133,5 +122,12 @@ public class HomeController {
 		System.out.println("HomeController - no_permission() :: GET /no-permission");
 		model.addAttribute("msg", StrResources.BAD_PERMISSION);
 		return StrResources.ALERT_MESSAGE_PAGE;
+	}
+
+	@RequestMapping(value = "/pause", method = RequestMethod.GET)
+	public String pause(Model model) {
+		System.out.println("HomeController - pause() :: GET /pause");
+
+		return StrResources.PAUSE_PAGE;
 	}
 }

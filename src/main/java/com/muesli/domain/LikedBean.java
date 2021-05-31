@@ -13,5 +13,5 @@ public class LikedBean {
     private int mem_id;
     private int target_mem_id;
     private int lik_type;
-    private int lik_ip;
+    private String lik_ip;
 }

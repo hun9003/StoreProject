@@ -12,6 +12,7 @@
 				<c:if test="${sessionScope.member.mem_is_admin == 1}">
 					<li><a href="<c:url value="/settings"/>" class="fas fa-cogs"> <span class="label"><spring:message code="button.setting"/></span></a></li>
 				</c:if>
+				<li><a href="<c:url value="/member/info"/>" class="fas fa-user-alt"> <span class="label"><spring:message code="button.mypage"/></span></a></li>
 				<li><a href="<c:url value="/logout"/>" class="fas fa-sign-out-alt"> <span class="label"><spring:message code="button.logout"/></span></a></li>
 			</c:when>
 			<c:otherwise>

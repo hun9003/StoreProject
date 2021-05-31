@@ -1,8 +1,11 @@
 package com.muesli.util;
 
+import com.muesli.domain.MemberBean;
+
 import java.util.Random;
 
-public class FuntcionUtils {
+
+public class FunctionUtils {
 
     public String getRandStr() {
         String code = "";
@@ -29,4 +32,6 @@ public class FuntcionUtils {
 
         return code;
     }
+
+
 }

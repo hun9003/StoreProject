@@ -118,4 +118,33 @@
 		ORDER BY mem_id DESC
 		LIMIT #{pageBean.startRow},#{pageBean.pageSize};
 	</select>
+
+<!--	로그인 로그-->
+	<insert id="insertLog">
+		INSERT INTO member_login_log VALUES (null, #{mll_success}, #{mem_id}, #{mll_userid}, #{mll_datetime}
+											, #{mll_ip}, #{mll_reason}, #{mll_useragent}, #{mll_url}, #{mll_referer})
+	</insert>
+
+<!--	현재 접속자 수-->
+	<select id="getCurrentvisitor" resultType="currentvisitor">
+		SELECT * FROM currentvisitor
+	</select>
+
+	<insert id="insertCurrentVisitor">
+		INSERT INTO currentvisitor VALUES (#{cur_ip}, #{mem_id}, #{cur_mem_name}, #{cur_datetime}
+											, #{cur_page}, #{cur_url}, #{cur_referer}, #{cur_useragent})
+	</insert>
+
+	<delete id="deleteCurrentVisitor">
+		DELETE FROM currentvisitor WHERE cur_ip = #{cur_ip}
+	</delete>
+
+<!--	멤버 레벨 관련-->
+	<update id="setMemberPoint">
+		UPDATE member SET mem_point = mem_point + #{mem_point} WHERE mem_id = #{mem_id}
+	</update>
+
+	<update id="setMemberLevel">
+		UPDATE member set mem_level = #{mem_level}, mem_point = #{mem_point} WHERE mem_id = #{mem_id}
+	</update>
 </mapper>

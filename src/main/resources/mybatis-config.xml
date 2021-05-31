@@ -19,5 +19,8 @@
 		<typeAlias alias="like" type="com.muesli.domain.LikedBean"/>
 		<!--		댓글-->
 		<typeAlias alias="comment" type="com.muesli.domain.CommentBean"/>
+
+	<!--		현재접속자-->
+		<typeAlias alias="currentvisitor" type="com.muesli.domain.CurrentvisitorBean"/>
 	</typeAliases>
  </configuration> 

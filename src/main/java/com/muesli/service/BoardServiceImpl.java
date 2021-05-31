@@ -147,4 +147,10 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println("BoardServiceImpl - updateCommentCount()");
 		boardDAO.updateCommentCount(postBean);
 	}
+
+	@Override
+	public int deletePost(int post_id) {
+		System.out.println("BoardServiceImpl - deletePost()");
+		return boardDAO.deletePost(post_id);
+	}
 }

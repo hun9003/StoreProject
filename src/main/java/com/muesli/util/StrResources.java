@@ -13,6 +13,8 @@ public class StrResources {
     public static final String BAD_PERMISSION = "badPermission"; // 권한이 없습니다.
     public static final String PAGE_404 = "page404"; // 존재하지 않는 페이지 입니다. 메인 화면으로 이동합니다.
 
+    public static final String PAUSE = "pause";
+
     // 로그인 관련 =================================================================================
     public static final String LOGIN = "login"; // 로그인이 필요한 시스템 입니다.
     public static final String LOGIN_FAIL = "loginFail"; // 아이디 혹은 비밀번호가 틀립니다.
@@ -65,6 +67,8 @@ public class StrResources {
     public static final String LOGIN_PAGE = "/member/login"; // 로그인 페이지
     public static final String CERT_PAGE = "/member/cert"; // 이메일 인증 페이지
     public static final String CERT_FORM_PAGE = "/member/cert_form"; // 이메일 인증 폼 페이지
+    
+    public static final String MEMBER_INFO_PAGE = "/member/info"; // 회원 정보 페이지
 
     public static final String BOARD_PAGE = "/page/board"; // 게시판 페이지
     public static final String BOARD_FORM_PAGE = "/page/form"; // 게시물 폼 페이지
@@ -72,6 +76,10 @@ public class StrResources {
     public static final String COMMENT_PAGE = "/page/comment"; // 댓글 페이지
 
     public static final String ALERT_MESSAGE_PAGE = "/common/alertMessage"; // 메세지 출력 페이지
+    public static final String PAUSE_PAGE = "/common/pause"; // 시스템 점검 페이지
+    
+    public static final String PANEL_PAGE = "/page/boardPanel"; // 게시판 판넬 페이지
+    
 
     public static boolean CHECK_LOGIN(HttpSession session) {
         return session.getAttribute("member") != null;
