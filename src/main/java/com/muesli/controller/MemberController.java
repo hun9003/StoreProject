@@ -3,7 +3,6 @@ package com.muesli.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
@@ -11,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.muesli.domain.MemberLoginLogBean;
+import com.muesli.service.BoardService;
+import com.muesli.service.CommentService;
 import com.muesli.util.StrResources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,12 @@ public class MemberController {
 
     @Inject
     private MemberService memberService;
+
+    @Inject
+    private BoardService boardService;
+
+    @Inject
+    private CommentService commentService;
 
     @Autowired
     private JavaMailSenderImpl mailSender;
@@ -394,10 +401,14 @@ public class MemberController {
 
         MemberBean memberInfo = memberService.getMember(memberBean);
 
+        int postCount = boardService.getMemberPostCount(memberInfo.getMem_id());
+        int commentCount = commentService.getMemberCommentCount(memberInfo.getMem_id());
 
         // 모델에 저장
         model.addAttribute("subTitle", subTitle);
         model.addAttribute("member", memberInfo);
+        model.addAttribute("postCount", postCount);
+        model.addAttribute("commentCount", commentCount);
         return StrResources.MEMBER_INFO_PAGE;
     }
 

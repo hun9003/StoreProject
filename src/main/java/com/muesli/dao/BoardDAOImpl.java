@@ -154,4 +154,10 @@ public class BoardDAOImpl implements BoardDAO {
 		System.out.println("BoardDAOImpl - deletePost()");
 		return sqlSession.update(namespace+".deletePost", post_id);
 	}
+
+	@Override
+	public int getMemberPostCount(int mem_id) {
+		System.out.println("BoardDAOImpl - getMemberPostCount()");
+		return sqlSession.selectOne(namespace+".getMemberPostCount", mem_id);
+	}
 }

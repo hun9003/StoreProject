@@ -56,4 +56,10 @@ public class CommentServiceImpl implements CommentService {
 		System.out.println("CommentServiceImpl - deleteComment()");
 		return  commentDAO.deleteComment(cmt_id);
 	}
+
+	@Override
+	public int getMemberCommentCount(int mem_id) {
+		System.out.println("CommentServiceImpl - getMemberCommentCount()");
+		return commentDAO.getMemberCommentCount(mem_id);
+	}
 }

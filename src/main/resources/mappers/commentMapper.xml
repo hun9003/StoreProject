@@ -37,4 +37,10 @@
     <update id="deleteComment">
         UPDATE comment SET cmt_del = 1 WHERE cmt_id = #{cmt_id}
     </update>
+
+    <!--    회원이 올린 댓글 개수-->
+    <select id="getMemberCommentCount" resultType="int">
+        SELECT COUNT(cmt.cmt_id) FROM comment cmt JOIN post
+        ON cmt.post_id = post.post_id WHERE cmt.mem_id = #{mem_id} AND post.post_del = 0
+    </select>
 </mapper>

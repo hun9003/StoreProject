@@ -22,4 +22,6 @@ public interface CommentService {
     CommentBean getComment(int cmt_id);
 
     int deleteComment(int cmt_id);
+
+    int getMemberCommentCount(int mem_id);
 }

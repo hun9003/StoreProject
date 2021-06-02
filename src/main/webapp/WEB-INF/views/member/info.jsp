@@ -98,13 +98,13 @@
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.writePost"/></div>
-										<div class="col-6 col-6-large text-bold"><spring:message code="label.count" arguments="0"/></div>
+										<div class="col-6 col-6-large text-bold"><spring:message code="label.count" arguments="${postCount}"/></div>
 										<div class="col-3 col-3-large text-bold"><a href="#" class="text-primary"><spring:message code="label.allView"/></a></div>
 									</div>
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.writeComment"/></div>
-										<div class="col-6 col-6-large text-bold"><spring:message code="label.count" arguments="0"/></div>
+										<div class="col-6 col-6-large text-bold"><spring:message code="label.count" arguments="${commentCount}"/></div>
 										<div class="col-3 col-3-large text-bold"><a href="#" class="text-primary"><spring:message code="label.allView"/></a></div>
 									</div>
 								</div>

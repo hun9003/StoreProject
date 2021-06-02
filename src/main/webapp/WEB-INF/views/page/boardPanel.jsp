@@ -6,7 +6,7 @@
 <!-- Section -->
 <section>
   <header class="major">
-    <h2><a href="<c:url value="/board/notice"/>">${brd_name}</a></h2>
+    <h2><a href="<c:url value="/board/${brd_key}"/>">${brd_name}</a></h2>
   </header>
   <div class="table-wrapper">
     <table>

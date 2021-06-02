@@ -30,7 +30,7 @@
                         <p class="text-mute"><spring:message code="table.hit"/> ${postBean.post_hit}</p>
                     </div>
                     <div class="col-3 col-3-medium">
-                        <p class="text-mute"><script>document.write(timeForToday('${postBean.post_datetime}'));</script></p>
+                       <p class="text-mute"><spring:message code="table.dateWrite"/> <fmt:formatDate value="${postBean.post_datetime}" pattern="yy-MM-dd HH:mm"/></p>
                     </div>
                 </div>
                 <div class="box" style="min-height: 500px; position: relative;">

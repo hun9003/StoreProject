@@ -54,4 +54,6 @@ public interface BoardDAO {
     void updateCommentCount(PostBean postBean);
 
     int deletePost(int post_id);
+
+    int getMemberPostCount(int mem_id);
 }

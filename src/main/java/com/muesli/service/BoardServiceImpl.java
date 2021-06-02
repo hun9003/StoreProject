@@ -153,4 +153,10 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println("BoardServiceImpl - deletePost()");
 		return boardDAO.deletePost(post_id);
 	}
+
+	@Override
+	public int getMemberPostCount(int mem_id) {
+		System.out.println("BoardServiceImpl - getMemberPostCount()");
+		return boardDAO.getMemberPostCount(mem_id);
+	}
 }

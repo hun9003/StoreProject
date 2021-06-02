@@ -57,4 +57,10 @@ public class CommentDAOImpl implements CommentDAO {
 		System.out.println("CommentDAOImpl - deleteComment()");
 		return sqlSession.update(namespace+".deleteComment", cmt_id);
 	}
+
+	@Override
+	public int getMemberCommentCount(int mem_id) {
+		System.out.println("CommentDAOImpl - getMemberCommentCount()");
+		return sqlSession.selectOne(namespace+".getMemberCommentCount", mem_id);
+	}
 }

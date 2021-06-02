@@ -12,7 +12,10 @@
             <c:if test="${cmt.cmt_reply > 0}">style="margin-left: 20px;"</c:if>
     >
       <c:if test="${cmt.cmt_reply > 0}"><i class="icon fab fa-replyd"></i> </c:if>
-      <span class="text-info">${cmt.mem_nickname}</span>
+      <span class="<c:choose>
+        <c:when test="${cmt.mem_id == postBean.mem_id}">text-primary</c:when>
+        <c:otherwise>text-info</c:otherwise>
+      </c:choose>">${cmt.mem_nickname}</span>
       <c:if test="${cmt.cmt_device == 2}"><i class="fas fa-mobile-alt"></i> </c:if>
         ${cmt.cmt_content} <c:if test="${cmt.mem_id == sessionScope.member.mem_id}">
       <i class="icon fa-trash-alt solid" style="margin-left: 10px; cursor: pointer;" onclick="commentDelete('${cmt.cmt_id}');"></i></c:if> <span id="cmt_date${cmt.cmt_id}" class="text-mute" style="float: right"></span></li>
