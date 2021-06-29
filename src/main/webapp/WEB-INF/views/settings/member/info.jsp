@@ -49,7 +49,7 @@
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.password"/></div>
-										<div class="col-9 col-9-large text-bold"><a href="#" class="text-primary"><spring:message code="button.passwordChange"/></a></div>
+										<div class="col-9 col-9-large text-bold"><a href="<c:url value="/member/check_pwd"/>?type=changePassword" class="text-primary"><spring:message code="button.passwordChange"/></a></div>
 									</div>
 								</div>
 							</section>

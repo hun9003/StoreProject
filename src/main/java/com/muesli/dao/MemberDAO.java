@@ -45,4 +45,6 @@ public interface MemberDAO {
 	void setMemberPoint(MemberBean memberBean);
 
 	void setMemberLevel(MemberBean memberBean);
+
+    int updateMemberPhoto(MemberBean memberBean);
 }

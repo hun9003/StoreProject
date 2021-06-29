@@ -13,7 +13,7 @@
       <section id="banner">
         <div class="content">
           <header>
-            <h1><spring:message code="msg.badRedirect"/> </h1>
+            <h1><spring:message code="msg.badSystem"/> </h1>
             <a class="primary" href="<c:url value="/"/>"><spring:message code="button.main"/></a> <a class="primary" href="javascript:void(0)" onclick="history.back();"><spring:message code="button.back"/></a>
           </header>
         </div>

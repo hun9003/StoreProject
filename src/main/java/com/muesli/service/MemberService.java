@@ -45,4 +45,6 @@ public interface MemberService {
 	void setMemberPoint(int mem_id, int point);
 
 	void setMemberLevel(MemberBean memberBean);
+
+    int updateMemberPhoto(MemberBean memberBean);
 }

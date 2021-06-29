@@ -143,4 +143,10 @@ public class MemberServiceImpl implements MemberService {
 		System.out.println("MemberServiceImpl - setMemberLevel()");
 		memberDAO.setMemberLevel(memberBean);
 	}
+
+	@Override
+	public int updateMemberPhoto(MemberBean memberBean) {
+		System.out.println("MemberServiceImpl - updateMemberPhoto()");
+		return memberDAO.updateMemberPhoto(memberBean);
+	}
 }

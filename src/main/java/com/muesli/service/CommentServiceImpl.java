@@ -5,6 +5,7 @@ import com.muesli.domain.CommentBean;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,14 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public int createComment(CommentBean commentBean) {
 		System.out.println("CommentServiceImpl - createComment()");
+
+		commentBean.setCmt_datetime(new Timestamp(System.currentTimeMillis()));
+		commentBean.setCmt_updated_datetime(new Timestamp(System.currentTimeMillis()));
+		commentBean.setCmt_like(0);
+		commentBean.setCmt_dislike(0);
+		commentBean.setCmt_blame(0);
+		commentBean.setCmt_del(0);
+
 		return  commentDAO.createComment(commentBean);
 	}
 

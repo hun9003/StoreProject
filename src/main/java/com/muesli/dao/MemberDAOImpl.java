@@ -141,5 +141,11 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.update(namespace+".setMemberLevel", memberBean);
 	}
 
+	@Override
+	public int updateMemberPhoto(MemberBean memberBean) {
+		System.out.println("MemberDAOImpl - updateMemberPhoto()");
+		return sqlSession.update(namespace+".updateMemberPhoto", memberBean);
+	}
+
 
 }

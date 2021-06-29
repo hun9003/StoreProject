@@ -10,6 +10,8 @@ public class StrResources {
     public static final String SUCCESS = "success"; // 성공적으로 완료했습니다.
     public static final String RESULT_EMPTY = "resultEmpty"; // 결과가 존재하지 않습니다.
     public static final String BAD_REDIRECT = "noRedirect"; // 잘못된 접근 방식 입니다.
+    public static final String BAD_SYSTEM = "badSystem"; // 시스템에 오류가 있습니다..
+    public static final String BAD_REQUEST = "badRequest"; // 잘못된 파라미터가 있습니다.
     public static final String BAD_PERMISSION = "badPermission"; // 권한이 없습니다.
     public static final String PAGE_404 = "page404"; // 존재하지 않는 페이지 입니다. 메인 화면으로 이동합니다.
 
@@ -41,6 +43,11 @@ public class StrResources {
     public static final String FAIL_COMMENT_UPDATE = "failCommentUpdate"; // 댓글 수정을 실패했습니다.
     public static final String SUCCESS_COMMENT_DELETE = "successCommentDelete"; // 댓글 삭제를 완료했습니다.
     public static final String FAIL_COMMENT_DELETE = "failCommentDelete"; // 댓글 삭제를 실패했습니다.
+    
+    // 회원관련
+    public static final String SUCCESS_PHOTO_UPLOAD = "successPhotoUpload"; // 사진 업로드를 완료했습니다.
+    public static final String FAIL_PHOTO_UPLOAD = "failPhotoUpload"; // 사진 업로드를 실패했습니다.
+    
 
     public static final String INCLUDE_TOP = "/include/top"; // 리팩토링 top 페이지
     public static final String INCLUDE_HEADER = "/include/header"; // 리팩토링 header 페이지
@@ -67,6 +74,9 @@ public class StrResources {
     public static final String LOGIN_PAGE = "/member/login"; // 로그인 페이지
     public static final String CERT_PAGE = "/member/cert"; // 이메일 인증 페이지
     public static final String CERT_FORM_PAGE = "/member/cert_form"; // 이메일 인증 폼 페이지
+    public static final String CHECK_PASSWORD = "/member/check-password"; // 비밀번호 인증 페이지
+    public static final String CHANGE_PHOTO = "/member/change-photo"; // 프로필 사진 변경 페이지
+    
     
     public static final String MEMBER_INFO_PAGE = "/member/info"; // 회원 정보 페이지
 

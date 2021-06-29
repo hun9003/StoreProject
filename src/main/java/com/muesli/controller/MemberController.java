@@ -1,5 +1,8 @@
 package com.muesli.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -7,6 +10,7 @@ import java.sql.Timestamp;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.muesli.domain.MemberLoginLogBean;
@@ -32,6 +36,26 @@ import com.muesli.service.MemberService;
 import com.muesli.util.FunctionUtils;
 import com.muesli.util.LoginAPI;
 import com.muesli.util.ScriptUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+/**
+ * 회원 관리를 위한 컨트롤러 클래스
+ *
+ * @author 개발자 박진훈
+ * @version 1.0
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *
+ *     수정일         수정자           수정내용
+ *  ------------   --------    ---------------------------
+ *   2021.04.06     박진훈          최초 생성
+ *
+ * Copyright (C) 2009 by MOPAS  All right reserved.
+ * </pre>
+ * @since 2021.04.06
+ */
 
 @Controller
 public class MemberController {
@@ -48,9 +72,18 @@ public class MemberController {
     @Autowired
     private JavaMailSenderImpl mailSender;
 
+    /**
+     * 회원가입 페이지
+     * @param session 세션
+     * @param model 뷰에 전달할 객체
+     * @return "/member/join"
+     */
     @RequestMapping(value = "/join", method = RequestMethod.GET)
     public String join(HttpSession session, Model model) {
         System.out.println("MemberController - join() :: GET /join");
+        /*
+        이미 로그인 되어있을 경우 메인 페이지로 이동
+         */
         if(StrResources.CHECK_LOGIN(session)){
             model.addAttribute("msg", StrResources.ALREADY_LOGIN);
             model.addAttribute("url", "/home");
@@ -59,15 +92,24 @@ public class MemberController {
         return StrResources.JOIN_PAGE;
     }
 
+    /**
+     * 로그인 페이지
+     * @param session 세션
+     * @param model 뷰에 전달할 객체
+     * @param request 요청
+     * @return "member/login"
+     */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(HttpSession session, Model model, HttpServletRequest request) {
         System.out.println("MemberController - login :: GET /login");
 
         // 로그인 시 이전페이지 기억
         String referrer = request.getHeader("Referer");
+
         request.getSession().setAttribute("prevPage", referrer);
 
         model.addAttribute("referrer", referrer);
+
 
         if(StrResources.CHECK_LOGIN(session)){
             return StrResources.REDIRECT+"/home";
@@ -226,10 +268,10 @@ public class MemberController {
                 // 사용가능
                 result = "true";
             }
-            entity = new ResponseEntity<String>(result, HttpStatus.OK);
+            entity = new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
@@ -250,10 +292,10 @@ public class MemberController {
                 // 사용가능
                 result = "true";
             }
-            entity = new ResponseEntity<String>(result, HttpStatus.OK);
+            entity = new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
@@ -412,5 +454,106 @@ public class MemberController {
         return StrResources.MEMBER_INFO_PAGE;
     }
 
+    // 비밀번호 체크
+    @RequestMapping(value = "/member/check_pwd", method = RequestMethod.GET)
+    public String check_password(HttpSession session, Model model, HttpServletRequest request) {
+        System.out.println("MemberController - check_password() :: GET /member/check_pwd");
 
+        // 페이지 제목
+        String subTitle = "checkPwd";
+        String type = request.getParameter("type");
+        if(type == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+
+
+        model.addAttribute("subTitle", subTitle);
+        model.addAttribute("type", type);
+        return StrResources.CHECK_PASSWORD;
+    }
+
+    // 프로필 사진 변경
+    @RequestMapping(value = "/member/change_photo", method = RequestMethod.GET)
+    public String change_photo(HttpSession session, Model model, HttpServletRequest request) {
+        System.out.println("MemberController - change_photo() :: GET /member/change_photo");
+
+        // 페이지 제목
+        String subTitle = "changePhoto";
+
+        model.addAttribute("subTitle", subTitle);
+        return StrResources.CHANGE_PHOTO;
+    }
+
+    // 프로필 사진 변경
+    @RequestMapping(value = "/member/change_photo", method = RequestMethod.POST)
+    public String change_photo_upload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile mem_photo, HttpSession session, Model model)
+        throws Exception {
+        System.out.println("MemberController - change_photo_upload() :: POST /member/change_photo");
+
+        String fileUrl = null;
+        if(!StrResources.CHECK_LOGIN(session)){
+            model.addAttribute("msg", StrResources.LOGIN);
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
+        // 한글깨짐을 방지하기위해 문자셋 설정
+        response.setCharacterEncoding("utf-8");
+
+        // 마찬가지로 파라미터로 전달되는 response 객체의 한글 설정
+        response.setContentType("text/html; charset=utf-8");
+
+        // 업로드한 파일 이름
+        String fileName = mem_photo.getOriginalFilename();
+        System.out.println(fileName);
+        if(!fileName.equals("")) {
+            // 파일을 바이트 배열로 변환
+            byte[] bytes = mem_photo.getBytes();
+
+            // 이미지를 업로드할 디렉토리(배포 디렉토리로 설정)
+            String root_path = request.getSession().getServletContext().getRealPath("/");
+            //String uploadPath = "resources/upload/";
+            String uploadPath = "images/user/"+memberBean.getMem_userid()+"/";
+//        프로젝트는 개발 디렉토리에 저장이 되는데 이미지를 업로드할 디렉토리를 개발 디렉토리로 설정하면 일일이 새로고침을 해주어야되서
+//        불편하기 때문에 이미지를 업로드할 디렉토리를 배포 디렉토리로 설정한다.
+            System.out.println("디렉토리 : " + root_path + uploadPath);
+            File Folder = new File(root_path + uploadPath);
+
+            // 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
+            if (!Folder.exists()) {
+                try{
+                    Folder.mkdirs(); //폴더 생성합니다.
+                    System.out.println("폴더가 생성되었습니다.");
+                }
+                catch(Exception e){
+                    e.getStackTrace();
+                }
+            }else {
+                System.out.println("이미 폴더가 생성되어 있습니다.");
+            }
+
+            OutputStream out = new FileOutputStream(new File(root_path + uploadPath + fileName));
+
+            // 서버로 업로드
+            // write메소드의 매개값으로 파일의 총 바이트를 매개값으로 준다.
+            // 지정된 바이트를 출력 스트립에 쓴다 (출력하기 위해서)
+            out.write(bytes);
+
+            fileUrl ="/"+uploadPath + fileName;
+        }
+
+        // 프로필 저장
+        memberBean.setMem_photo(fileUrl);
+        int result = memberService.updateMemberPhoto(memberBean);
+        if(result > 0) {
+            model.addAttribute("msg", StrResources.SUCCESS_PHOTO_UPLOAD);
+            model.addAttribute("url", "/member/info");
+        } else {
+            model.addAttribute("msg", StrResources.FAIL_PHOTO_UPLOAD);
+        }
+
+        return StrResources.ALERT_MESSAGE_PAGE;
+    }
 }

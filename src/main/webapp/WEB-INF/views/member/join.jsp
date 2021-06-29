@@ -30,6 +30,9 @@
 						<div class="col-6 col-12-xsmall">
 							<input type="password" name="mem_password2" id="mem_password2" value="" placeholder="<spring:message code="label.passwordCheck"/>" maxlength="30" required="required">
 						</div>
+						<div class="col-12 col-12-large m-b-20 txt-left">
+							<input type="checkbox" id="pass_show" value="1" onchange="pass_show_toggle()"><label for="pass_show"><spring:message code="label.passwordShow"/></label>
+						</div>
 						<div class="col-9 col-12-xsmall">
 							<input type="text" name="mem_nickname" id="mem_nickname" value="" placeholder="<spring:message code="label.nickname"/>" maxlength="20" required="required">
 						</div>

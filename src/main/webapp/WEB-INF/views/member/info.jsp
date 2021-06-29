@@ -24,8 +24,11 @@
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.photo"/></div>
-										<div class="col-6 col-6-large text-bold"><spring:message code="msg.settingMemberPhoto"/> <a href="#" class="text-primary">변경하기</a> </div>
-										<div class="col-3 col-3-large"><img src="<c:url value="/resources/images/profiles/no-profile.png"/>" alt="" style="width: 40%; border-radius: 50%;"></div>
+										<div class="col-6 col-6-large text-bold"><spring:message code="msg.settingMemberPhoto"/> <a href="<c:url value="/member/change_photo"/>" class="text-primary"><spring:message code="button.change"/></a> </div>
+										<div class="col-3 col-3-large"><img class="info_photo" src="<c:choose>
+										<c:when test="${member.mem_photo != null}"><c:url value="${member.mem_photo}"/></c:when>
+										<c:otherwise><c:url value="/resources/images/profiles/no-profile.png"/></c:otherwise>
+										</c:choose>" alt="profile_photo" style="width: 40%; border-radius: 50%;"></div>
 									</div>
 									<hr>
 									<div class="row">
@@ -49,7 +52,7 @@
 									<hr>
 									<div class="row">
 										<div class="col-3 col-3-large text-info"><spring:message code="label.password"/></div>
-										<div class="col-9 col-9-large text-bold"><a href="#" class="text-primary"><spring:message code="button.passwordChange"/></a></div>
+										<div class="col-9 col-9-large text-bold"><a href="<c:url value="/member/check_pwd"/>?type=changePassword" class="text-primary"><spring:message code="button.passwordChange"/></a></div>
 									</div>
 								</div>
 							</section>
@@ -110,10 +113,10 @@
 								</div>
 							</section>
 						</div>
-
 					</section>
 			</div>
 		</div>
+
 	<c:import url="/side"/>
 </div>
 <c:import url="/bottom"/>

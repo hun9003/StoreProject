@@ -26,7 +26,9 @@
                     <form method="post">
                         <div class="row gtr-uniform">
                             <div class="col-12 col-12-xsmall">
+                                <c:if test="${postBean != null}">
                                 <input type="hidden" name="post_id" value="${postBean.post_id}">
+                                </c:if>
                                 <label for="post_title"><spring:message code="label.title"/></label>
                                 <input type="text" name="post_title" id="post_title" value="${postBean.post_title}" placeholder="<spring:message code="label.title"/>" required="required">
                                 <hr>

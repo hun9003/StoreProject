@@ -4,9 +4,11 @@ import com.muesli.dao.BoardDAO;
 import com.muesli.domain.BoardBean;
 import com.muesli.domain.LikedBean;
 import com.muesli.domain.PostBean;
+import com.muesli.util.ScriptUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Inject
 	BoardDAO boardDAO;
+
 
 	@Override
 	public List<BoardBean> getBoardList() {
@@ -79,6 +82,20 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int createPost(PostBean postBean) {
 		System.out.println("BoardServiceImpl - createPost()");
+		postBean.setPost_category("");
+		postBean.setPost_datetime(new Timestamp(System.currentTimeMillis()));
+		postBean.setPost_updated_datetime(new Timestamp(System.currentTimeMillis()));
+		postBean.setPost_comment_count(0);
+		postBean.setPost_comment_updated_datetime(null);
+		postBean.setPost_secret(0);
+		postBean.setPost_hit(0);
+		postBean.setPost_like(0);
+		postBean.setPost_dislike(0);
+		postBean.setPost_blame(0);
+		postBean.setPost_file(0);
+		postBean.setPost_image(0);
+		postBean.setPost_del(0);
+
 		return boardDAO.createPost(postBean);
 	}
 
@@ -91,6 +108,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int updatePost(PostBean postBean) {
 		System.out.println("BoardServiceImpl - updatePost()");
+		postBean.setPost_updated_datetime(new Timestamp(System.currentTimeMillis()));
 		return boardDAO.updatePost(postBean);
 	}
 
@@ -145,6 +163,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void updateCommentCount(PostBean postBean) {
 		System.out.println("BoardServiceImpl - updateCommentCount()");
+		postBean.setPost_comment_updated_datetime(new Timestamp(System.currentTimeMillis()));
 		boardDAO.updateCommentCount(postBean);
 	}
 

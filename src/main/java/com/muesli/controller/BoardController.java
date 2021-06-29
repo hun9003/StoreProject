@@ -5,8 +5,6 @@ import com.muesli.service.BoardService;
 import com.muesli.service.MemberService;
 import com.muesli.util.ScriptUtils;
 import com.muesli.util.StrResources;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,10 +23,28 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * 게시판 관리를 위한 컨트롤러 클래스
+ *
+ * @author 개발자 박진훈
+ * @version 1.0
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *
+ *     수정일         수정자           수정내용
+ *  ------------   --------    ---------------------------
+ *   2021.04.06     박진훈          최초 생성
+ *
+ * Copyright (C) 2009 by MOPAS  All right reserved.
+ * </pre>
+ * @since 2021.04.06
+ */
+
 
 @Controller
 public class BoardController {
@@ -39,196 +55,305 @@ public class BoardController {
     @Inject
     private MemberService memberService;
 
-    // 게시판 조회
+    /**
+     * 게시물 리스트 출력하는 페이지
+     *
+     * @param model          뷰에 전달할 객체
+     * @param brd_key        게시판 KEY
+     * @param page           현재 페이지
+     * @param order_type     정렬 타입
+     * @param search_type    검색 타입
+     * @param search_content 검색 내용
+     * @param size           페이지 사이즈
+     * @return "/page/board"
+     */
     @RequestMapping(value = "/board/{brd_key}", method = RequestMethod.GET)
-    public String board(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+    public String board(Model model, @PathVariable String brd_key,
+                        @RequestParam(value = "page", defaultValue = "1", required = false) int page,
+                        @RequestParam(value = "order_type", defaultValue = "new", required = false) String order_type,
+                        @RequestParam(value = "search_type", required = false) String search_type,
+                        @RequestParam(value = "search_content", required = false) String search_content,
+                        @RequestParam(value = "size", defaultValue = "15", required = false) int size) {
         System.out.println("BoardController - board() :: GET /board/" + brd_key);
 
-        int page = 1;
-        if(request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-
-        String order_type = request.getParameter("order_type");
-        if(order_type == null || order_type.equals("")) {
-            order_type = "new";
-        }
-        String search_type = request.getParameter("search_type");
-        String search_content = request.getParameter("search_content");
-        int isOnlyDel = 0;
-
-        // 페이징 정보 저장
+        // 페이징 빈 설정
         PageBean pageBean = new PageBean();
-        pageBean.setCurrentPage(page); // 서블릿에 붙은 페이지를 저장
+        pageBean.setCurrentPage(page);
         pageBean.setPageNum(page + "");
+        pageBean.setPageSize(size);
 
-        String sizeStr = request.getParameter("size"); // 파라미터에 size가 있다면 (행 갯수 조절) 저장
-        if (sizeStr != null && !sizeStr.equals("")) { // 사이즈가 따로 파라미터에 저장되어있지 않다면 15로 저장
-            pageBean.setPageSize(Integer.parseInt(sizeStr));
-        } else {
-            pageBean.setPageSize(15);
-        }
+        /*
+            게시판 KEY를 통해 게시판 정보를 호출한다
+            게시판 키가 올바르지 않다면 404 오류 출력
+         */
         BoardBean boardBean = boardService.getBoardName(brd_key);
-
-        if(boardBean == null) {
+        if (boardBean == null) {
             model.addAttribute("msg", StrResources.PAGE_404);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        Map<String, Object> ListMap = new HashMap<String, Object>();
+        /*
+            삭제처리 되지 않은 게시물만 출력
+         */
+        int isOnlyDel = 0;
+
+        /*
+            리스트맵에 리스트 출력에 필요한 각종정보 전달
+            sch_type = 검색 타입 ( 1 : 제목 + 내용, 2 : 제목, 3 : 내용, 4 : 닉네임 )
+		    sch_content = 검색 내용
+         */
+        Map<String, Object> ListMap = new HashMap<>();
         ListMap.put("search_type", search_type);
         ListMap.put("search_content", search_content);
         ListMap.put("isOnlyDel", isOnlyDel);
         ListMap.put("brd_id", boardBean.getBrd_id());
 
-        // 페이지빈에 리스트의 총 갯수를 저장
+        // 출력 리스트의 총 갯수 count
         pageBean.setCount(boardService.getPostCount(ListMap));
+        // 출력 리스트의 LIMIT 시작 번호 ( currentPage(현재페이지)-1 ) * getPageSize(페이지크기)+1-1
         pageBean.setStartRow((pageBean.getCurrentPage() - 1) * pageBean.getPageSize() + 1 - 1);
 
-        if (page < 1 || page > pageBean.getPageCount()) {
-            model.addAttribute("isEmpty", true);
-        } else {
-            model.addAttribute("isEmpty", false);
-        }
+        // 결과가 존재하지 않을 시 예외처리
+        model.addAttribute("isEmpty", page < 1 || page > pageBean.getPageCount());
 
+        /*
+            리스트맵에 리스트 출력에 필요한 각종정보 전달
+            order_type = 정렬 타입 (new : 최근순, old : 오래된 순, like : 인기 순, hit : 조회순, comment : 댓글 순 )
+         */
         ListMap.put("pageBean", pageBean);
         ListMap.put("order_type", order_type);
-        List<PostBean> postBeans = boardService.getPostList(ListMap);
 
+        /*
+		VIEW 에 가져갈 객체 저장
+		BoardBean boardBean = 게시판 정보
+		List<PostBean> posts = 게시물 리스트
+		PageBean pageBean = 페이지 빈
+		 */
         model.addAttribute("boardBean", boardBean);
-        model.addAttribute("posts", postBeans);
+        model.addAttribute("posts", boardService.getPostList(ListMap));
         model.addAttribute("pageBean", pageBean);
 
         return StrResources.BOARD_PAGE;
     }
 
-    // 게시물 생성
+    /**
+     * 게시물 작성 페이지
+     *
+     * @param session 세션
+     * @param model   뷰에 전달할 객체
+     * @param brd_key 게시판 KEY
+     * @return "/page/form"
+     */
     @RequestMapping(value = "/board/{brd_key}/write", method = RequestMethod.GET)
-    public String write(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+    public String write(HttpSession session, Model model, @PathVariable String brd_key) {
         System.out.println("BoardController - write() :: GET /board/" + brd_key + "/write");
+        /*
+        게시판 KEY 로 게시판 정보 호출
+        존재하지 않을시 경고창 출력
+         */
         BoardBean boardBean = boardService.getBoardName(brd_key);
-        if(!StrResources.CHECK_LOGIN(session)){
-            model.addAttribute("msg", StrResources.LOGIN);
-            model.addAttribute("url", "/login");
-            return StrResources.ALERT_MESSAGE_PAGE;
-        }
-        MemberBean memberBean = (MemberBean) session.getAttribute("member");
-        if(boardBean == null){
+        if (boardBean == null) {
             model.addAttribute("msg", StrResources.BAD_REDIRECT);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(boardBean.getBrd_key().equals("notice")){
-            if(memberBean.getMem_is_admin() != 1) {
-                model.addAttribute("msg", StrResources.BAD_PERMISSION);
-                return StrResources.ALERT_MESSAGE_PAGE;
-            }
-        }
-
-        model.addAttribute("boardBean", boardBean);
-        return StrResources.BOARD_FORM_PAGE;
-    }
-
-    // 게시물 수정
-    @RequestMapping(value = "/board/{brd_key}/update", method = RequestMethod.GET)
-    public String update(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
-        System.out.println("BoardController - update() :: GET /board/" + brd_key + "/update");
-        BoardBean boardBean = boardService.getBoardName(brd_key);
-        if(!StrResources.CHECK_LOGIN(session)){
+        /*
+		로그인 여부를 파악하는 메서드 호출 (로그인 상태 = return true)
+		서블릿 메서드 MemberController.login()
+		 */
+        if (!StrResources.CHECK_LOGIN(session)) {
             model.addAttribute("msg", StrResources.LOGIN);
             model.addAttribute("url", "/login");
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(request.getParameter("post_id") == null) {
-            model.addAttribute("msg", StrResources.BAD_REDIRECT);
-            return StrResources.ALERT_MESSAGE_PAGE;
-        }
-        int post_id = Integer.parseInt(request.getParameter("post_id"));
-
+        /*
+         세션으로 회원정보를 저장한다
+         */
         MemberBean memberBean = (MemberBean) session.getAttribute("member");
 
-        if(boardBean == null){
-            model.addAttribute("msg", StrResources.BAD_REDIRECT);
-            return StrResources.ALERT_MESSAGE_PAGE;
-        }
 
-        if(boardBean.getBrd_key().equals("notice")){
-            if(memberBean.getMem_is_admin() != 1) {
-                model.addAttribute("msg", StrResources.BAD_PERMISSION);
-                return StrResources.ALERT_MESSAGE_PAGE;
-            }
-        }
-
-        PostBean postBean = boardService.getPost(post_id);
-        if(postBean.getMem_id() != memberBean.getMem_id()) {
+        /*
+        공지사항을 작성할 경우 권한 검증
+         */
+        if (boardBean.getBrd_key().equals("notice") && memberBean.getMem_is_admin() != 1) {
             model.addAttribute("msg", StrResources.BAD_PERMISSION);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
+        /*
+		VIEW 에 가져갈 객체 저장
+		BoardBean boardBean = 게시판 정보
+		 */
+        model.addAttribute("boardBean", boardBean);
+        return StrResources.BOARD_FORM_PAGE;
+    }
+
+    /**
+     * 게시물 수정 페이지
+     *
+     * @param session 세션
+     * @param model   모델
+     * @param brd_key 게시판 KEY
+     * @return "/page/form"
+     */
+    @RequestMapping(value = "/board/{brd_key}/update", method = RequestMethod.GET)
+    public String update(HttpSession session, Model model, @PathVariable String brd_key,
+                         @RequestParam(value = "post_id", required = false, defaultValue = "0") int post_id) {
+        System.out.println("BoardController - update() :: GET /board/" + brd_key + "/update");
+
+        /*
+		로그인 여부를 파악하는 메서드 호출 (로그인 상태 = return true)
+		서블릿 메서드 MemberController.login()
+		 */
+        if (!StrResources.CHECK_LOGIN(session)) {
+            model.addAttribute("msg", StrResources.LOGIN);
+            model.addAttribute("url", "/login");
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        /*
+         세션으로 회원정보를 저장한다
+         */
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
+
+        /*
+        게시물 PK 확인
+         */
+        if (post_id == 0) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        /*
+        게시판 KEY 로 게시판 정보 호출
+        존재하지 않을시 경고창 출력
+         */
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if (boardBean == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        /*
+        공지사항을 수정할 경우 권한 검증
+         */
+        if (boardBean.getBrd_key().equals("notice") && memberBean.getMem_is_admin() != 1) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        /*
+        게시물의 작성자인지 확인
+         */
+        PostBean postBean = boardService.getPost(post_id);
+        if (postBean.getMem_id() != memberBean.getMem_id()) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
+            return StrResources.ALERT_MESSAGE_PAGE;
+        }
+
+        /*
+		VIEW 에 가져갈 객체 저장
+		BoardBean boardBean = 게시판 정보
+		PostBean postBean = 게시물 정보
+		 */
         model.addAttribute("boardBean", boardBean);
         model.addAttribute("postBean", postBean);
         return StrResources.BOARD_FORM_PAGE;
     }
 
-    // 게시물 삭제
+    /**
+     * 게시물 삭제
+     *
+     * @param session 세션
+     * @param model   뷰에 전달할 객체
+     * @param brd_key 게시판 KEY
+     * @param post_id 게시물 PK
+     * @return "/common/alertMessage"
+     */
     @RequestMapping(value = "/board/{brd_key}/delete", method = RequestMethod.GET)
-    public String delete(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+    public String delete(HttpSession session, Model model, @PathVariable String brd_key,
+                         @RequestParam(value = "post_id", required = false, defaultValue = "0") int post_id) {
         System.out.println("BoardController - delete() :: GET /board/" + brd_key + "/delete");
-        BoardBean boardBean = boardService.getBoardName(brd_key);
-        if(!StrResources.CHECK_LOGIN(session)){
+
+        /*
+		로그인 여부를 파악하는 메서드 호출 (로그인 상태 = return true)
+		서블릿 메서드 MemberController.login()
+		 */
+        if (!StrResources.CHECK_LOGIN(session)) {
             model.addAttribute("msg", StrResources.LOGIN);
             model.addAttribute("url", "/login");
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(request.getParameter("post_id") == null) {
-            model.addAttribute("msg", StrResources.BAD_REDIRECT);
-            return StrResources.ALERT_MESSAGE_PAGE;
-        }
-        int post_id = Integer.parseInt(request.getParameter("post_id"));
-
+        /*
+         세션으로 회원정보를 저장한다
+         */
         MemberBean memberBean = (MemberBean) session.getAttribute("member");
 
-        if(boardBean == null){
+        /*
+        게시물 PK 확인
+         */
+        if (post_id == 0) {
             model.addAttribute("msg", StrResources.BAD_REDIRECT);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(boardBean.getBrd_key().equals("notice")){
-            if(memberBean.getMem_is_admin() != 1) {
-                model.addAttribute("msg", StrResources.BAD_PERMISSION);
-                return StrResources.ALERT_MESSAGE_PAGE;
-            }
+        /*
+        게시판 KEY 로 게시판 정보 호출
+        존재하지 않을시 경고창 출력
+         */
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if (boardBean == null) {
+            model.addAttribute("msg", StrResources.BAD_REDIRECT);
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        PostBean postBean = boardService.getPost(post_id);
-        if(postBean.getMem_id() != memberBean.getMem_id()) {
+        /*
+        공지사항을 삭제 경우 권한 검증
+         */
+        if (boardBean.getBrd_key().equals("notice") && memberBean.getMem_is_admin() != 1) {
             model.addAttribute("msg", StrResources.BAD_PERMISSION);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        int result = boardService.deletePost(post_id);
-        if(result == 0) {
-            model.addAttribute("msg", StrResources.FAIL_BOARD_DELETE);
+        /*
+        게시물 작성자인지 확인
+         */
+        PostBean postBean = boardService.getPost(post_id);
+        if (postBean.getMem_id() != memberBean.getMem_id()) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
-        model.addAttribute("msg", StrResources.SUCCESS_BOARD_DELETE);
-        model.addAttribute("url", "/board/"+brd_key+"");
+
+        /*
+        게시물 삭제
+         */
+        int result = boardService.deletePost(post_id);
+        if (result == 0) {
+            model.addAttribute("msg", StrResources.FAIL_BOARD_DELETE);
+        } else {
+            model.addAttribute("msg", StrResources.SUCCESS_BOARD_DELETE);
+            model.addAttribute("url", "/board/" + brd_key + "");
+        }
         return StrResources.ALERT_MESSAGE_PAGE;
     }
 
-    // 컨트롤러클래스의 로그를 출력
-    private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-
-    // 이미지 업로드
-    // product_edit페이지에서 맵핑되는 메소드
+    /**
+     * 이미지 업로드  product_edit페이지에서 맵핑되는 메소드
+     *
+     * @param request  요청
+     * @param response 응답
+     * @param upload   업로드한 이미지
+     * @param session  세션
+     * @throws Exception 예외처리
+     */
     @RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
-    // 이미지를 저장하고, 불러오고, 업로드하기위해 매개변수를 선언
-    public void imageUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload)
+    public void imageUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload, HttpSession session)
     //MultipartFile 타입은 ckedit에서 upload란 이름으로 저장하게 된다
             throws Exception {
 
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
         // 한글깨짐을 방지하기위해 문자셋 설정
         response.setCharacterEncoding("utf-8");
 
@@ -243,12 +368,28 @@ public class BoardController {
 
         // 이미지를 업로드할 디렉토리(배포 디렉토리로 설정)
         String root_path = request.getSession().getServletContext().getRealPath("/");
-        String uploadPath = "resources/upload/";
-
+        //String uploadPath = "resources/upload/";
+        String uploadPath = "images/board/" + memberBean.getMem_userid() + "/";
 //        프로젝트는 개발 디렉토리에 저장이 되는데 이미지를 업로드할 디렉토리를 개발 디렉토리로 설정하면 일일이 새로고침을 해주어야되서
-//
 //        불편하기 때문에 이미지를 업로드할 디렉토리를 배포 디렉토리로 설정한다.
-        OutputStream out = new FileOutputStream(new File(root_path + uploadPath + fileName));
+        // System.out.println("디렉토리 : " + root_path + uploadPath);
+        File Folder = new File(root_path + uploadPath);
+
+        // 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
+        if (!Folder.exists()) {
+            try {
+                //폴더 생성합니다.
+                if (Folder.mkdirs()) {
+                    System.out.println("폴더가 생성되었습니다.");
+                }
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else {
+            System.out.println("이미 폴더가 생성되어 있습니다.");
+        }
+
+        OutputStream out = new FileOutputStream(root_path + uploadPath + fileName);
 
         // 서버로 업로드
         // write메소드의 매개값으로 파일의 총 바이트를 매개값으로 준다.
@@ -260,169 +401,228 @@ public class BoardController {
         System.out.println(callback);
         // 서버=>클라이언트로 텍스트 전송(자바스크립트 실행)
         PrintWriter printWriter = response.getWriter();
-        String fileUrl = request.getContextPath() + "/resources/upload/" + fileName;
+
+        // String fileUrl = request.getContextPath() + "/resources/upload/" + fileName;
+        String fileUrl = request.getContextPath() + "/" + uploadPath + fileName;
         printWriter.println("<script>window.parent.CKEDITOR.tools.callFunction(" + callback + ",'" + fileUrl
                 + "','Image Upload Complete!')" + "</script>");
         printWriter.flush();
     }
 
-    // 게시물 생성
+    /**
+     * 게시물 생성
+     *
+     * @param session  세션
+     * @param request  요청
+     * @param postBean 게시물빈
+     * @param model    뷰에 전달할 객체
+     * @param brd_key  게시판 KEY
+     * @return "/common/alertMessage"
+     */
     @RequestMapping(value = "/board/{brd_key}/write", method = RequestMethod.POST)
-    public String write_post(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key) {
+    public String write_post(HttpSession session, HttpServletRequest request, PostBean postBean, Model model, @PathVariable String brd_key) {
         System.out.println("BoardController - write_post() :: POST /board/" + brd_key + "/write");
-        BoardBean boardBean = boardService.getBoardName(brd_key);
-        if(!StrResources.CHECK_LOGIN(session)){
+        /*
+		로그인 여부를 파악하는 메서드 호출 (로그인 상태 = return true)
+		서블릿 메서드 MemberController.login()
+		 */
+        if (!StrResources.CHECK_LOGIN(session)) {
             model.addAttribute("msg", StrResources.LOGIN);
             model.addAttribute("url", "/login");
             return StrResources.ALERT_MESSAGE_PAGE;
         }
+
+        /*
+         세션으로 회원정보를 저장한다
+         */
         MemberBean memberBean = (MemberBean) session.getAttribute("member");
-        if(boardBean == null){
+
+        /*
+        게시판 KEY 로 게시판 정보 호출
+        존재하지 않을시 경고창 출력
+         */
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if (boardBean == null) {
             model.addAttribute("msg", StrResources.BAD_REDIRECT);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(boardBean.getBrd_key().equals("notice")){
-            if(memberBean.getMem_is_admin() != 1) {
+        /*
+        공지사항을 작성할 경우 권한 검증
+         */
+        int isNotice = 0;
+        if (boardBean.getBrd_key().equals("notice")) {
+            isNotice++;
+            if (memberBean.getMem_is_admin() != 1) {
                 model.addAttribute("msg", StrResources.BAD_PERMISSION);
                 return StrResources.ALERT_MESSAGE_PAGE;
             }
         }
 
-        PostBean postBean = new PostBean();
-        postBean.setPost_title(request.getParameter("post_title"));
-        postBean.setPost_content(request.getParameter("post_content"));
-        postBean.setPost_device(request.getParameter("post_device") != null ? Integer.parseInt(request.getParameter("post_device")) : 1);
-        if(request.getParameter("post_id") != null && !request.getParameter("post_id").equals("")) {
-            postBean.setPost_id(Integer.parseInt(request.getParameter("post_id")));
-        }
-        if(postBean.getPost_title().trim().equals("")){
+        /*
+        글 제목이 비어있을 시 경고창 출력
+         */
+        if (postBean.getPost_title().trim().equals("")) {
             model.addAttribute("msg", StrResources.FAIL);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
-        String nowIp = ScriptUtils.getIp(request);
-
+        /*
+        게시물에 저장될 주요 정보들 세팅
+         */
+        postBean.setPost_device(postBean.getPost_device() != 0 ? postBean.getPost_device() : 1);
+        postBean.setPost_ip(ScriptUtils.getIp(request));
         postBean.setBrd_id(boardBean.getBrd_id());
-        postBean.setPost_category("");
         postBean.setMem_id(memberBean.getMem_id());
         postBean.setPost_userid(memberBean.getMem_userid());
         postBean.setPost_nickname(memberBean.getMem_nickname());
-        postBean.setPost_datetime(nowTime);
-        postBean.setPost_updated_datetime(nowTime);
         postBean.setPost_update_mem_id(memberBean.getMem_id());
-        postBean.setPost_comment_count(0);
-        postBean.setPost_comment_updated_datetime(null);
-        postBean.setPost_secret(0);
-        postBean.setPost_notice(0);
-        postBean.setPost_hit(0);
-        postBean.setPost_like(0);
-        postBean.setPost_dislike(0);
-        postBean.setPost_ip(nowIp);
-        postBean.setPost_blame(0);
-        postBean.setPost_file(0);
-        postBean.setPost_image(0);
-        postBean.setPost_del(0);
+        postBean.setPost_notice(isNotice);
 
+        /*
+        게시물 작성
+         */
         int result = boardService.createPost(postBean);
-        if(result == 1) {
+        if (result == 1) {
             model.addAttribute("msg", StrResources.SUCCESS_BOARD_WRITE);
-            model.addAttribute("url", "/board/"+brd_key+"");
-            return StrResources.ALERT_MESSAGE_PAGE;
+            model.addAttribute("url", "/board/" + brd_key + "");
+        } else {
+            model.addAttribute("msg", StrResources.FAIL_BOARD_WRITE);
         }
-
-
-        return StrResources.BOARD_FORM_PAGE;
+        return StrResources.ALERT_MESSAGE_PAGE;
     }
 
-    // 게시물 수정
+    /**
+     * 게시물 수정
+     *
+     * @param session  세션
+     * @param model    뷰에 전달할 객체
+     * @param brd_key  게시판 KEY
+     * @param postBean 게시물 빈
+     * @return "/common/alertMessage"
+     */
     @RequestMapping(value = "/board/{brd_key}/update", method = RequestMethod.POST)
-    public String update_post(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, PostBean postBean) {
+    public String update_post(HttpSession session, Model model, @PathVariable String brd_key, PostBean postBean) {
         System.out.println("BoardController - update() :: GET /board/" + brd_key + "/write");
-        BoardBean boardBean = boardService.getBoardName(brd_key);
-        if(!StrResources.CHECK_LOGIN(session)){
+        /*
+		로그인 여부를 파악하는 메서드 호출 (로그인 상태 = return true)
+		서블릿 메서드 MemberController.login()
+		 */
+        if (!StrResources.CHECK_LOGIN(session)) {
             model.addAttribute("msg", StrResources.LOGIN);
             model.addAttribute("url", "/login");
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(request.getParameter("post_id") == null) {
-            model.addAttribute("msg", StrResources.BAD_REDIRECT);
-            return StrResources.ALERT_MESSAGE_PAGE;
-        }
-        int post_id = Integer.parseInt(request.getParameter("post_id"));
-
+        /*
+         세션으로 회원정보를 저장한다
+         */
         MemberBean memberBean = (MemberBean) session.getAttribute("member");
 
-        if(boardBean == null){
+
+         /*
+        게시판 KEY 로 게시판 정보 호출
+        존재하지 않을시 경고창 출력
+         */
+        BoardBean boardBean = boardService.getBoardName(brd_key);
+        if (boardBean == null) {
             model.addAttribute("msg", StrResources.BAD_REDIRECT);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        if(boardBean.getBrd_key().equals("notice")){
-            if(memberBean.getMem_is_admin() != 1) {
-                model.addAttribute("msg", StrResources.BAD_PERMISSION);
-                return StrResources.ALERT_MESSAGE_PAGE;
-            }
-        }
-
-        PostBean postBean2 = boardService.getPost(post_id);
-        if(postBean2.getMem_id() != memberBean.getMem_id()) {
+        /*
+        공지사항을 수정할 경우 권한 검증
+         */
+        if (boardBean.getBrd_key().equals("notice") && memberBean.getMem_is_admin() != 1) {
             model.addAttribute("msg", StrResources.BAD_PERMISSION);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
-        Timestamp nowTime = new Timestamp(System.currentTimeMillis());
-        postBean.setPost_update_mem_id(memberBean.getMem_id());
-        postBean.setPost_updated_datetime(nowTime);
-
-        int result = boardService.updatePost(postBean);
-        if(result == 0) {
-            model.addAttribute("msg", StrResources.FAIL_BOARD_UPDATE);
-
+        /*
+        게시물 작성자인지 확인
+         */
+        PostBean postBean2 = boardService.getPost(postBean.getPost_id());
+        if (postBean2.getMem_id() != memberBean.getMem_id()) {
+            model.addAttribute("msg", StrResources.BAD_PERMISSION);
+            return StrResources.ALERT_MESSAGE_PAGE;
         }
-        model.addAttribute("msg", StrResources.SUCCESS_BOARD_UPDATE);
-        model.addAttribute("url", "/board/"+brd_key+"/1");
+
+        /*
+        게시물 수정
+         */
+        postBean.setPost_update_mem_id(memberBean.getMem_id());
+        int result = boardService.updatePost(postBean);
+
+        if (result == 0) {
+            model.addAttribute("msg", StrResources.FAIL_BOARD_UPDATE);
+        } else {
+            model.addAttribute("msg", StrResources.SUCCESS_BOARD_UPDATE);
+            model.addAttribute("url", "/board/" + brd_key + "/info/" + postBean.getPost_id());
+        }
         return StrResources.ALERT_MESSAGE_PAGE;
     }
 
-    // 게시물 조회
+    /**
+     * 게시물 조회
+     *
+     * @param session  세션
+     * @param request  요청
+     * @param model    뷰에 전달할 객체
+     * @param brd_key  게시판 KEY
+     * @param post_id  게시물 PK
+     * @param pageBean 페이지 빈
+     * @param page     페이지
+     * @return "/page/info"
+     */
     @RequestMapping(value = "/board/{brd_key}/info/{post_id}", method = RequestMethod.GET)
-    public String boardInfo(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, @PathVariable int post_id, PageBean pageBean) {
+    public String boardInfo(HttpSession session, HttpServletRequest request, Model model, @PathVariable String brd_key, @PathVariable int post_id, PageBean pageBean,
+                            @RequestParam(value = "page", defaultValue = "1", required = false) int page) {
         System.out.println("BoardController - boardInfo() :: GET /board/" + brd_key + "/info");
 
+        /*
+        게시판, 게시물 정보 호출
+         */
         BoardBean boardBean = boardService.getBoardName(brd_key);
         PostBean postBean = boardService.getPost(post_id);
-        int page = 1;
-        if(request.getParameter("page") != null){
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-        pageBean.setCurrentPage(page);
-        if(postBean == null) {
+        if (postBean == null) {
             model.addAttribute("msg", StrResources.BAD_REDIRECT);
             return StrResources.ALERT_MESSAGE_PAGE;
         }
 
+        // 페이징 빈 설정
+        pageBean.setCurrentPage(page);
+
+        // 조회수 증가
         boardService.hitPost(post_id);
 
-        int like = boardService.getLikeCount(post_id);
-        int hate = boardService.getHateCount(post_id);
-        postBean.setPost_like(like);
-        postBean.setPost_dislike(hate);
+        // 게시물 좋아요, 싫어요 호출
+        postBean.setPost_like(boardService.getLikeCount(post_id));
+        postBean.setPost_dislike(boardService.getHateCount(post_id));
         boardService.setLikeCount(postBean);
         boardService.setHateCount(postBean);
 
-
-        Map<String, Object> likeMap = new HashMap<String, Object>();
-        likeMap.put("member", (MemberBean)session.getAttribute("member"));
+        /*
+        게시물 좋아요 싫어요 정보 호출
+         */
+        Map<String, Object> likeMap = new HashMap<>();
+        likeMap.put("member", session.getAttribute("member"));
         likeMap.put("post", postBean);
         likeMap.put("ip", ScriptUtils.getIp(request));
 
         LikedBean likedBean = boardService.getLiked(likeMap);
 
+        /*
+        게시물 작성자 경험치
+         */
         memberService.setMemberPoint(postBean.getMem_id(), 1);
 
+        /*
+		VIEW 에 가져갈 객체 저장
+		Map<String, Object> likedBean = 좋아요 정보
+		BoardBean boardBean = 게시판 정보
+		PostBean postBean = 게시물 리스트
+		PageBean pageBean = 페이지 빈
+		 */
         model.addAttribute("likedBean", likedBean);
         model.addAttribute("boardBean", boardBean);
         model.addAttribute("postBean", postBean);
@@ -430,36 +630,52 @@ public class BoardController {
         return StrResources.BOARD_INFO_PAGE;
     }
 
-    // 추천 기능
+    /**
+     * 추천 기능 (AJAX)
+     *
+     * @param request 요청
+     * @param session 세션
+     * @return ResponseEntity<String> AJAX
+     */
     @RequestMapping(value = "/like", method = RequestMethod.GET)
     public ResponseEntity<String> like(HttpServletRequest request, HttpSession session) {
         System.out.println("BoardController - like() :: GET /like");
-        MemberBean memberBean = (MemberBean)session.getAttribute("member");
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
         String result;
         ResponseEntity<String> entity;
 
-        if(memberBean == null) {
+        /*
+        비로그인시 nologin 리턴
+         */
+        if (memberBean == null) {
             result = "nologin";
             try {
-                entity = new ResponseEntity<String>(result, HttpStatus.OK);
+                entity = new ResponseEntity<>(result, HttpStatus.OK);
             } catch (Exception e) {
                 e.printStackTrace();
-                entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+                entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             return entity;
         }
+
+        /*
+        게시물 정보 호출
+         */
         int post_id = Integer.parseInt(request.getParameter("post_id"));
         PostBean postBean = boardService.getPost(post_id);
 
-        Map<String, Object> likeMap = new HashMap<String, Object>();
+        /*
+        likeMap에 기능에 필요한 각종 정보 저장
+         */
+        Map<String, Object> likeMap = new HashMap<>();
         likeMap.put("member", memberBean);
         likeMap.put("post", postBean);
         likeMap.put("ip", ScriptUtils.getIp(request));
         try {
             LikedBean likedBean = boardService.getLiked(likeMap);
             likeMap.put("like", likedBean);
-            if(likedBean != null) {
-                if(likedBean.getLik_type() == 1) {
+            if (likedBean != null) {
+                if (likedBean.getLik_type() == 1) {
                     // 추천을 이미 했음 ( 추천 삭제 )
                     likeMap.put("type", "like");
                     boardService.deleteLike(likeMap);
@@ -477,43 +693,60 @@ public class BoardController {
                 boardService.insertLike(likeMap);
                 result = "likeOn";
             }
-            entity = new ResponseEntity<String>(result, HttpStatus.OK);
+            entity = new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
 
-    // 비추천 기능
+    /**
+     * 비추천 기능 (AJAX)
+     *
+     * @param request 요청
+     * @param session 세션
+     * @return ResponseEntity<String> AJAX
+     */
     @RequestMapping(value = "/hate", method = RequestMethod.GET)
     public ResponseEntity<String> hate(HttpServletRequest request, HttpSession session) {
         System.out.println("BoardController - hate() :: GET /hate");
-        MemberBean memberBean = (MemberBean)session.getAttribute("member");
+        MemberBean memberBean = (MemberBean) session.getAttribute("member");
         String result;
         ResponseEntity<String> entity;
 
-        if(memberBean == null) {
+        /*
+        비로그인시 nologin 리턴
+         */
+        if (memberBean == null) {
             result = "nologin";
             try {
-                entity = new ResponseEntity<String>(result, HttpStatus.OK);
+                entity = new ResponseEntity<>(result, HttpStatus.OK);
             } catch (Exception e) {
                 e.printStackTrace();
-                entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+                entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            return entity;
         }
+        
+        /*
+        게시물 정보 호출
+         */
         int post_id = Integer.parseInt(request.getParameter("post_id"));
         PostBean postBean = boardService.getPost(post_id);
 
-        Map<String, Object> likeMap = new HashMap<String, Object>();
+        /*
+        likeMap에 기능에 필요한 각종 정보 저장
+         */
+        Map<String, Object> likeMap = new HashMap<>();
         likeMap.put("member", memberBean);
         likeMap.put("post", postBean);
         likeMap.put("ip", ScriptUtils.getIp(request));
         try {
             LikedBean likedBean = boardService.getLiked(likeMap);
             likeMap.put("like", likedBean);
-            if(likedBean != null) {
-                if(likedBean.getLik_type() == 2) {
+            if (likedBean != null) {
+                if (likedBean.getLik_type() == 2) {
                     // 비추천을 이미 했음 ( 비추천 삭제 )
                     likeMap.put("type", "hate");
                     boardService.deleteLike(likeMap);
@@ -531,43 +764,46 @@ public class BoardController {
                 boardService.insertLike(likeMap);
                 result = "hateOn";
             }
-            entity = new ResponseEntity<String>(result, HttpStatus.OK);
+            entity = new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
 
     // 게시물 조회
     @RequestMapping(value = "/board/table", method = RequestMethod.GET)
-    public String boardTable(HttpSession session, HttpServletRequest request, Model model) {
+    public String boardTable(Model model, @RequestParam(value = "brd_key", required = false) String brd_key) {
         System.out.println("BoardController - boardTable() :: GET /board/table");
 
-        String brd_key = request.getParameter("brd_key");
-
-        int page = 1;
-        String order_type = "new";
-        String search_type = null;
-        String search_content = null;
-        int isOnlyDel = 0;
-
+        /*
+        페이지 정보 1페이지 고정
+         */
         PageBean pageBean = new PageBean();
-        pageBean.setCurrentPage(page); // 서블릿에 붙은 페이지를 저장
-        pageBean.setPageNum(page + "");
+        pageBean.setCurrentPage(1); // 서블릿에 붙은 페이지를 저장
+        pageBean.setPageNum("1");
         pageBean.setPageSize(5);
+        
+        /*
+        리스트 출력에 필요한 각종 정보 저장
+        삭제되지 않은 게시물, 게시판 PK, 최근순 정렬 고정
+         */
         BoardBean boardBean = boardService.getBoardName(brd_key);
-        Map<String, Object> ListMap = new HashMap<String, Object>();
-        ListMap.put("search_type", search_type);
-        ListMap.put("search_content", search_content);
-        ListMap.put("isOnlyDel", isOnlyDel);
-        ListMap.put("brd_id", boardBean.getBrd_id());;
+        Map<String, Object> ListMap = new HashMap<>();
+        ListMap.put("isOnlyDel", 0);
+        ListMap.put("brd_id", boardBean.getBrd_id());
         pageBean.setStartRow((pageBean.getCurrentPage() - 1) * pageBean.getPageSize() + 1 - 1);
         ListMap.put("pageBean", pageBean);
-        ListMap.put("order_type", order_type);
+        ListMap.put("order_type", "new");
         List<PostBean> posts = boardService.getPostList(ListMap);
 
 
+        /*
+		VIEW 에 가져갈 객체 저장
+		String brd_name = 게시판 이름
+		List<PostBean> posts = 게시물 리스트
+		 */
         model.addAttribute("posts", posts);
         model.addAttribute("brd_name", boardBean.getBrd_name());
         model.addAttribute("brd_key", brd_key);

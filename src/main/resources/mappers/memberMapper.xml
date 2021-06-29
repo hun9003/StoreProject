@@ -147,4 +147,9 @@
 	<update id="setMemberLevel">
 		UPDATE member set mem_level = #{mem_level}, mem_point = #{mem_point} WHERE mem_id = #{mem_id}
 	</update>
+
+<!--	멤버 프로필 변경-->
+	<update id="updateMemberPhoto">
+		UPDATE member SET mem_photo = #{mem_photo} WHERE mem_id = #{mem_id}
+	</update>
 </mapper>

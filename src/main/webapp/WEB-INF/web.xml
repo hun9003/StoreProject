@@ -37,10 +37,6 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-	<listener>
-		<listener-class>com.muesli.util.CountManager</listener-class>
-	</listener>
-
 
 	<!-- Processes application requests -->
 	<servlet>
@@ -67,8 +63,18 @@
 	<!-- Error Page -->
 
 	<error-page>
-		<error-code>404</error-code>
-		<location>/WEB-INF/views/common/404error.jsp</location>
+	<error-code>404</error-code>
+	<location>/WEB-INF/views/common/404error.jsp</location>
+</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/common/500error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>400</error-code>
+		<location>/WEB-INF/views/common/400error.jsp</location>
 	</error-page>
 
 </web-app>
