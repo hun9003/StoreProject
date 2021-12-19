@@ -21,10 +21,10 @@
     <meta name="keywords" content="">
     <meta name="author" content="Phoenixcoded" />
     <!-- Favicon icon -->
-    <link rel="icon" href="<c:url value="/resources/images/favicon.ico"/>assets" type="image/x-icon">
+    <link rel="icon" href="<c:url value="/resources/images/favicon.ico"/>" type="image/x-icon">
 
     <!-- vendor css -->
-    <link rel="stylesheet" href="<c:url value="/resources/images/favicon/favicon.ico"/>assets/css/style.css">
+    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
     
     
 
@@ -44,7 +44,7 @@
 				
 				<div class="">
 					<div class="main-menu-header">
-						<img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="User-Profile-Image">
+						<img class="img-radius" src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="User-Profile-Image">
 						<div class="user-details">
 							<div id="more-details">UX Designer <i class="fa fa-caret-down"></i></div>
 						</div>
@@ -150,8 +150,8 @@
 					<a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
 					<a href="#!" class="b-brand">
 						<!-- ========   change your logo hear   ============ -->
-						<img src="assets/images/logo.png" alt="" class="logo">
-						<img src="assets/images/logo-icon.png" alt="" class="logo-thumb">
+						<img src="<c:url value="/resources/images/logo.png"/>" alt="" class="logo">
+						<img src="<c:url value="/resources/images/logo-icon.png"/>" alt="" class="logo-thumb">
 					</a>
 					<a href="#!" class="mob-toggler">
 						<i class="feather icon-more-vertical"></i>
@@ -187,7 +187,7 @@
 										</li>
 										<li class="notification">
 											<div class="media">
-												<img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="<c:url value="/resources/images/user/avatar-1.jpg"/>" alt="Generic placeholder image">
 												<div class="media-body">
 													<p><strong>John Doe</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>5 min</span></p>
 													<p>New ticket Added</p>
@@ -199,7 +199,7 @@
 										</li>
 										<li class="notification">
 											<div class="media">
-												<img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="Generic placeholder image">
 												<div class="media-body">
 													<p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>10 min</span></p>
 													<p>Prchace New Theme and make payment</p>
@@ -208,7 +208,7 @@
 										</li>
 										<li class="notification">
 											<div class="media">
-												<img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="<c:url value="/resources/images/user/avatar-1.jpg"/>" alt="Generic placeholder image">
 												<div class="media-body">
 													<p><strong>Sara Soudein</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>12 min</span></p>
 													<p>currently login</p>
@@ -217,7 +217,7 @@
 										</li>
 										<li class="notification">
 											<div class="media">
-												<img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="Generic placeholder image">
 												<div class="media-body">
 													<p><strong>Joseph William</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p>
 													<p>Prchace New Theme and make payment</p>
@@ -238,7 +238,7 @@
 								</a>
 								<div class="dropdown-menu dropdown-menu-right profile-notification">
 									<div class="pro-head">
-										<img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image">
+										<img src="<c:url value="/resources/images/user/avatar-1.jpg"/>" class="img-radius" alt="User-Profile-Image">
 										<span>John Doe</span>
 										<a href="auth-signin.html" class="dud-logout" title="Logout">
 											<i class="feather icon-log-out"></i>
@@ -495,7 +495,7 @@
                                                 </label>
                                             </div>
                                             <div class="d-inline-block align-middle">
-                                                <img src="assets/images/user/avatar-4.jpg" alt="user image" class="img-radius wid-40 align-top m-r-15">
+                                                <img src="<c:url value="/resources/images/user/avatar-4.jpg"/>" alt="user image" class="img-radius wid-40 align-top m-r-15">
                                                 <div class="d-inline-block">
                                                     <h6>John Deo</h6>
                                                     <p class="text-muted m-b-0">Graphics Designer</p>
@@ -515,7 +515,7 @@
                                                 </label>
                                             </div>
                                             <div class="d-inline-block align-middle">
-                                                <img src="assets/images/user/avatar-2.jpg" alt="user image" class="img-radius wid-40 align-top m-r-15">
+                                                <img src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="user image" class="img-radius wid-40 align-top m-r-15">
                                                 <div class="d-inline-block">
                                                     <h6>Jenifer Vintage</h6>
                                                     <p class="text-muted m-b-0">Web Designer</p>
@@ -535,7 +535,7 @@
                                                 </label>
                                             </div>
                                             <div class="d-inline-block align-middle">
-                                                <img src="assets/images/user/avatar-3.jpg" alt="user image" class="img-radius wid-40 align-top m-r-15">
+                                                <img src="<c:url value="/resources/images/user/avatar-3.jpg"/>" alt="user image" class="img-radius wid-40 align-top m-r-15">
                                                 <div class="d-inline-block">
                                                     <h6>William Jem</h6>
                                                     <p class="text-muted m-b-0">Developer</p>
@@ -555,7 +555,7 @@
                                                 </label>
                                             </div>
                                             <div class="d-inline-block align-middle">
-                                                <img src="assets/images/user/avatar-2.jpg" alt="user image" class="img-radius wid-40 align-top m-r-15">
+                                                <img src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="user image" class="img-radius wid-40 align-top m-r-15">
                                                 <div class="d-inline-block">
                                                     <h6>David Jones</h6>
                                                     <p class="text-muted m-b-0">Developer</p>
@@ -631,7 +631,7 @@
                                             <tr>
                                                 <td class="b-none">
                                                     <a href="#!" class="align-middle">
-                                                        <img src="assets/images/user/avatar-2.jpg" alt="user image" class="img-radius wid-40 align-top m-r-15">
+                                                        <img src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="user image" class="img-radius wid-40 align-top m-r-15">
                                                         <div class="d-inline-block">
                                                             <h6>Jeny William</h6>
                                                             <p class="text-muted m-b-0">Graphic Designer</p>
@@ -722,7 +722,7 @@
                         <div class="review-block">
                             <div class="row">
                                 <div class="col-sm-auto p-r-0">
-                                    <img src="assets/images/user/avatar-2.jpg" alt="user image" class="img-radius profile-img cust-img m-b-15">
+                                    <img src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="user image" class="img-radius profile-img cust-img m-b-15">
                                 </div>
                                 <div class="col">
                                     <h6 class="m-b-15">John Deo <span class="float-right f-13 text-muted"> a week ago</span></h6>
@@ -741,7 +741,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-auto p-r-0">
-                                    <img src="assets/images/user/avatar-4.jpg" alt="user image" class="img-radius profile-img cust-img m-b-15">
+                                    <img src="<c:url value="/resources/images/user/avatar-4.jpg"/>" alt="user image" class="img-radius profile-img cust-img m-b-15">
                                 </div>
                                 <div class="col">
                                     <h6 class="m-b-15">Allina D’croze <span class="float-right f-13 text-muted"> a week ago</span></h6>
@@ -839,7 +839,7 @@
                     <div class="card-body">
                         <div class="row m-b-20 received-chat">
                             <div class="col-auto p-r-0">
-                                <img src="assets/images/user/avatar-2.jpg" alt="user image" class="img-radius wid-40">
+                                <img src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="user image" class="img-radius wid-40">
                             </div>
                             <div class="col">
                                 <div class="msg">
@@ -856,18 +856,18 @@
                                 <p class="text-muted m-b-0"><i class="fa fa-clock-o m-r-10"></i>10:20am</p>
                             </div>
                             <div class="col-auto p-l-0">
-                                <img src="assets/images/user/avatar-3.jpg" alt="user image" class="img-radius wid-40">
+                                <img src="<c:url value="/resources/images/user/avatar-3.jpg"/>" alt="user image" class="img-radius wid-40">
                             </div>
                         </div>
                         <div class="row m-b-20 received-chat">
                             <div class="col-auto p-r-0">
-                                <img src="assets/images/user/avatar-2.jpg" alt="user image" class="img-radius wid-40">
+                                <img src="<c:url value="/resources/images/user/avatar-2.jpg"/>" alt="user image" class="img-radius wid-40">
                             </div>
                             <div class="col">
                                 <div class="msg">
                                     <p class="m-b-0">Nice to meet you!</p>
-                                    <img src="assets/images/widget/dashborad-1.jpg" alt="">
-                                    <img src="assets/images/widget/dashborad-3.jpg" alt="">
+                                    <img src="<c:url value="/resources/images/widget/dashborad-1.jpg"/>" alt="">
+                                    <img src="<c:url value="/resources/images/widget/dashborad-3.jpg"/>" alt="">
                                 </div>
                                 <p class="text-muted m-b-0"><i class="fa fa-clock-o m-r-10"></i>10:20am</p>
                             </div>
@@ -923,31 +923,31 @@
                 <ul class="iew-download">
                     <li>
                         <a href="http://www.google.com/chrome/">
-                            <img src="assets/images/browser/chrome.png" alt="Chrome">
+                            <img src="<c:url value="/resources/images/browser/chrome.png"/>" alt="Chrome">
                             <div>Chrome</div>
                         </a>
                     </li>
                     <li>
                         <a href="https://www.mozilla.org/en-US/firefox/new/">
-                            <img src="assets/images/browser/firefox.png" alt="Firefox">
+                            <img src="<c:url value="/resources/images/browser/firefox.png"/>" alt="Firefox">
                             <div>Firefox</div>
                         </a>
                     </li>
                     <li>
                         <a href="http://www.opera.com">
-                            <img src="assets/images/browser/opera.png" alt="Opera">
+                            <img src="<c:url value="/resources/images/browser/opera.png"/>" alt="Opera">
                             <div>Opera</div>
                         </a>
                     </li>
                     <li>
                         <a href="https://www.apple.com/safari/">
-                            <img src="assets/images/browser/safari.png" alt="Safari">
+                            <img src="<c:url value="/resources/images/browser/safari.png"/>" alt="Safari">
                             <div>Safari</div>
                         </a>
                     </li>
                     <li>
                         <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                            <img src="assets/images/browser/ie.png" alt="">
+                            <img src="<c:url value="/resources/images/browser/ie.png"/>" alt="">
                             <div>IE (11 & above)</div>
                         </a>
                     </li>
@@ -959,17 +959,17 @@
     <!-- Warning Section Ends -->
 
     <!-- Required Js -->
-    <script src="assets/js/vendor-all.min.js"></script>
-    <script src="assets/js/plugins/bootstrap.min.js"></script>
-    <script src="assets/js/ripple.js"></script>
-    <script src="assets/js/pcoded.min.js"></script>
+    <script src="<c:url value="/resources/js/vendor-all.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/plugins/bootstrap.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/ripple.js"/>"></script>
+    <script src="<c:url value="/resources/js/pcoded.min.js"/>"></script>
 
 <!-- Apex Chart -->
-<script src="assets/js/plugins/apexcharts.min.js"></script>
+<script src="<c:url value="/resources/js/plugins/apexcharts.min.js"/>"></script>
 
 
 <!-- custom-chart js -->
-<script src="assets/js/pages/dashboard-main.js"></script>
+<script src="<c:url value="/resources/js/pages/dashboard-main.js"/>"></script>
 </body>
 
 </html>
