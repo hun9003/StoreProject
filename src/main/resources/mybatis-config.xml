@@ -6,21 +6,7 @@
  <configuration>
  	<typeAliases>
 		<!--  		회원 -->
- 		<typeAlias alias="member" type="com.muesli.domain.MemberBean"/>
-		<!--  		회원 이메일 코드 -->
-		<typeAlias alias="emailCode" type="com.muesli.domain.MemberAuthEmailBean"/>
-		<!--		메뉴-->
-		<typeAlias alias="menu" type="com.muesli.domain.MenuBean"/>
-		<!--		게시판-->
-		<typeAlias alias="board" type="com.muesli.domain.BoardBean"/>
-		<!--		게시물-->
-		<typeAlias alias="post" type="com.muesli.domain.PostBean"/>
-		<!--		좋아요-->
-		<typeAlias alias="like" type="com.muesli.domain.LikedBean"/>
-		<!--		댓글-->
-		<typeAlias alias="comment" type="com.muesli.domain.CommentBean"/>
+<!-- 		<typeAlias alias="member" type="com.rateye.domain.MemberBean"/>-->
 
-	<!--		현재접속자-->
-		<typeAlias alias="currentvisitor" type="com.muesli.domain.CurrentvisitorBean"/>
 	</typeAliases>
  </configuration> 

@@ -14,9 +14,8 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-	<resources mapping="/images/**" location="/images/" />
+<!--	<resources mapping="/images/**" location="/images/" />-->
 	<!--	CKEditor-->
-	<resources location="/resources/plugin/ckeditor/" mapping="/ckeditor/**"/>
 
 	<!-- Resolves views selected for rendering by
 @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -25,10 +24,10 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.muesli.ToyProject" />
-	<context:component-scan base-package="com.muesli.controller" />
-	<context:component-scan base-package="com.muesli.service" />
-	<context:component-scan base-package="com.muesli.dao" />
+	<context:component-scan base-package="com.rateye.ToyProject" />
+	<context:component-scan base-package="com.rateye.controller" />
+	<context:component-scan base-package="com.rateye.service" />
+	<context:component-scan base-package="com.rateye.dao" />
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="10485760"></beans:property>
@@ -53,13 +52,13 @@
 	</beans:bean>
 
 <!--	전역변수-->
-	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-		<beans:property name="basenames">
-			<beans:list>
-				<beans:value>messages.message</beans:value>
-			</beans:list>
-		</beans:property>
-		<beans:property name="defaultEncoding" value="utf-8"/>
-	</beans:bean>
+<!--	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">-->
+<!--		<beans:property name="basenames">-->
+<!--			<beans:list>-->
+<!--				<beans:value>messages.message</beans:value>-->
+<!--			</beans:list>-->
+<!--		</beans:property>-->
+<!--		<beans:property name="defaultEncoding" value="utf-8"/>-->
+<!--	</beans:bean>-->
 
 </beans:beans>

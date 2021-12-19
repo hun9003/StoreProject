@@ -19,9 +19,9 @@
 <!--	<property name="password" value="pjhoon" />-->
 	<bean id="driverManagerDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
-		<property name="url" value="jdbc:log4jdbc:mariadb://hun9003.cafe24.com:3306/hun9003" />
+		<property name="url" value="jdbc:log4jdbc:mysqldb://db.hun9003.gabia.io:3306/dbhun9003" />
 		<property name="username" value="hun9003" />
-		<property name="password" value="jinhun12" />
+		<property name="password" value="wlsgns12!@" />
 	</bean>
 
 	<!-- Mybatis 사용을 위한 Bean 설정으로 pom.xml에서 dependency 설정을 이미 했기에 가능 -->
@@ -29,7 +29,7 @@
 		<property name="dataSource" ref="driverManagerDataSource"/>
 		<property name="configLocation" value="classpath:/mybatis-config.xml"/>
 		<!-- mapper 설정으로 경로를 반드시 정확하게 지정해주어야 한다 -->
-		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml" />
+<!--		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml" />-->
 	</bean>
 	
 	<!-- Mybatis 사용을 위한 Bean 설정으로 pom.xml에서 dependency 설정을 이미 했기에 가능 -->
